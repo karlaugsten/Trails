@@ -13,6 +13,11 @@ body {
     color: rgb(233, 232, 232);
 }
 
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
 .card {
     background-color: #424242;
     width: 200px;
@@ -38,7 +43,4 @@ body {
     top: -80px;
     overflow: hidden;
     object-fit: cover;
-}
-.card-photo-wrapper {
-    width: 100%;
 }
