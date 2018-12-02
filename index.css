@@ -16,31 +16,139 @@ body {
 .card-container {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
+}
+
+.card-icon {
+    color: #929292;
+}
+
+.units {
+    color: #bebebe;
+    font-size: 0.65em;
+    margin: 2px;
 }
 
 .card {
+    position: relative;
     background-color: #424242;
-    width: 200px;
-    height: 300px;
+    width: 400px;
+    height: 600px;
     justify-content: center;
     text-align: center;
     /*display: flex;*/
-    margin: 40px;
-    padding: 10px;
-    padding-top: 40px;
-    border-radius: 2px;
+    margin: 30px;
+    padding: 0px 10px 10px 10px;
+    border-radius: 4px;
     box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0,.19)!important;
+    cursor: pointer;
+    transition: ease 0.75s all;
+}
+
+.card:hover {
+    box-shadow: 0 12px 22px 0 rgba(0, 0, 0, 0.2), 0 10px 25px 0 rgba(0, 0, 0,.19)!important;
+}
+
+@media (max-width:600px)  {
+    .card {
+        width: 80%;
+    }
 }
 
 .card-photo {
     border-color: #000000;
-    position: relative;
+    position: absolute;
+    left: 160px;
     width: 80px;
     height: 80px;
     border-radius: 40px;
     box-shadow: 0 2px 7px 0 rgba(0, 0, 0, 0.2), 0 1px 8px 0 rgba(0, 0, 0,.19)!important;
     z-index: 100;
-    top: -80px;
+    margin-bottom: -40px;
+    top: -40px;
     overflow: hidden;
     object-fit: cover;
+}
+
+.card-stats {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    border-bottom: 1px solid #bebebe86;
+    border-top: 1px solid #bebebe86;
+    position: relative;
+    /*top: -90px;*/
+    margin-top: 5px;
+    margin-bottom: 5px;
+    justify-content: center;
+}
+
+
+.card-stat {
+    margin-left: 15px;
+    margin-right: 15px;
+    padding: 5px;
+    transition: ease-in-out 0.2s all;
+    width: 70px;
+    white-space: nowrap;
+    height: 35px;
+    padding: 5px;
+    text-align: center;
+    vertical-align: middle;
+}
+.card-stat:hover {
+    font-size: 1.15em;
+    text-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.25), 0 6px 20px 0 rgba(0, 0, 0,.22);
+}
+
+.card-title {
+    /*margin: 5px;*/
+    padding: 2px;
+    font-size: 30px;
+    font-weight: 100;
+    /*font-family: 'Roboto script=all rev=1';*/
+    /*letter-spacing: -1.5px;*/
+    /*top: -95px;*/
+    position: relative;
+    text-overflow: ellipsis;
+    text-transform: capitalize;
+    white-space: nowrap;
+    letter-spacing: 6px;
+}
+
+.card-sub-title {
+    /*margin: 5px;*/
+    padding: 1px;
+    font-size: 12px;
+    font-weight: 100;
+    position: relative;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    letter-spacing: 2px;
+}
+
+.card-image {
+    height: 250px;
+    width: 400px;
+    left: -10px;
+    position: relative;
+    overflow: hidden;
+    object-fit: cover;
+    object-position: 0 0;
+    /*top: -40px;*/
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.card-description {
+    font-family: Roboto;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-weight: 100;
+    font-size: 0.9em;
+    position: relative;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 200px;
 }
