@@ -22,116 +22,13 @@
     <link rel="stylesheet" href="/index.css">
   </head>
   <body>
-    <!-- For now just adding static html to get website demo up. -->
-    <div class="container-fluid">
-        <h1>Trails</h1>
-        <div class="card-container">
-              
-              <div class="card">
-                  
-                  <img class="card-image" src="/Bourgeau.jpg">
-                  <div class="card-title">
-                      Mount Bourgeau
-                  </div>
-                  <div class="card-sub-title">
-                      <i class="fas fa-map-marker-alt"></i> Banff, Alberta, Canada
-                  </div>
-                  <div class="card-stats">
-                      <div class="card-stat">1600<span class="units">m</span> <i class="card-icon fas fa-long-arrow-alt-up"></i></div>
-                      <div class="card-stat">23<span class="units">km</span> <i class="card-icon fas fa-long-arrow-alt-right"></i></div>
-                      <div class="card-stat">3-4<span class="units">h</span> <i class="card-icon far fa-clock"></i></div>
-                      <div class="card-stat"><i class="fa fa-star checked"></i><i class="fa fa-star checked"></i><i class="fa fa-star checked"></i><i class="fa fa-star checked"></i><i class="far fa-star"></i></div>
-                  </div>
-                  <div class="card-description">
-                    A winding trail leads you up the bourgeau valley up to a serene mountain like. Continue up a steep rocky trail to more mountain lakes. Eventually crest over a hill to reveal vast views of the neighbouring valleys, including a stunning view of Mount Assiniboine. After taking in the vi... <strong>See More...</strong>
-                  </div>
-                      
-                </div>
-
-              <div class="card">
-                  
-                <img class="card-image" src="/Rockwall.jpg">
-                <div class="card-title">
-                    Rockwall Traverse
-                </div>
-                <div class="card-sub-title">
-                    <i class="fas fa-map-marker-alt"></i> Banff, Alberta, Canada
-                </div>
-                <div class="card-stats">
-                    <div class="card-stat">2500<span class="units">m</span> <i class="card-icon fas fa-long-arrow-alt-up"></i></div>
-                    <div class="card-stat">55<span class="units">km</span> <i class="card-icon fas fa-long-arrow-alt-right"></i></div>
-                    <div class="card-stat">6-12<span class="units">h</span> <i class="card-icon far fa-clock"></i></div>
-                    <div class="card-stat"><i class="fa fa-star checked"></i><i class="fa fa-star checked"></i><i class="fa fa-star checked"></i><i class="fa fa-star checked"></i><i class="fa fa-star checked"></i></div>
-                  </div>
-                <div class="card-description">
-                  A winding trail leads you up the bourgeau valley up to a serene mountain like. Continue up a steep rocky trail to more mountain lakes. Eventually crest over a hill to reveal vast views of the neighbouring valleys, including a stunning view of Mount Assiniboine. After taking in the vi... <strong>See More...</strong>
-                </div>
-                      
-              </div>
-              <div class="card">
-                  
-                  <img class="card-image" src="/Northover.jpg">
-                  <div class="card-title">
-                      Northover Ridge
-                  </div>
-                  <div class="card-sub-title">
-                      <i class="fas fa-map-marker-alt"></i> Kananaskis, Alberta, Canada
-                  </div>
-                  <div class="card-stats">
-                      <div class="card-stat">1700<span class="units">m</span> <i class="card-icon fas fa-long-arrow-alt-up"></i></div>
-                      <div class="card-stat">36<span class="units">km</span> <i class="card-icon fas fa-long-arrow-alt-right"></i></div>
-                      <div class="card-stat">4-8<span class="units">h</span> <i class="card-icon far fa-clock"></i></div>
-                      <div class="card-stat"><i class="fa fa-star checked"></i><i class="fa fa-star checked"></i><i class="fa fa-star checked"></i><i class="fa fa-star checked"></i><i class="fa fa-star checked"></i></div>
-                  </div>
-                  <div class="card-description">
-                    A winding trail leads you up the bourgeau valley up to a serene mountain like. Continue up a steep rocky trail to more mountain lakes. Eventually crest over a hill to reveal vast views of the neighbouring valleys, including a stunning view of Mount Assiniboine. After taking in the vi... <strong>See More...</strong>
-                  </div>
-                        
-                </div>
-
-                <div class="card">
-                    <img class="card-photo" src="/EverestMarathonPicture.jpg">
-                    <img class="card-image" src="/Bourgeau.jpg">
-                    <div class="card-title">
-                        Mount Bourgeau
-                    </div>
-                    <div class="card-sub-title">
-                        <i class="fas fa-map-marker-alt"></i> Banff, Alberta, Canada
-                    </div>
-                    <div class="card-stats">
-                        <div class="card-stat">1600<span class="units">m</span> <i class="card-icon fas fa-long-arrow-alt-up"></i></div>
-                        <div class="card-stat">23<span class="units">km</span> <i class="card-icon fas fa-long-arrow-alt-right"></i></div>
-                        <div class="card-stat">3-6<span class="units">h</span> <i class="card-icon far fa-clock"></i></div>
-                        <div class="card-stat"><i class="fa fa-star checked"></i><i class="fa fa-star checked"></i><i class="fa fa-star checked"></i><i class="fa fa-star checked"></i><i class="far fa-star"></i></div>
-                      </div>
-                    
-                        
-                  </div>
-              <div class="card">
-                  <img class="row card-photo" src="/EverestMarathonPicture.jpg">
-                <div class="row">I am another card.</div>
-              </div>
-          
-              <div class="card">
-
-                  <img class="row card-photo" src="/EverestMarathonPicture.jpg">
-                  <div class="row">I am a third card.</div>
-              </div>
-          
-              <div class="card">
-                  <img class="row card-photo" src="/EverestMarathonPicture.jpg">
-                  <div class="row">I am a fourth card.</div>
-              </div>
-          </div>
-    </div>
-
-
-
-
     <!-- We will put our React component inside this div. -->
     <div id="root"></div>
 
     <!-- Load our React component. -->
+    <script src="/Components/TrailCard.js" type="text/babel"></script>
+    <script src="/Components/TrailCards.js" type="text/babel"></script>
+    <script src="/App.js" type="text/babel"></script>
     <script src="/index.js" type="text/babel"></script>
 
   </body>
