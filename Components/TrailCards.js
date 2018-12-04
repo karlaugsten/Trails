@@ -5,11 +5,12 @@ class TrailCards extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
+          fullscreen: false,
           trails: [
             {
                 title: 'Mount Bourgeau',
                 location: 'Banff, Alberta, Canada',
-                mainImage: '/Bourgeau.jpg',
+                images: ['/Bourgeau.jpg', '/Rockwall.jpg', '/Northover.jpg'],
                 summary: 'A winding trail leads you up the bourgeau valley up to a serene mountain like. Continue up a steep rocky trail to more mountain lakes. Eventually crest over a hill to reveal vast views of the neighbouring valleys, including a stunning view of Mount Assiniboine. After taking in the vi... <strong>See More...</strong>',
                 stats: {
                     distance: 23,
@@ -22,7 +23,7 @@ class TrailCards extends React.Component {
             {
                 title: 'Rockwall Traverse',
                 location: 'Banff, Alberta, Canada',
-                mainImage: '/Rockwall.jpg',
+                images: ['/Rockwall.jpg'],
                 summary: 'A winding trail leads you up the bourgeau valley up to a serene mountain like. Continue up a steep rocky trail to more mountain lakes. Eventually crest over a hill to reveal vast views of the neighbouring valleys, including a stunning view of Mount Assiniboine. After taking in the vi... <strong>See More...</strong>',
                 stats: {
                     distance: 55,
@@ -35,7 +36,7 @@ class TrailCards extends React.Component {
             {
                 title: 'Northover Ridge',
                 location: 'Kananaskis, Alberta, Canada',
-                mainImage: '/Northover.jpg',
+                images: ['/Northover.jpg'],
                 summary: 'A winding trail leads you up the bourgeau valley up to a serene mountain like. Continue up a steep rocky trail to more mountain lakes. Eventually crest over a hill to reveal vast views of the neighbouring valleys, including a stunning view of Mount Assiniboine. After taking in the vi... <strong>See More...</strong>',
                 stats: {
                     distance: 36,
@@ -48,7 +49,7 @@ class TrailCards extends React.Component {
             {
                 title: 'Mount Bourgeau',
                 location: 'Banff, Alberta, Canada',
-                mainImage: '/Bourgeau.jpg',
+                images: ['/Bourgeau.jpg'],
                 summary: 'A winding trail leads you up the bourgeau valley up to a serene mountain like. Continue up a steep rocky trail to more mountain lakes. Eventually crest over a hill to reveal vast views of the neighbouring valleys, including a stunning view of Mount Assiniboine. After taking in the vi... <strong>See More...</strong>',
                 stats: {
                     distance: 23,
@@ -70,7 +71,7 @@ class TrailCards extends React.Component {
     }
   
     render() {
-      var trails = this.state.trails.map((t, i) => (<TrailCard trail={t} key={i} />));
+      var trails = this.state.trails.map((t, i) => (<TrailCard fullscreen={(full) => this.setState({fullscreen: full})} hidden={this.state.fullscreen} trail={t} key={i} />));
       return (
         <div className="card-container">
             {trails}

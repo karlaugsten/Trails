@@ -42,11 +42,31 @@ body {
     border-radius: 4px;
     box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0,.19)!important;
     cursor: pointer;
-    transition: ease 0.75s all;
 }
 
 .card:hover {
     box-shadow: 0 12px 22px 0 rgba(0, 0, 0, 0.2), 0 10px 25px 0 rgba(0, 0, 0,.19)!important;
+}
+
+.card-fullscreen {
+    z-index: 9999; 
+    width: 90%; 
+    height: 2000px; 
+    /*position: fixed;*/
+    /*top: -20px;*/
+    /*left: -20px;*/
+    overflow: scroll;
+    position: relative;
+background-color: #424242;
+
+justify-content: center;
+text-align: center;
+/*display: flex;*/
+margin: 30px;
+padding: 0px 10px 10px 10px;
+border-radius: 4px;
+box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0,.19)!important;
+transition: ease 0.75s all;
 }
 
 @media (max-width:600px)  {
@@ -127,18 +147,47 @@ body {
     letter-spacing: 2px;
 }
 
-.card-image {
+.card-image-wrapper {
     height: 250px;
     width: 400px;
     left: -10px;
     position: relative;
     overflow: hidden;
-    object-fit: cover;
-    object-position: 0 0;
+    display: flex;
     /*top: -40px;*/
     border-top-right-radius: 4px;
     border-top-left-radius: 4px;
     margin-bottom: 10px;
+}
+
+.card-image {
+    height: 250px;
+    width: 400px;
+    object-fit: cover;
+    object-position: 0 0;
+    transition: transform 500ms cubic-bezier(0.455, 0.03, 0.515, 0.955);
+}
+
+.card-image-overlay {
+        position: absolute;
+        top: 100px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 100%;
+        width: 100%;
+        opacity: 0;
+        transition: .3s ease;
+        z-index: 200;
+}
+.card-image-overlay > i {
+    font-size: 3em;
+    z-index: 200;
+    margin: 10px;
+}
+
+.card-image-overlay:hover {
+    opacity: 0.5;
 }
 
 .card-description {
@@ -152,3 +201,4 @@ body {
     text-overflow: ellipsis;
     height: 200px;
 }
+
