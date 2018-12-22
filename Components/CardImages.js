@@ -36,7 +36,7 @@ class CardImages extends React.Component {
     return (
       <div className="card-image-wrapper">
         {imageTransitions}
-        {this.props.images.map((image, index) => <img style={{'transform': `translateX(-${400*this.state.currentIndex}px)`}} className="card-image" key={index} src={image} />)}
+        {this.props.images.map((image, index) => <img style={{'transform': `translateX(-${100*this.state.currentIndex}%)`}} className="card-image" key={index} src={image} />)}
       </div>
     );
   }

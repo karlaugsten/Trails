@@ -23,8 +23,8 @@ class TrailCardWrapper extends React.Component {
     render() {
       if(!this.state.fullscreen){
           return (
-            <div style={{display: this.props.hidden ? "none" : ""}} onClick={() => this.setFullScreen(true)} className="card">
-                <TrailCard trail={this.props.trail} />
+            <div style={{display: this.props.hidden ? "none" : ""}} className="card">
+                <TrailCard trail={this.props.trail} fullscreen={(full) => this.setFullScreen(full)} />
             </div>)
       } else{
           return (

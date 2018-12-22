@@ -3,9 +3,6 @@
 class TrailCard extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      className: "card"
-    }
   }
 
   componentDidMount() {
@@ -31,21 +28,23 @@ class TrailCard extends React.Component {
       
         <React.Fragment>
           <CardImages images={this.props.trail.images} />
-          <div className="card-title">
-              {this.props.trail.title}
-          </div>
-          <div className="card-sub-title">
-              <i className="fas fa-map-marker-alt"></i> {this.props.trail.location}
-          </div>
-          <div className="card-stats">
-              <div className="card-stat">{this.props.trail.stats.elevation}<span className="units">m</span> <i className="card-icon fas fa-long-arrow-alt-up"></i></div>
-              <div className="card-stat">{this.props.trail.stats.distance}<span className="units">km</span> <i className="card-icon fas fa-long-arrow-alt-right"></i></div>
-              <div className="card-stat">{this.props.trail.stats.time}<span className="units">h</span> <i className="card-icon far fa-clock"></i></div>
-              <div className="card-stat">{rating}</div>
-              <div className="card-stat">{this.props.trail.stats.season} <i className="card-icon far fa-calendar-check"></i></div>
-          </div>
-          <div className="card-description">
-            {this.props.trail.summary}
+          <div onClick={() => this.props.fullscreen(true)}>
+            <div className="card-title">
+                {this.props.trail.title}
+            </div>
+            <div className="card-sub-title">
+                <i className="fas fa-map-marker-alt"></i> {this.props.trail.location}
+            </div>
+            <div className="card-stats">
+                <div className="card-stat">{this.props.trail.stats.elevation}<span className="units">m</span> <i className="card-icon fas fa-long-arrow-alt-up"></i></div>
+                <div className="card-stat">{this.props.trail.stats.distance}<span className="units">km</span> <i className="card-icon fas fa-long-arrow-alt-right"></i></div>
+                <div className="card-stat">{this.props.trail.stats.time}<span className="units">h</span> <i className="card-icon far fa-clock"></i></div>
+                <div className="card-stat">{rating}</div>
+                <div className="card-stat">{this.props.trail.stats.season} <i className="card-icon far fa-calendar-check"></i></div>
+            </div>
+            <div className="card-description">
+              {this.props.trail.summary}
+            </div>
           </div>
 
       </React.Fragment>
