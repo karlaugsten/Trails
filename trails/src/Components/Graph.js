@@ -1,6 +1,6 @@
-//import React from 'react';
+import React from 'react';
 
-class Graph extends React.Component {
+export default class Graph extends React.Component {
     constructor(props) {
       super(props);
       this.state = {

@@ -1,6 +1,8 @@
-//import React from 'react';
+import React from 'react';
+import CardImages from './CardImages';
+import Graph from './Graph';
 
-class FullTrailCard extends React.Component {
+export default class FullTrailCard extends React.Component {
     constructor(props) {
       super(props);
     }
