@@ -1,7 +1,7 @@
-//import TrailCard from './TrailCard';
-//import React from 'react';
+import TrailCardWrapper from './TrailCardWrapper';
+import React from 'react';
 
-class TrailCards extends React.Component {
+export default class TrailCards extends React.Component {
     constructor(props) {
       super(props);
       this.state = {

@@ -1,6 +1,7 @@
-//import React from 'react';
+import React from 'react';
+import CardImages from './CardImages';
 
-class TrailCard extends React.Component {
+export default class TrailCard extends React.Component {
   constructor(props) {
     super(props);
   }
