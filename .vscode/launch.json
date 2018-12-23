@@ -9,7 +9,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/bin/Debug/netcoreapp2.2/trails.dll",
+            "program": "${workspaceFolder}/bin/Debug/netcoreapp2.2/Trails.dll",
             "args": [],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,

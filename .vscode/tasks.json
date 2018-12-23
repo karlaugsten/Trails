@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/trails.csproj"
+                "${workspaceFolder}/Trails.csproj"
             ],
             "problemMatcher": "$msCompile"
         }
