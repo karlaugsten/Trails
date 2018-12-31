@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Trails.Repositories;
 
 namespace Trails
 {
@@ -22,6 +24,9 @@ namespace Trails
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+            services.AddTransient<IImageRepository, FileImageRepository>();
+            // For now use the test database.
+            services.AddDbContext<TrailContext>(options => options.UseSqlite("Data Source=trails.db"));
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {

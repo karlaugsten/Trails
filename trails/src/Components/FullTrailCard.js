@@ -1,6 +1,7 @@
 import React from 'react';
 import CardImages from './CardImages';
 import Graph from './Graph';
+import TrailDescriptionEditor from './TrailDescriptionEditor';
 
 export default class FullTrailCard extends React.Component {
     constructor(props) {
@@ -52,6 +53,7 @@ export default class FullTrailCard extends React.Component {
             <div className="card-description">
             {this.props.trail.summary}
             </div>
+            <TrailDescriptionEditor />
             </React.Fragment>
         )
     }

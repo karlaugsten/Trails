@@ -1,0 +1,29 @@
+.editor {
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    cursor: text;
+    padding: 16px;
+    border-radius: 2px;
+    margin-bottom: 2em;
+    box-shadow: inset 0px 1px 8px -3px #ABABAB;
+  }
+  
+  .editor :global(.public-DraftEditor-content) {
+    min-height: 140px;
+  }
+  
+  .options {
+    margin-bottom: 20px;
+  }
+
+  div.DraftEditor-root {
+    border: 1px solid #00000091;
+    background-color: #3b3b3b;
+    width:100%;
+    margin:auto;
+    box-shadow: 0px 0px 6px 1px rgba(0,0,0,0.5);
+    height:auto;
+    padding:20px;
+    font-size: 18px;
+    font-family: 'calibri', sans-serif;
+  }

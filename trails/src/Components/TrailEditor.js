@@ -1,0 +1,83 @@
+import React from 'react';
+import TrailDescriptionEditor from './TrailDescriptionEditor';
+import TrailService from '../Services/TrailService';
+
+export default class TrailEditor extends React.Component {
+    constructor(props) {
+      super(props);
+      this.trails = new TrailService();
+      this.state = {
+        images: [],
+        description: null,
+        editId: props.match.params.editId,
+        title: '',
+        location: '',
+        distance: 0,
+        elevation: 0,
+        minDuration: 0,
+        maxDuration: 0,
+        rating: 0
+      }
+    }
+  
+    componentDidMount() {
+      // Load the trail edit...
+      /*this.trails.edit(this.props.trailId).then(edit => {
+
+      });*/
+      if(this.props.match.params.editId) 
+      {
+        this.trails.getEdit(this.props.match.params.editId).then(edit => {
+          this.setState({
+            trailId: edit.trailId,
+            editId: edit.editId,
+            images: edit.images,
+            description: edit.description
+          })
+        })
+      } 
+      else 
+      {
+        this.trails.create().then(edit => {
+          this.props.history.push(`/edit/${edit.editId}`)
+          this.setState({
+            trailId: edit.trailId,
+            editId: edit.editId
+          })
+        })
+      }
+    }
+
+    componentWillUpdate(nextProps, nextState) {
+      if(nextState.editId && nextState.trailId) {
+        this.trails.save(nextState.trailId, nextState.editId, nextState).then(edit => {
+          console.log("Saved edit: ");
+          console.log(edit);
+        })
+      }
+    }
+  
+    componentWillUnmount() {
+    }
+
+    updateDescription = (desc) => {
+      this.setState({
+          description: desc
+        });
+    }
+  
+    render() {
+        return (
+          <div className="card-fullscreen">
+            <TrailDescriptionEditor 
+              trailId={this.state.trailId}
+              editId={this.state.editId}
+              images={this.state.images} 
+              addImage={(image) => this.setState({images: this.state.images.concat([image])})} 
+              description={this.state.description}
+              updateDescription={(desc) => this.updateDescription(desc)}
+            />
+          </div>
+        )
+    }
+  }

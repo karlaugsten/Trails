@@ -133,16 +133,16 @@ body {
 .card-title {
     /*margin: 5px;*/
     padding: 2px;
-    font-size: 30px;
+    font-size: 25px;
     font-weight: 100;
-    /*font-family: 'Roboto script=all rev=1';*/
+    font-family: 'Roboto Thin', sans-serif;
+    text-transform: uppercase;
     /*letter-spacing: -1.5px;*/
     /*top: -95px;*/
     position: relative;
     text-overflow: ellipsis;
-    text-transform: capitalize;
     white-space: nowrap;
-    letter-spacing: 6px;
+    letter-spacing: 4px;
     flex-grow: 3;
 }
 
