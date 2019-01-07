@@ -67,6 +67,9 @@ export default class TrailEditor extends React.Component {
     }
   
     render() {
+        if(!this.state.trailId || !this.state.editId) {
+          return (<div className="card-fullscreen"></div>)
+        }
         return (
           <div className="card-fullscreen">
             <TrailDescriptionEditor 

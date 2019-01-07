@@ -4,11 +4,6 @@ public class Image {
   [Key]
   public int Id { get; set; }
   /// <summary>
-  /// Foreign key to the trail this image belongs to.
-  /// </summary>
-  /// <value></value>
-  //public int TrailId { get; set; }
-  /// <summary>
   /// Foreign key to the specific trail edit this image belongs to.
   /// </summary>
   /// <value></value>

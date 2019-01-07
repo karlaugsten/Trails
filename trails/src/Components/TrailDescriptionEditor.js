@@ -53,7 +53,7 @@ export default class TrailDescriptionEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      editorState: EditorState.createEmpty()
+      editorState: props.description ? this.getEditorState(props.description) : EditorState.createEmpty()
     }
   }
 

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 public class TrailEdit : BaseTrail {
   [Key]
@@ -11,5 +12,6 @@ public class TrailEdit : BaseTrail {
   /// </summary>
   /// <value></value>
   //public int UserId { get; set; }
+  public List<Image> Images { get; set; } = new List<Image>();
 
 }

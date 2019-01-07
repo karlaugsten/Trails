@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Trails.Controllers
 {
@@ -70,8 +71,8 @@ namespace Trails.Controllers
                 MinDuration = trail.MinDuration,
                 Rating = trail.Rating,
                 Distance = trail.Distance,
-                Elevation = trail.Elevation,
-                Images = trail.Images // TODO: Will foreign key's be automatically mapped here? Or do we need to do the mapping ourselves.
+                Elevation = trail.Elevation
+                //Images = trail.Images // TODO: Will foreign key's be automatically mapped here? Or do we need to do the mapping ourselves.
             });
             _context.SaveChanges();
             return Ok(newEdit.Entity);
@@ -81,7 +82,7 @@ namespace Trails.Controllers
         public IActionResult Getdit(int editId)
         {
             // Saves a draft of an edit.
-            var trail = _context.TrailEdits.FirstOrDefault(t => t.EditId == editId);
+            var trail = _context.TrailEdits.Include(t => t.Images).FirstOrDefault(t => t.EditId == editId);
             if(trail == null)
             {
                 return NotFound();
@@ -93,14 +94,15 @@ namespace Trails.Controllers
         public IActionResult SaveEdit(int trailId, int editId, [FromBody]TrailEdit edit)
         {
             // Saves a draft of an edit.
-            var trail = _context.TrailEdits.FirstOrDefault(t => t.EditId == editId && t.TrailId == trailId);
+            var trail = _context.TrailEdits.Include(t => t.Images).FirstOrDefault(t => t.EditId == editId && t.TrailId == trailId);
             if(trail == null)
             {
                 return NotFound();
             }
+            //trail.EditId = edit.EditId;
             trail.Title = edit.Title;
             trail.Rating = edit.Rating;
-            trail.Images = edit.Images;
+            trail.Images = _context.Images.Where(i => edit.Images.FirstOrDefault(ei => ei.Id == i.Id) != null).ToList();
             trail.Location = edit.Location;
             trail.Elevation = edit.Elevation;
             trail.Distance = edit.Distance;
@@ -132,7 +134,7 @@ namespace Trails.Controllers
             // Copy all fields from edit to trail.
             trail.Title = edit.Title;
             trail.Rating = edit.Rating;
-            trail.Images = edit.Images;
+            //trail.Images = edit.Images;
             trail.Location = edit.Location;
             trail.Elevation = edit.Elevation;
             trail.Distance = edit.Distance;

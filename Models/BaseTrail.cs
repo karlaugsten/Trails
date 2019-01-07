@@ -9,5 +9,4 @@ public class BaseTrail {
   public double MinDuration { get; set; }
   public double Distance { get; set; }
   public int Elevation { get; set; }
-  public List<Image> Images { get; set; } = new List<Image>();
 }
