@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 
 namespace Trails.Repositories
 {
@@ -19,10 +20,12 @@ namespace Trails.Repositories
       {"image/tiff", ".tiff"}
     };
 
-    private string folder = "./";
-    public FileImageRepository(TrailContext context)
+    private string folder;
+
+    public FileImageRepository(TrailContext context, IConfiguration config)
     {
       _context = context;
+      folder = config["ImageRepoFolder"];
     }
     
     public async Task<Image> AddImageAsync(IFormFile image, int editId) {
@@ -49,7 +52,11 @@ namespace Trails.Repositories
 
     public Stream GetImageStream(string imageName) 
     {
-      FileStream fileStream = new FileStream(this.folder + imageName, FileMode.Open);
+      var imagePath = this.folder + imageName;
+      if(!System.IO.File.Exists(imagePath)) { // TODO: Do the check in imagerepo somehow...
+        throw new KeyNotFoundException("No image.");
+      }
+      FileStream fileStream = new FileStream(imagePath, FileMode.Open);
       return fileStream;      
     }
   }

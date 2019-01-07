@@ -49,10 +49,11 @@ namespace Trails.Controllers
         [HttpGet("{image}")]
         public IActionResult GetImage(string image)
         {
-            if(!System.IO.File.Exists(image)) { // TODO: Do the check in imagerepo somehow...
+            try {
+                return new FileStreamResult(_imageRepo.GetImageStream(image), "image/jpeg");
+            } catch (KeyNotFoundException e) { // Reusing this exception type...
                 return NotFound();
             }
-            return new FileStreamResult(_imageRepo.GetImageStream(image), "image/jpeg");
         }
     }
 }
