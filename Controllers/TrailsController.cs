@@ -71,7 +71,9 @@ namespace Trails.Controllers
                 MinDuration = trail.MinDuration,
                 Rating = trail.Rating,
                 Distance = trail.Distance,
-                Elevation = trail.Elevation
+                Elevation = trail.Elevation,
+                MaxSeason = trail.MaxSeason,
+                MinSeason = trail.MinSeason
                 //Images = trail.Images // TODO: Will foreign key's be automatically mapped here? Or do we need to do the mapping ourselves.
             });
             _context.SaveChanges();
@@ -109,6 +111,9 @@ namespace Trails.Controllers
             trail.Description = edit.Description;
             trail.MaxDuration = edit.MaxDuration;
             trail.MinDuration = edit.MinDuration;
+            trail.MaxSeason = edit.MaxSeason;
+            trail.MinSeason = edit.MinSeason;
+
             _context.TrailEdits.Update(trail);
 
             // Save changes in database
@@ -141,6 +146,8 @@ namespace Trails.Controllers
             trail.Description = edit.Description;
             trail.MaxDuration = edit.MaxDuration;
             trail.MinDuration = edit.MinDuration;
+            trail.MaxSeason = edit.MaxSeason;
+            trail.MinSeason = edit.MinSeason;
             trail.EditId = edit.EditId; // Update the EditId to reflect the new edit.
 
             // For now any time a trail is committed, lets approve it.

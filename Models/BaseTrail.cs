@@ -9,4 +9,6 @@ public class BaseTrail {
   public double MinDuration { get; set; }
   public double Distance { get; set; }
   public int Elevation { get; set; }
+  public string MinSeason {get; set; }
+  public string MaxSeason {get; set; }
 }

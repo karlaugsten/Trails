@@ -11,8 +11,12 @@ CREATE TABLE Trails (
     Location    VARCHAR (300)   NOT NULL,
     Approved    BOOLEAN         DEFAULT False
                                 NOT NULL,
-    EditId      INTEGER         REFERENCES TrailEdits (EditId) 
-                                NOT NULL
+    EditId      INTEGER         REFERENCES TrailEdits (EditId) DEFERRABLE INITIALLY DEFERRED
+                                DEFAULT NULL,
+    MaxSeason   VARCHAR (100)   NOT NULL
+                                DEFAULT January,
+    MinSeason   VARCHAR (100)   NOT NULL
+                                DEFAULT January
 );
 
 CREATE TABLE Images (
@@ -38,5 +42,9 @@ CREATE TABLE TrailEdits (
     Elevation   INT             NOT NULL,
     TrailId     INTEGER         REFERENCES Trails (TrailId),
     Title       VARCHAR (300)   NOT NULL,
-    Location    VARCHAR (300)   NOT NULL
+    Location    VARCHAR (300)   NOT NULL,
+    MaxSeason   VARCHAR (100)   NOT NULL
+                                DEFAULT January,
+    MinSeason   VARCHAR (100)   NOT NULL
+                                DEFAULT January
 );
