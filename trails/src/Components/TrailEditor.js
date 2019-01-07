@@ -1,6 +1,7 @@
 import React from 'react';
 import TrailDescriptionEditor from './TrailDescriptionEditor';
 import TrailService from '../Services/TrailService';
+import throttle from 'lodash/throttle'
 
 export default class TrailEditor extends React.Component {
     constructor(props) {
@@ -18,6 +19,11 @@ export default class TrailEditor extends React.Component {
         maxDuration: 0,
         rating: 0
       }
+
+      this.save = throttle((trailId, editId, edit) => this.trails.save(trailId, editId, edit).then(edit => {
+        console.log("Saved edit: ");
+        console.log(edit);
+      }), 3000);
     }
   
     componentDidMount() {
@@ -50,10 +56,7 @@ export default class TrailEditor extends React.Component {
 
     componentWillUpdate(nextProps, nextState) {
       if(nextState.editId && nextState.trailId) {
-        this.trails.save(nextState.trailId, nextState.editId, nextState).then(edit => {
-          console.log("Saved edit: ");
-          console.log(edit);
-        })
+        this.save(nextState.trailId, nextState.editId, nextState);
       }
     }
   
