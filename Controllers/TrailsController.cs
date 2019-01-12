@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,6 +19,7 @@ namespace Trails.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IEnumerable<Trail> Trails()
         {
             return _context.Trails.Where(t => t.Approved).ToList();
@@ -35,7 +37,9 @@ namespace Trails.Controllers
                 MinDuration = 0,
                 Rating = 0,
                 Distance = 0,
-                Elevation = 0
+                Elevation = 0,
+                MaxSeason = "",
+                MinSeason = ""
             });
             _context.SaveChanges();
             // Create a new edit for the new trail and return that.
@@ -48,7 +52,9 @@ namespace Trails.Controllers
                 MinDuration = 0,
                 Rating = 0,
                 Distance = 0,
-                Elevation = 0
+                Elevation = 0,
+                MaxSeason = "",
+                MinSeason = ""
             });
             _context.SaveChanges();
             return Ok(newEdit.Entity);

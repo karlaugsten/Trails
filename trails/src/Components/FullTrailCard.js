@@ -1,7 +1,6 @@
 import React from 'react';
 import CardImages from './CardImages';
 import Graph from './Graph';
-import TrailDescriptionEditor from './TrailDescriptionEditor';
 
 export default class FullTrailCard extends React.Component {
     constructor(props) {
@@ -43,17 +42,16 @@ export default class FullTrailCard extends React.Component {
             
             
             <div className="card-stats">
-                <div className="card-stat">{this.props.trail.stats.elevation}<span className="units">m</span> <i className="card-icon fas fa-long-arrow-alt-up"></i></div>
-                <div className="card-stat">{this.props.trail.stats.distance}<span className="units">km</span> <i className="card-icon fas fa-long-arrow-alt-right"></i></div>
-                <div className="card-stat">{this.props.trail.stats.time}<span className="units">h</span> <i className="card-icon far fa-clock"></i></div>
-                <div className="card-stat">{rating}</div>
-                <div className="card-stat">{this.props.trail.stats.season} <i className="card-icon far fa-calendar-check"></i></div>
+                <div title="Elevation gain" className="card-stat">{this.props.trail.stats.elevation}<span className="units">m</span> <i className="card-icon fas fa-long-arrow-alt-up"></i></div>
+                <div title="Total distance" className="card-stat">{this.props.trail.stats.distance}<span className="units">km</span> <i className="card-icon fas fa-long-arrow-alt-right"></i></div>
+                <div title="Estimated duration" className="card-stat">{this.props.trail.stats.time}<span className="units">h</span> <i className="card-icon far fa-clock"></i></div>
+                <div title="Overall rating" className="card-stat">{rating}</div>
+                <div title="Best season" className="card-stat">{this.props.trail.stats.season} <i className="card-icon far fa-calendar-check"></i></div>
             </div>
             <Graph />
             <div className="card-description">
             {this.props.trail.summary}
             </div>
-            <TrailDescriptionEditor />
             </React.Fragment>
         )
     }

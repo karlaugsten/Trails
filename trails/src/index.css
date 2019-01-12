@@ -118,7 +118,7 @@ body {
     vertical-align: middle;
 }
 .card-stat:hover {
-    font-size: 1.15em;
+    transform: scale(1.2,1.2);
     text-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.25), 0 6px 20px 0 rgba(0, 0, 0,.22);
 }
 
@@ -326,4 +326,76 @@ body {
     border-color: rgb(0,0,0,0.7);
     border-style: dotted;
     transition: all 1.0s cubic-bezier(0, 0.8, 0.6, 0.95)
+}
+
+.trail-navbar {
+    height: auto;
+    width: 100%;
+    position: fixed;
+    background-color: #313131;
+    box-shadow: 0 7px 13px 0 rgba(0, 0, 0, 0.2), 0 4px 8px 0 rgba(0, 0, 0,.19)!important;
+    z-index: 99999;
+}
+
+.trail-navbar-header {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    float: left !important;
+    font-size: 2em;
+    margin: 2px;
+}
+
+.trail-navbar-header > a {
+    color: rgba(233, 232, 232, 0.5);
+    text-decoration: none;
+    transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.trail-navbar-header > a:hover {
+    color: rgba(233, 232, 232, 0.8);
+    text-decoration: none;
+    background-color: rgba(63, 63, 63, 0.28);
+}
+
+.trail-navbar-buttons {
+    float: right !important;
+    display: flex;
+    height: 100%;
+    width: auto;
+}
+
+.trail-navbar-button {
+    height: 50px;
+    width: 50px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    border-radius: 100px;
+    margin: 2px;
+    border-color: white;
+    border-width: 4px;
+    transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    cursor: pointer;
+    font-size: 2.5em;
+    font-weight: 200;
+    color: rgba(83, 83, 83, 0.397);
+    margin-right: 5px;
+}
+
+.trail-navbar-button:hover {
+    background-color: rgba(75, 74, 74, 0.363);
+    color: rgba(100, 100, 100, 0.774);
+}
+
+.trail-navbar-button > a {
+    text-decoration: none;
+    color: inherit;
+    display: inherit;
+    align-content: inherit;
+    justify-content: inherit;
+    align-items: inherit;
 }

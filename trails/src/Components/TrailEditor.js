@@ -43,7 +43,7 @@ export default class TrailEditor extends React.Component {
       {
         // This creates a whole new trail.
         this.trails.create().then(edit => {
-          this.props.history.push(`/edit/${edit.editId}`)
+          this.props.history.replace(`/edit/${edit.editId}`)
           this.setState(edit)
         })
       }
