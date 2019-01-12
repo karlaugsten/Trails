@@ -13,6 +13,7 @@ namespace Trails.Repositories
   public class FileImageRepository : IImageRepository
   {
     private TrailContext _context;
+    private IImageProcessor _imageProcessor;
 
     private Dictionary<string, string> MimeTypeMap = new Dictionary<string, string>() {
       {"image/jpeg", ".jpeg"},
@@ -22,27 +23,36 @@ namespace Trails.Repositories
 
     private string folder;
 
-    public FileImageRepository(TrailContext context, IConfiguration config)
+    public FileImageRepository(TrailContext context, IConfiguration config, IImageProcessor imageProcessor)
     {
       _context = context;
       folder = config["ImageRepoFolder"];
+      _imageProcessor = imageProcessor;
     }
     
     public async Task<Image> AddImageAsync(IFormFile image, int editId) {
       // Save the image to wherever we are storing it.. for now just the file system.
-      var imageName = Guid.NewGuid().ToString() + this.MimeTypeMap[image.ContentType];
+      var name = Guid.NewGuid().ToString();
+      var imageName = name + this.MimeTypeMap[image.ContentType];
+      var thumbnailName = name + "-thumbnail" + this.MimeTypeMap[image.ContentType];
       var imagePath = this.folder + imageName;
       using (var stream = new FileStream(imagePath, FileMode.CreateNew))
       {
-          await image.CopyToAsync(stream);
+          await _imageProcessor.ProcessImageToStream(image, stream);
       }
+      using (var stream = new FileStream(thumbnailName, FileMode.CreateNew))
+      {
+          await _imageProcessor.ProcessThumbnailImageToStream(image, stream);
+      }
+      
       // Create an image record in the database.
       var newImage = new Image() {
         Url = $"/api/images/{imageName}",
-        ThumbnailUrl = $"/api/images/{imageName}",
+        ThumbnailUrl = $"/api/images/{thumbnailName}",
         Name = imageName,
         EditId = editId
       };
+
       _context.Images.Add(newImage);
 
       _context.SaveChanges();
