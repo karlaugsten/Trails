@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 public class Trail : BaseTrail
 {
@@ -10,6 +11,10 @@ public class Trail : BaseTrail
   /// </summary>
   /// <value></value>
   public int? EditId { get; set; } = null;
+
+  [ForeignKey("EditId")]
+  public TrailEdit Edit { get; set; }
+
   /// <summary>
   /// A flag indicating that this trail has been flagged as approved for
   /// viewing on the sites main page.

@@ -37,16 +37,16 @@ export default class FullTrailCard extends React.Component {
                     <i className="fas fa-map-marker-alt"></i> {this.props.trail.location}
                 </div>
             </div>
-            <CardImages images={this.props.trail.images} />
+            <CardImages images={this.props.trail.edit.images.map(i => i.url)} />
             
             
             
             <div className="card-stats">
-                <div title="Elevation gain" className="card-stat">{this.props.trail.stats.elevation}<span className="units">m</span> <i className="card-icon fas fa-long-arrow-alt-up"></i></div>
-                <div title="Total distance" className="card-stat">{this.props.trail.stats.distance}<span className="units">km</span> <i className="card-icon fas fa-long-arrow-alt-right"></i></div>
-                <div title="Estimated duration" className="card-stat">{this.props.trail.stats.time}<span className="units">h</span> <i className="card-icon far fa-clock"></i></div>
+                <div title="Elevation gain" className="card-stat">{this.props.trail.elevation}<span className="units">m</span> <i className="card-icon fas fa-long-arrow-alt-up"></i></div>
+                <div title="Total distance" className="card-stat">{this.props.trail.distance}<span className="units">km</span> <i className="card-icon fas fa-long-arrow-alt-right"></i></div>
+                <div title="Estimated duration" className="card-stat">{this.props.trail.minDuration}-{this.props.trail.maxDuration}<span className="units">h</span> <i className="card-icon far fa-clock"></i></div>
                 <div title="Overall rating" className="card-stat">{rating}</div>
-                <div title="Best season" className="card-stat">{this.props.trail.stats.season} <i className="card-icon far fa-calendar-check"></i></div>
+                <div title="Best season" className="card-stat">{this.props.trail.minSeason}-{this.props.trail.maxSeason}<i className="card-icon far fa-calendar-check"></i></div>
             </div>
             <Graph />
             <div className="card-description">

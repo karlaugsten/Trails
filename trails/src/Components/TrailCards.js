@@ -71,7 +71,7 @@ export default class TrailCards extends React.Component {
     }
   
     render() {
-      var trails = this.state.trails.map((t, i) => (<TrailCardWrapper fullscreen={(full) => this.setState({fullscreen: full})} hidden={this.state.fullscreen} trail={t} key={i} />));
+      var trails = this.props.trails.map((t, i) => (<TrailCardWrapper fullscreen={(full) => this.setState({fullscreen: full})} hidden={this.state.fullscreen} trail={t} key={i} />));
       return (
         <div className="card-container">
             {trails}

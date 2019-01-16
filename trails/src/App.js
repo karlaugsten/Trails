@@ -1,8 +1,8 @@
 import React from 'react';
-import TrailCards from './Components/TrailCards';
 import TrailEditor from './Components/TrailEditor';
 import TrailNav from './Components/TrailNav';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import ReduxTrailCards from './Components/ReduxTrailCards';
 
 export default class App extends React.Component {
     render() {
@@ -15,7 +15,7 @@ export default class App extends React.Component {
                 <div className="trail-navbar-button"><i className="far fa-user-circle"></i></div>
               </TrailNav>
               <div className="container-fluid" style={{paddingTop: "50px"}}>
-                  <Route exact path="/" component={TrailCards} />
+                  <Route exact path="/" component={ReduxTrailCards} />
                   <Route path="/edit/:editId" component={TrailEditor} />
                   <Route exact path="/edit" component={TrailEditor} />
               </div>

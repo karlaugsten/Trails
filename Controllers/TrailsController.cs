@@ -22,7 +22,7 @@ namespace Trails.Controllers
         [AllowAnonymous]
         public IEnumerable<Trail> Trails()
         {
-            return _context.Trails.Where(t => t.Approved).ToList();
+            return _context.Trails.Where(t => t.Approved).Include(t => t.Edit).ThenInclude(e => e.Images).ToList();
         }
 
         [HttpPost]
@@ -87,7 +87,7 @@ namespace Trails.Controllers
         }
 
         [HttpGet("edit/{editId}")]
-        public IActionResult Getdit(int editId)
+        public IActionResult GetEdit(int editId)
         {
             // Saves a draft of an edit.
             var trail = _context.TrailEdits.Include(t => t.Images).FirstOrDefault(t => t.EditId == editId);

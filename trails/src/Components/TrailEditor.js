@@ -6,7 +6,6 @@ import throttle from 'lodash/throttle'
 export default class TrailEditor extends React.Component {
     constructor(props) {
       super(props);
-      this.trails = new TrailService();
       this.state = {
         images: [],
         description: null,
@@ -20,7 +19,7 @@ export default class TrailEditor extends React.Component {
         rating: 0
       }
 
-      this.save = throttle((trailId, editId, edit) => this.trails.save(trailId, editId, edit).then(edit => {
+      this.save = throttle((trailId, editId, edit) => TrailService.save(trailId, editId, edit).then(edit => {
         console.log("Saved edit: ");
         console.log(edit);
       }), 3000);
@@ -30,19 +29,19 @@ export default class TrailEditor extends React.Component {
   
     componentDidMount() {
       // Load the trail edit...
-      /*this.trails.edit(this.props.trailId).then(edit => {
+      /*TrailService.edit(this.props.trailId).then(edit => {
 
       });*/
       if(this.props.match.params.editId) 
       {
-        this.trails.getEdit(this.props.match.params.editId).then(edit => {
+        TrailService.getEdit(this.props.match.params.editId).then(edit => {
           this.setState(edit)
         })
       } 
       else 
       {
         // This creates a whole new trail.
-        this.trails.create().then(edit => {
+        TrailService.create().then(edit => {
           this.props.history.replace(`/edit/${edit.editId}`)
           this.setState(edit)
         })

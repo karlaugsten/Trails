@@ -1,7 +1,7 @@
 export default class TrailService {
 
 
-  create() {
+  static create() {
     return fetch('/api/trails', {
       method: 'POST'
     }).then(result => result.json()
@@ -10,7 +10,7 @@ export default class TrailService {
     });
   }
 
-  edit(trailId) {
+  static edit(trailId) {
     return fetch(`/api/trails/${trailId}/edit`, {
       method: 'POST'
     }).then(result => result.json()
@@ -20,7 +20,7 @@ export default class TrailService {
     });
   }
 
-  getEdit(editId) {
+  static getEdit(editId) {
     return fetch(`/api/trails/edit/${editId}`, {
       method: 'GET'
     }).then(result => result.json()
@@ -30,7 +30,7 @@ export default class TrailService {
     });
   }
 
-  save(trailId, editId, trail) {
+  static save(trailId, editId, trail) {
     return fetch(`/api/trails/${trailId}/edit/${editId}`, {
       method: 'POST',
       body: JSON.stringify(trail),
@@ -43,7 +43,7 @@ export default class TrailService {
     });
   }
 
-  commit(trailId, editId) {
+  static commit(trailId, editId) {
     return fetch(`/api/trails/${trailId}/commit/${editId}`, {
       method: 'POST'
     }).then(result => result.ok
@@ -52,13 +52,10 @@ export default class TrailService {
     });
   }
 
-  getAll() {
+  static getAll() {
     return fetch('/api/trails', {
       method: 'GET',
     })
-    .then(result => result.json())
-    .catch(error => {
-      console.log(error);
-    });
+    .then(result => result.json());
   }
 }
