@@ -1,4 +1,4 @@
-import TrailCardWrapper from './TrailCardWrapper';
+import TrailCard from './TrailCard';
 import React from 'react';
 
 export default class TrailCards extends React.Component {
@@ -71,9 +71,9 @@ export default class TrailCards extends React.Component {
     }
   
     render() {
-      var trails = this.props.trails.map((t, i) => (<TrailCardWrapper fullscreen={(full) => this.setState({fullscreen: full})} hidden={this.state.fullscreen} trail={t} key={i} />));
+      var trails = this.props.trails.map((t, i) => (<TrailCard trail={t} key={t.trailId} />));
       return (
-        <div className="card-container">
+        <div className="card-container" id="card-container">
             {trails}
         </div>
       );

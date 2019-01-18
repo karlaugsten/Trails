@@ -14,6 +14,15 @@ export const getTrails = (state) => {
   return ids.map(id => fromById.getTrail(state.byId, id));
 };
 
+export const getTrail = (state, id) => 
+  fromById.getTrail(state.byId, id);
+
+export const getIsFetchingId = (state, id) => 
+  fromById.getIsFetchingForId(state.byId, id);
+
+export const getErrorMessageForId = (state, id) => 
+  fromById.getErrorMessageForId(state.byId, id);
+
 export const getIsFetching = (state) =>
   fromList.getIsFetching(state.list);
 

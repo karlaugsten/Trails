@@ -10,12 +10,6 @@ class ReduxTrailCards extends Component {
     this.fetchData();
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.filter !== prevProps.filter) {
-      this.fetchData();
-    }
-  }
-
   fetchData() {
     const { fetchTrails } = this.props;
     fetchTrails();

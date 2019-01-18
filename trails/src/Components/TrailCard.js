@@ -1,7 +1,8 @@
 import React from 'react';
 import CardImages from './CardImages';
+import { withRouter } from "react-router-dom";
 
-export default class TrailCard extends React.Component {
+class TrailCard extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -23,13 +24,17 @@ export default class TrailCard extends React.Component {
     return ratingJsx;
   }
 
+  handleClick() {
+    this.props.history.push(`/trails/${this.props.trail.trailId}`);
+  }
+
   render() {
     var rating = this.buildRating();
     return (
       
-        <React.Fragment>
+      <div className="card" id={`trail-${this.props.trail.trailId}`}>
           <CardImages images={this.props.trail.edit.images.map(i => i.thumbnailUrl)} />
-          <div onClick={() => this.props.fullscreen(true)}>
+          <div onClick={() => this.handleClick()}>
             <div className="card-title">
                 {this.props.trail.title}
             </div>
@@ -41,14 +46,15 @@ export default class TrailCard extends React.Component {
                 <div title="Total distance" className="card-stat">{this.props.trail.distance}<span className="units">km</span> <i className="card-icon fas fa-long-arrow-alt-right"></i></div>
                 <div title="Estimated duration" className="card-stat">{this.props.trail.minDuration}-{this.props.trail.maxDuration}<span className="units">h</span> <i className="card-icon far fa-clock"></i></div>
                 <div title="Overall rating" className="card-stat">{rating}</div>
-                <div title="Best season" className="card-stat">{this.props.trail.minSeason}-{this.props.trail.maxSeason}<i className="card-icon far fa-calendar-check"></i></div>
+                <div title="Best season" className="card-stat">{this.props.trail.minSeason}-{this.props.trail.maxSeason} <i className="card-icon far fa-calendar-check"></i></div>
             </div>
             <div className="card-description">
               {this.props.trail.description || "See more..."}
             </div>
           </div>
-
-      </React.Fragment>
+      </div>
     );
   }
 }
+
+export default withRouter(TrailCard);

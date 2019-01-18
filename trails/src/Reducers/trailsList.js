@@ -8,6 +8,8 @@ const ids = (state = [], action) => {
   switch (action.type) {
     case 'FETCH_TRAILS_SUCCESS':
       return action.response.result;
+    case 'FETCH_TRAIL_SUCCESS':
+      return [...state.filter(id => id != action.response.result), action.response.result];
     case 'ADD_TRAIL_SUCCESS':
       return [...state, action.response.result];
     case 'HEART_TRAIL_SUCCESS':
@@ -20,8 +22,11 @@ const ids = (state = [], action) => {
 const isFetching = (state = false, action) => {
   switch (action.type) {
     case 'FETCH_TRAIL_REQUEST':
+    case 'FETCH_TRAILS_REQUEST':
       return true;
+    case 'FETCH_TRAILS_SUCCESS':
     case 'FETCH_TRAIL_SUCCESS':
+    case 'FETCH_TRAILS_FAILURE':
     case 'FETCH_TRAIL_FAILURE':
       return false;
     default:
@@ -31,10 +36,14 @@ const isFetching = (state = false, action) => {
 
 const errorMessage = (state = null, action) => {
   switch (action.type) {
+    case 'FETCH_TRAILS_FAILURE':
+      return action.message;
     case 'FETCH_TRAIL_FAILURE':
       return action.message;
     case 'FETCH_TRAIL_REQUEST':
+    case 'FETCH_TRAILS_REQUEST':
     case 'FETCH_TRAIL_SUCCESS':
+    case 'FETCH_TRAILS_SUCCESS':
       return null;
     default:
       return state;
