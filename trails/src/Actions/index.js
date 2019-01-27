@@ -1,7 +1,8 @@
 import { normalize } from 'normalizr';
 import * as schema from './schema';
-import TrailService from '../Services/TrailService';
-import { getIsFetchingId, getIsFetching, getTrail } from '../Reducers';
+import TrailsApi from '../Api/trails';
+import UsersApi from '../Api/users';
+import { getIsFetchingId, getIsFetching, getTrail, isLoggedIn } from '../Reducers';
 
 export const fetchTrails = () => (dispatch, getState) => {
   if (getIsFetching(getState())) {
@@ -12,7 +13,7 @@ export const fetchTrails = () => (dispatch, getState) => {
     type: 'FETCH_TRAILS_REQUEST'
   });
 
-  return TrailService.getAll().then(
+  return TrailsApi.getAll().then(
     response => {
       dispatch({
         type: 'FETCH_TRAILS_SUCCESS',
@@ -44,7 +45,7 @@ export const fetchTrail = (id) => (dispatch, getState) => {
     id
   });
 
-  return TrailService.getAll().then(
+  return TrailsApi.getAll().then(
     response => {
       dispatch({
         type: 'FETCH_TRAIL_SUCCESS',
@@ -63,15 +64,49 @@ export const fetchTrail = (id) => (dispatch, getState) => {
 };
 
 export const addTrail = () => (dispatch) =>
-  TrailService.create().then(response => {
+  TrailsApi.create().then(response => {
     dispatch({
       type: 'ADD_TRAIL_SUCCESS',
       response: normalize(response, schema.trail),
     });
   });
 
+export const login = () => (dispatch, getState) => {
+  if(isLoggedIn(getState())) {
+    return; // do nothing?
+  }
+    dispatch({
+      type: 'REQUEST_LOGIN', // Should somehow pop up a login modal.
+    });
+  }
+
+export const submitLogin = (email, password) => (dispatch, getState) => {
+  if(isLoggedIn(getState())) {
+    return Promise.resolve(); // do nothing?
+  }
+  return UsersApi.login(email, password).then(
+    response => {
+      dispatch({
+        type: 'LOGIN_SUCCESS',
+        token: response.token,
+      });
+    },
+    error => {
+      dispatch({
+        type: 'LOGIN_FAILURE',
+        message: error.message || 'Something went wrong.',
+      });
+    }
+  );
+}
+
+export const cancelLogin = () => (dispatch) =>
+    dispatch({
+      type: 'END_LOGIN', // Cancel the login.
+    });
+
 export const heartTrail = (id) => (dispatch) =>
-  TrailService.heartTrail(id).then(response => 
+  TrailsApi.heartTrail(id).then(response => 
     {
       dispatch({
         type: 'HEART_TRAIL_SUCCESS',
@@ -82,5 +117,8 @@ export const heartTrail = (id) => (dispatch) =>
     error => 
     {
       // TODO: Check if unauthorized and dispatch a REQUEST_LOGIN action if so.
+      if(error.statusCode == 401) {
+        login() // Should somehow pop up a login modal.
+      }
     }
   );

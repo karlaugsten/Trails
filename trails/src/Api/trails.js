@@ -1,4 +1,4 @@
-export default class TrailService {
+export default class TrailsApi {
 
 
   static create() {

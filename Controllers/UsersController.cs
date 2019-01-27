@@ -18,7 +18,7 @@ namespace Trails.Controllers
       _userManager = userManager;
     }
 
-    [HttpPost]
+    [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody]LoginRequest login)
     {
       if(string.IsNullOrEmpty(login.Email) ||

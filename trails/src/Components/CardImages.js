@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from './Image';
 
 export default class CardImages extends React.Component {
   constructor(props) {
@@ -36,7 +37,7 @@ export default class CardImages extends React.Component {
     return (
       <div className="card-image-wrapper">
         {imageTransitions}
-        {this.props.images.map((image, index) => <img style={{'transform': `translateX(-${100*this.state.currentIndex}%)`}} className="card-image" key={index} src={image} />)}
+        {this.props.images.map((image, index) => <Image style={{'transform': `translateX(-${100*this.state.currentIndex}%)`}} key={index} src={image} />)}
       </div>
     );
   }
