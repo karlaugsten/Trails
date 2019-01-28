@@ -1,7 +1,9 @@
+using System.Threading.Tasks;
+
 namespace Trails.Authentication
 {
     public interface ITokenFactory
     {
-        string GenerateToken(User user);
+        Task<string> GenerateToken(User user);
     }
 }

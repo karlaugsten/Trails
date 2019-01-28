@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Trails.Encryption;
+using Trails.Authentication;
 using Trails.Repositories;
 
 namespace Trails
@@ -67,6 +68,8 @@ namespace Trails
             });
 
             ISigningKeyResolver signingKey = new AppSettingsSymetricKeyResolver(Configuration, "SigningKey"); // TODO: Add signing key to the appsettings.
+            services.AddSingleton<ISigningKeyResolver>(signingKey);
+            services.AddScoped<ITokenFactory, JwtTokenFactory>();
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -88,6 +91,13 @@ namespace Trails
                     RequireExpirationTime = true,
                     ValidateLifetime = true
                 };
+            });
+
+            // Add all the authorization claims policies
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("CanEdit", policy => policy.RequireClaim("CanEditTrails", new[] { "true" }));
+                options.AddPolicy("CanCommit", policy => policy.RequireClaim("CanCommitTrails", new[] { "true" }));
             });
         }
 
@@ -150,6 +160,12 @@ namespace Trails
                 IdentityResult roleResult = roleManager.
                 CreateAsync(role).Result;
                 roleManager.AddClaimAsync(role, new Claim("CanEditTrails", "true"));
+                roleManager.AddClaimAsync(role, new Claim("CanCommitTrails", "true"));
+            } else {
+                IdentityRole role = new IdentityRole();
+                role.Name = "Administrator";
+                roleManager.AddClaimAsync(role, new Claim("CanEditTrails", "true"));
+                roleManager.AddClaimAsync(role, new Claim("CanCommitTrails", "true"));
             }
         }
 

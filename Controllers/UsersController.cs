@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Trails.Authentication;
 
 namespace Trails.Controllers
 {
@@ -12,10 +13,12 @@ namespace Trails.Controllers
   public class UsersController : Controller
   {
     private UserManager<User> _userManager;
+    private ITokenFactory _tokenFactory;
 
-    public UsersController(UserManager<User> userManager) 
+    public UsersController(UserManager<User> userManager, ITokenFactory tokenFactory) 
     {
       _userManager = userManager;
+      _tokenFactory = tokenFactory;
     }
 
     [HttpPost("login")]
@@ -31,7 +34,7 @@ namespace Trails.Controllers
 
       var valid = await _userManager.CheckPasswordAsync(user, login.Password);
       if(!valid) return BadRequest();
-      return Ok(new { token = "test" });
+      return Ok(new { token = await _tokenFactory.GenerateToken(user) });
     }
   }
 }

@@ -26,6 +26,7 @@ namespace Trails.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "CanEdit")]
         public IActionResult NewTrail()
         {
             // Creates and returns a new trail with a new edit.
@@ -61,6 +62,7 @@ namespace Trails.Controllers
         }
 
         [HttpPost("{trailId}/Edit")]
+        [Authorize(Policy = "CanEdit")]
         public IActionResult Edit(int trailId)
         {
             // Creates and returns a new edit for an existing trail.
@@ -87,6 +89,7 @@ namespace Trails.Controllers
         }
 
         [HttpGet("edit/{editId}")]
+        [Authorize(Policy = "CanEdit")]
         public IActionResult GetEdit(int editId)
         {
             // Saves a draft of an edit.
@@ -99,6 +102,7 @@ namespace Trails.Controllers
         }
 
         [HttpPost("{trailId}/Edit/{editId}")]
+        [Authorize(Policy = "CanEdit")]
         public IActionResult SaveEdit(int trailId, int editId, [FromBody]TrailEdit edit)
         {
             // Saves a draft of an edit.
@@ -128,6 +132,7 @@ namespace Trails.Controllers
         }
 
         [HttpPost("{trailId}/Commit/{editId}")]
+        [Authorize(Policy = "CanCommit")]
         public IActionResult CommitEdit(int trailId, int editId)
         {
             // Commits an edit as the actual trail definition.

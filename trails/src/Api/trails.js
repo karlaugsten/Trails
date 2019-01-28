@@ -1,9 +1,10 @@
 export default class TrailsApi {
-
-
   static create() {
     return fetch('/api/trails', {
-      method: 'POST'
+      method: 'POST',
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("token"),
+      },
     }).then(result => result.json()
     ).catch(error => {
       console.log(error);
@@ -12,7 +13,10 @@ export default class TrailsApi {
 
   static edit(trailId) {
     return fetch(`/api/trails/${trailId}/edit`, {
-      method: 'POST'
+      method: 'POST',
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("token"),
+      },
     }).then(result => result.json()
     ).catch(error => {
       console.log(error);
@@ -22,7 +26,10 @@ export default class TrailsApi {
 
   static getEdit(editId) {
     return fetch(`/api/trails/edit/${editId}`, {
-      method: 'GET'
+      method: 'GET',
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("token"),
+      },
     }).then(result => result.json()
     ).catch(error => {
       console.log(error);
@@ -35,7 +42,8 @@ export default class TrailsApi {
       method: 'POST',
       body: JSON.stringify(trail),
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + localStorage.getItem("token"),
       }
     }).then(result => result.ok
     ).catch(error => {
@@ -45,7 +53,10 @@ export default class TrailsApi {
 
   static commit(trailId, editId) {
     return fetch(`/api/trails/${trailId}/commit/${editId}`, {
-      method: 'POST'
+      method: 'POST',
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("token"),
+      }
     }).then(result => result.ok
     ).catch(error => {
       console.log(error);
@@ -55,6 +66,9 @@ export default class TrailsApi {
   static getAll() {
     return fetch('/api/trails', {
       method: 'GET',
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("token"),
+      }
     })
     .then(result => result.json());
   }

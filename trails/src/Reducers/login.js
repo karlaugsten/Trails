@@ -28,6 +28,7 @@ const loginError = (state = null, action) => {
 const token = (state = null, action) => {
   switch (action.type) {
     case 'LOGIN_SUCCESS':
+      localStorage.setItem('token', action.token);
       return action.token
     case 'REQUEST_LOGIN':
       return null;
