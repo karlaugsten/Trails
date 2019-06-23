@@ -12,6 +12,8 @@ const ids = (state = [], action) => {
       return [...state.filter(id => id != action.response.result), action.response.result];
     case 'ADD_TRAIL_SUCCESS':
       return [...state, action.response.result];
+    case 'COMMIT_TRAIL_EDIT_SUCCESS':
+      return [...state, action.response.result];
     case 'HEART_TRAIL_SUCCESS':
       return handleHeart(state, action);
     default:

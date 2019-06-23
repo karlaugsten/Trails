@@ -128,7 +128,7 @@ namespace Trails.Controllers
 
             // Save changes in database
             _context.SaveChanges();
-            return Ok();
+            return Ok(trail);
         }
 
         [HttpPost("{trailId}/Commit/{editId}")]

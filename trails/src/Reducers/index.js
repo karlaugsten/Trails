@@ -2,14 +2,20 @@ import { combineReducers } from 'redux';
 import byId, * as fromById from './byId';
 import list, * as fromList from './trailsList';
 import login, * as fromLogin from './login';
+import edits, * as fromEdits from './edits';
 
 const trails = combineReducers({
   byId,
   list,
-  login
+  login,
+  edits
 });
 
 export default trails;
+
+export const getTrailEdit = (state, id) => fromEdits.getEdit(state.edits, id);
+
+export const getTrailEdits = (state) => fromEdits.getEdits(state.edits);
 
 export const getTrails = (state) => {
   const ids = fromList.getIds(state.list);

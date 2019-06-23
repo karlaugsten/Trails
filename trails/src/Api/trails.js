@@ -1,14 +1,24 @@
 export default class TrailsApi {
+
+  static checkStatus(response) {
+    if(response.status >= 200 && response.status <= 300) {
+      return response.json();
+    } else {
+      return response.text().then(text => {
+        let error = new Error(text);
+        error.response = response;
+        return Promise.reject(error);
+      })
+    }
+  }
+
   static create() {
     return fetch('/api/trails', {
       method: 'POST',
       headers: {
         "Authorization": "Bearer " + localStorage.getItem("token"),
       },
-    }).then(result => result.json()
-    ).catch(error => {
-      console.log(error);
-    });
+    }).then(TrailsApi.checkStatus)
   }
 
   static edit(trailId) {
@@ -17,11 +27,7 @@ export default class TrailsApi {
       headers: {
         "Authorization": "Bearer " + localStorage.getItem("token"),
       },
-    }).then(result => result.json()
-    ).catch(error => {
-      console.log(error);
-      alert(error);
-    });
+    }).then(TrailsApi.checkStatus)
   }
 
   static getEdit(editId) {
@@ -30,11 +36,7 @@ export default class TrailsApi {
       headers: {
         "Authorization": "Bearer " + localStorage.getItem("token"),
       },
-    }).then(result => result.json()
-    ).catch(error => {
-      console.log(error);
-      alert(error);
-    });
+    }).then(TrailsApi.checkStatus)
   }
 
   static save(trailId, editId, trail) {
@@ -45,10 +47,7 @@ export default class TrailsApi {
         "Content-Type": "application/json",
         "Authorization": "Bearer " + localStorage.getItem("token"),
       }
-    }).then(result => result.ok
-    ).catch(error => {
-      console.log(error);
-    });
+    }).then(TrailsApi.checkStatus)
   }
 
   static commit(trailId, editId) {
@@ -57,10 +56,7 @@ export default class TrailsApi {
       headers: {
         "Authorization": "Bearer " + localStorage.getItem("token"),
       }
-    }).then(result => result.ok
-    ).catch(error => {
-      console.log(error);
-    });
+    }).then(TrailsApi.checkStatus)
   }
 
   static getAll() {
@@ -70,6 +66,6 @@ export default class TrailsApi {
         "Authorization": "Bearer " + localStorage.getItem("token"),
       }
     })
-    .then(result => result.json());
+    .then(TrailsApi.checkStatus);
   }
 }

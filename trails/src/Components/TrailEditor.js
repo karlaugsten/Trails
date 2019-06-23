@@ -1,9 +1,12 @@
 import React from 'react';
 import TrailDescriptionEditor from './TrailDescriptionEditor';
-import TrailsApi from '../Api/trails';
+import * as actions from '../Actions';
+import { getTrailEdit, isLoggedIn, getLoginRequested } from '../Reducers';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import throttle from 'lodash/throttle'
 
-export default class TrailEditor extends React.Component {
+class TrailEditor extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
@@ -19,42 +22,46 @@ export default class TrailEditor extends React.Component {
         rating: 0
       }
 
-      this.save = throttle((trailId, editId, edit) => TrailsApi.save(trailId, editId, edit).then(edit => {
-        console.log("Saved edit: ");
-        console.log(edit);
-      }), 3000);
+      this.save = throttle((trailId, editId, edit) => this.props.saveTrailEdit(trailId, editId, edit).then(edit => {
+        
+      }), 10000);
 
       this.handleChange = this.handleChange.bind(this);
     }
   
     componentDidMount() {
-      // Load the trail edit...
-      /*TrailsApi.edit(this.props.trailId).then(edit => {
-
-      });*/
-      if(this.props.match.params.editId) 
-      {
-        TrailsApi.getEdit(this.props.match.params.editId).then(edit => {
-          this.setState(edit)
-        })
-      } 
-      else 
-      {
-        // This creates a whole new trail.
-        TrailsApi.create().then(edit => {
-          this.props.history.replace(`/edit/${edit.editId}`)
-          this.setState(edit)
-        })
-      }
+      this.createTrailEdit();
     }
 
     componentWillUpdate(nextProps, nextState) {
+      if(nextProps.isLoggedIn && !this.props.isLoggedIn) {
+        this.createTrailEdit();
+      }
       if(nextState.editId && nextState.trailId) {
         this.save(nextState.trailId, nextState.editId, nextState);
       }
     }
   
     componentWillUnmount() {
+    }
+
+    createTrailEdit = () => {
+      if(this.props.match.params.editId) 
+      {
+        this.props.getTrailEdit(this.props.match.params.editId).then(result => {
+          this.setState(result);
+        }, error => {
+
+        });
+      } 
+      else 
+      {
+        this.props.addTrail().then(edit => {
+          this.props.history.replace(`/edit/${edit.editId}`)
+        }, error => {
+
+        });
+      }
     }
 
     handleChange = (e) => {
@@ -68,7 +75,10 @@ export default class TrailEditor extends React.Component {
     }
   
     render() {
-        if(!this.state.trailId || !this.state.editId) {
+        if(!this.props.isLoggedIn) {
+          return (<div className="card-fullscreen">Please Log In</div>)
+        }
+        if(!this.state.trailId || !this.state.editId ) {
           return (<div className="card-fullscreen"></div>)
         }
         return (
@@ -171,3 +181,17 @@ export default class TrailEditor extends React.Component {
         )
     }
   }
+
+  const mapStateToProps = (state, { match }) => {
+    return {
+      edit: getTrailEdit(state, match.params.editId),
+      isLoggedIn: isLoggedIn(state)
+    };
+  };
+  
+  TrailEditor = withRouter(connect(
+    mapStateToProps,
+    actions
+  )(TrailEditor));
+  
+  export default TrailEditor;

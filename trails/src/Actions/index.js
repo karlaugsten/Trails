@@ -63,12 +63,88 @@ export const fetchTrail = (id) => (dispatch, getState) => {
   );
 };
 
-export const addTrail = () => (dispatch) =>
+export const addTrail = () => (dispatch, getState) =>
   TrailsApi.create().then(response => {
     dispatch({
       type: 'ADD_TRAIL_SUCCESS',
       response: normalize(response, schema.trail),
     });
+    return response;
+  },
+  error => 
+  {
+    // TODO: Check if unauthorized and dispatch a REQUEST_LOGIN action if so.
+    if(error.response.status == 401) {
+      login()(dispatch, getState) // Should somehow pop up a login modal.
+    }
+    return Promise.reject(error);
+  });
+
+export const saveTrailEdit = (trailId, editId, trail) => (dispatch, getState) =>
+  TrailsApi.save(trailId, editId, trail).then(response => {
+    dispatch({
+      type: 'SAVE_TRAIL_EDIT_SUCCESS',
+      response: normalize(response, schema.trailEdit),
+    });
+  },
+  error => 
+  {
+    // TODO: Check if unauthorized and dispatch a REQUEST_LOGIN action if so.
+    if(error.response.status == 401) {
+      login()(dispatch, getState) // Should somehow pop up a login modal.
+    }
+    return Promise.reject(error);
+  });
+
+export const getTrailEdit = (editId) => (dispatch, getState) =>
+  TrailsApi.getEdit(editId).then(response => {
+    dispatch({
+      type: 'FETCH_TRAIL_EDIT_SUCCESS',
+      response: normalize(response, schema.trailEdit),
+    });
+    return response;
+  },
+  error => 
+  {
+    // TODO: Check if unauthorized and dispatch a REQUEST_LOGIN action if so.
+    if(error.response.status == 401) {
+      login()(dispatch, getState) // Should somehow pop up a login modal.
+    }
+    return Promise.reject(error);
+  });
+
+export const createEdit = (trailId) => (dispatch, getState) =>
+  TrailsApi.edit(trailId).then(response => {
+    dispatch({
+      type: 'CREATE_TRAIL_EDIT_SUCCESS',
+      response: normalize(response, schema.trailEdit),
+    });
+    return response;
+  },
+  error => 
+  {
+    // TODO: Check if unauthorized and dispatch a REQUEST_LOGIN action if so.
+    if(error.response.status == 401) {
+      login()(dispatch, getState) // Should somehow pop up a login modal.
+    }
+    return Promise.reject(error);
+  });
+
+export const commitEdit = (trailId, editId) => (dispatch, getState) =>
+  TrailsApi.commit(trailId, editId).then(response => {
+    dispatch({
+      type: 'COMMIT_TRAIL_EDIT_SUCCESS',
+      response: normalize(response, schema.trail),
+    });
+    return response;
+  },
+  error => 
+  {
+    // TODO: Check if unauthorized and dispatch a REQUEST_LOGIN action if so.
+    if(error.response.status == 401) {
+      login()(dispatch, getState) // Should somehow pop up a login modal.
+    }
+    return Promise.reject(error);
   });
 
 export const login = () => (dispatch, getState) => {
@@ -90,6 +166,7 @@ export const submitLogin = (email, password) => (dispatch, getState) => {
         type: 'LOGIN_SUCCESS',
         token: response.token,
       });
+      return response;
     },
     error => {
       dispatch({
@@ -105,7 +182,7 @@ export const cancelLogin = () => (dispatch) =>
       type: 'END_LOGIN', // Cancel the login.
     });
 
-export const heartTrail = (id) => (dispatch) =>
+export const heartTrail = (id) => (dispatch, getState) =>
   TrailsApi.heartTrail(id).then(response => 
     {
       dispatch({
@@ -113,12 +190,14 @@ export const heartTrail = (id) => (dispatch) =>
         id,
         response: normalize(response, schema.trail),
       });
+      return response;
     },
     error => 
     {
       // TODO: Check if unauthorized and dispatch a REQUEST_LOGIN action if so.
-      if(error.statusCode == 401) {
-        login() // Should somehow pop up a login modal.
+      if(error.response.status == 401) {
+        login()(dispatch, getState) // Should somehow pop up a login modal.
       }
+      return Promise.reject(error);
     }
   );
