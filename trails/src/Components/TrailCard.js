@@ -1,5 +1,6 @@
 import React from 'react';
 import CardImages from './CardImages';
+import DraftContent from './DraftContent';
 import { withRouter } from "react-router-dom";
 
 class TrailCard extends React.Component {
@@ -49,7 +50,7 @@ class TrailCard extends React.Component {
                 <div title="Best season" className="card-stat">{this.props.trail.minSeason}-{this.props.trail.maxSeason} <i className="card-icon far fa-calendar-check"></i></div>
             </div>
             <div className="card-description">
-              {this.props.trail.description || "See more..."}
+              <DraftContent content={this.props.trail.description} />
             </div>
           </div>
       </div>

@@ -16,7 +16,7 @@
     margin-bottom: 20px;
   }
 
-  div.DraftEditor-root {
+  .editor> .DraftEditor-root {
     border: 1px solid #00000091;
     background-color: #3b3b3b;
     width:100%;
