@@ -1,3 +1,31 @@
+@font-face {
+    font-family: 'National Park';
+    font-style: normal;
+    font-weight: normal;
+    src: url('/NationalPark/NationalPark-Regular.otf') format('opentype');
+  }
+
+  @font-face {
+    font-family: 'National Park Outline';
+    font-style: normal;
+    font-weight: normal;
+    src: url('/NationalPark/NationalPark-Outline.otf') format('opentype');
+  }
+
+  @font-face {
+    font-family: 'National Park';
+    font-style: normal;
+    font-weight: 100;
+    src: url('/NationalPark/NationalPark-Thin.otf') format('opentype');
+  }
+
+  @font-face {
+    font-family: 'National Park';
+    font-style: normal;
+    font-weight: bold;
+    src: url('/NationalPark/NationalPark-Heavy.otf') format('opentype');
+  }
+
 header {
     background-color: #212121;
     color: rgb(233, 232, 232);
@@ -11,7 +39,7 @@ dark-header {
 body {
     background-color: #303030;
     color: rgb(233, 232, 232);
-    font-family: 'Roboto'
+    font-family: 'National Park'
 }
 
 .card-container {
@@ -133,16 +161,16 @@ body {
 .card-title {
     /*margin: 5px;*/
     padding: 2px;
-    font-size: 25px;
-    font-weight: 100;
-    font-family: 'Roboto Thin', sans-serif;
+    font-size: 30px;
+    font-weight: 500;
+    font-family: 'National Park';
     text-transform: uppercase;
-    /*letter-spacing: -1.5px;*/
+    letter-spacing: -1.5px;
     /*top: -95px;*/
     position: relative;
     text-overflow: ellipsis;
     white-space: nowrap;
-    letter-spacing: 4px;
+    letter-spacing: 8px;
     flex-grow: 3;
 }
 
@@ -255,7 +283,7 @@ body {
 }
 
 .card-description {
-    font-family: Roboto;
+    font-family: 'National Park';
     margin-top: 5px;
     margin-bottom: 5px;
     font-weight: 100;
@@ -353,6 +381,7 @@ body {
     transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
     padding: 5px;
     border-radius: 4px;
+    letter-spacing: 4px;
 }
 
 .trail-navbar-header > a:hover {
