@@ -51,7 +51,21 @@ const login = combineReducers({
 
 export default login;
 
+const decode = (token) => JSON.parse(atob(token.split('.')[1]));
+
+const isValidToken = (token) => {
+  try {
+    const { exp } = decode(token);
+    if (Date.now() >= exp * 1000) {
+      return false;
+    }
+  } catch(err) {
+    return false;
+  }
+  return true;
+}
+
 export const getLoginRequested = (state) => state.loginRequested;
 export const getLoginError = (state) => state.loginError;
-export const isLoggedIn = (state) => state.token != null;
+export const isLoggedIn = (state) => state.token != null && isValidToken(state.token);
 

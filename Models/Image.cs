@@ -11,6 +11,8 @@ public class Image {
   public string Name { get; set; }
   public string Url { get; set; }
   public string ThumbnailUrl { get; set; }
+
+  public string Base64Preview { get; set; }
   //public int CenterX { get; set; } = 0;
   //public int CenterY { get; set; } = 0;
 }

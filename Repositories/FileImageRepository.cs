@@ -36,13 +36,15 @@ namespace Trails.Repositories
       var imageName = name + this.MimeTypeMap[image.ContentType];
       var thumbnailName = name + "-thumbnail" + this.MimeTypeMap[image.ContentType];
       var imagePath = this.folder + imageName;
+      string base64Preview = null;
+
       using (var stream = new FileStream(imagePath, FileMode.CreateNew))
       {
           await _imageProcessor.ProcessImageToStream(image, stream);
       }
       using (var stream = new FileStream(thumbnailName, FileMode.CreateNew))
       {
-          await _imageProcessor.ProcessThumbnailImageToStream(image, stream);
+          base64Preview = await _imageProcessor.ProcessThumbnailImageToStream(image, stream);
       }
       
       // Create an image record in the database.
@@ -50,7 +52,8 @@ namespace Trails.Repositories
         Url = $"/api/images/{imageName}",
         ThumbnailUrl = $"/api/images/{thumbnailName}",
         Name = imageName,
-        EditId = editId
+        EditId = editId,
+        Base64Preview = base64Preview
       };
 
       _context.Images.Add(newImage);
