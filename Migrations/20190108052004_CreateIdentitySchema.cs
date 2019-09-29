@@ -189,11 +189,6 @@ namespace Trails.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Images_EditId",
-                table: "Images",
-                column: "EditId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
