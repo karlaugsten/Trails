@@ -8,8 +8,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Trails.Migrations
 {
     [DbContext(typeof(TrailContext))]
-    [Migration("20190626043156_AddBase64ThumbnailImage")]
-    partial class AddBase64ThumbnailImage
+    [Migration("20190929060004_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
