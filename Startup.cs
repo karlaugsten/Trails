@@ -40,7 +40,7 @@ namespace Trails
                 if(CurrentEnvironment.IsDevelopment()) {
                     options.UseSqlite("Data Source=trails.db");
                 } else {
-                    options.UseMySQL(Configuration["DatabaseConnectionString"]);
+                    options.UseMySql(Configuration["DatabaseConnectionString"]);
                 }  
             });
             services.AddScoped<IImageProcessor, ImageProcessor>();
