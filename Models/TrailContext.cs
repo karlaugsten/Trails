@@ -1,7 +1,8 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-public class TrailContext : IdentityDbContext<User>
+public class TrailContext : IdentityDbContext<User, IdentityRole<int>, int>
 {
     public TrailContext(DbContextOptions<TrailContext> options)
         : base(options)

@@ -16,12 +16,12 @@ namespace Trails.Authentication
         private ILogger<JwtTokenFactory> _logger;
         private int _tokenExpiryInMinutes;
         private UserManager<User> _userManager;
-        private RoleManager<IdentityRole> _roleManager;
+        private RoleManager<IdentityRole<int>> _roleManager;
 
         public JwtTokenFactory(ISigningKeyResolver signingKey, 
             ILogger<JwtTokenFactory> logger, 
             UserManager<User> userManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole<int>> roleManager)
         {
             _signingKey = signingKey;
             _logger = logger;

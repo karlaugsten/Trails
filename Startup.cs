@@ -52,7 +52,7 @@ namespace Trails
 
             services.AddDefaultIdentity<User>()
             .AddDefaultTokenProviders()
-            .AddRoles<IdentityRole>()
+            .AddRoles<IdentityRole<int>>()
             .AddEntityFrameworkStores<TrailContext>();
 
             services.Configure<IdentityOptions>(options =>
@@ -111,7 +111,7 @@ namespace Trails
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager)
         {
             if (env.IsDevelopment())
             {
@@ -150,12 +150,12 @@ namespace Trails
             SeedUsers(userManager);
         }
 
-        public static void SeedRoles(RoleManager<IdentityRole> roleManager)
+        public static void SeedRoles(RoleManager<IdentityRole<int>> roleManager)
         {
             if (!roleManager.RoleExistsAsync
         ("NormalUser").Result)
             {
-                IdentityRole role = new IdentityRole();
+                IdentityRole<int> role = new IdentityRole<int>();
                 role.Name = "NormalUser";
                 IdentityResult roleResult = roleManager.
                 CreateAsync(role).Result;
@@ -164,14 +164,14 @@ namespace Trails
             if (!roleManager.RoleExistsAsync
         ("Administrator").Result)
             {
-                IdentityRole role = new IdentityRole();
+                IdentityRole<int> role = new IdentityRole<int>();
                 role.Name = "Administrator";
                 IdentityResult roleResult = roleManager.
                 CreateAsync(role).Result;
                 roleManager.AddClaimAsync(role, new Claim("CanEditTrails", "true"));
                 roleManager.AddClaimAsync(role, new Claim("CanCommitTrails", "true"));
             } else {
-                IdentityRole role = new IdentityRole();
+                IdentityRole<int> role = new IdentityRole<int>();
                 role.Name = "Administrator";
                 roleManager.AddClaimAsync(role, new Claim("CanEditTrails", "true"));
                 roleManager.AddClaimAsync(role, new Claim("CanCommitTrails", "true"));
