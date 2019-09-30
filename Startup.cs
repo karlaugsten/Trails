@@ -166,15 +166,14 @@ namespace Trails
             {
                 IdentityRole<int> role = new IdentityRole<int>();
                 role.Name = "Administrator";
-                IdentityResult roleResult = roleManager.
-                CreateAsync(role).Result;
-                roleManager.AddClaimAsync(role, new Claim("CanEditTrails", "true"));
-                roleManager.AddClaimAsync(role, new Claim("CanCommitTrails", "true"));
+                IdentityResult roleResult = roleManager.CreateAsync(role).Result;
+                var realRole = roleManager.FindByNameAsync("Administrator").Result;
+                var one = roleManager.AddClaimAsync(realRole, new Claim("CanEditTrails", "true")).Result;
+                var two = roleManager.AddClaimAsync(realRole, new Claim("CanCommitTrails", "true")).Result;
             } else {
-                IdentityRole<int> role = new IdentityRole<int>();
-                role.Name = "Administrator";
-                roleManager.AddClaimAsync(role, new Claim("CanEditTrails", "true"));
-                roleManager.AddClaimAsync(role, new Claim("CanCommitTrails", "true"));
+                var realRole = roleManager.FindByNameAsync("Administrator").Result;
+                var one = roleManager.AddClaimAsync(realRole, new Claim("CanEditTrails", "true")).Result;
+                var two = roleManager.AddClaimAsync(realRole, new Claim("CanCommitTrails", "true")).Result;
             }
         }
 
@@ -186,7 +185,7 @@ namespace Trails
                 User user = new User();
                 user.UserName = "karl";
                 user.Email = "karlaugsten@gmail.com";
-
+                
                 IdentityResult result = userManager.CreateAsync
                 (user, "test123").Result;
 
