@@ -4,6 +4,7 @@ import './index.css';
 import Root from './Root';
 import configureStore from './configureStore';
 import * as serviceWorker from './serviceWorker';
+//import 'font-awesome/css/font-awesome.css';
 
 const store = configureStore();
 ReactDOM.render(<Root store={store} />, document.getElementById('root'));

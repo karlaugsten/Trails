@@ -11,7 +11,7 @@ class ProfileButton extends Component {
     if(!isLoggedIn) {
       login();
     } else {
-      // redirect to profile page.
+      this.props.history.push(`/profile`);
     }
   }
 

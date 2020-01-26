@@ -18,11 +18,36 @@ namespace Trails.Controllers
             _context = context;
         }
 
+        [HttpPost("{trailId}/Heart")]
+        [Authorize]
+        public IActionResult HeartTrail(int trailId)
+        {
+            // TODO: Save the users favourite to the database.
+            var usr = _context.Users
+                .Include(u => u.FavouriteTrails)
+                .First(u => u.UserName == this.HttpContext.User.Identity.Name);
+
+            var trail = _context.Trails.First(t => t.TrailId == trailId);
+            if(trail == null) return NotFound();
+            usr.FavouriteTrails.Add(new FavouriteTrails() {
+                User = usr,
+                Trail = trail
+            });
+            _context.Users.Update(usr);
+            _context.SaveChanges();
+            return Ok();
+        }
+
         [HttpGet]
         [AllowAnonymous]
-        public IEnumerable<Trail> Trails()
+        public IEnumerable<TrailEdit> Trails()
         {
-            return _context.Trails.Where(t => t.Approved).Include(t => t.Edit).ThenInclude(e => e.Images).ToList();
+            var trails = _context.Trails
+                        .Where(t => t.Approved)
+                        .Include(t => t.Edit)
+                        .ThenInclude(e => e.Images)
+                        .ToList();
+            return trails.Select(t => t.Edit).ToList();
         }
 
         [HttpPost]
@@ -106,7 +131,9 @@ namespace Trails.Controllers
         public IActionResult SaveEdit(int trailId, int editId, [FromBody]TrailEdit edit)
         {
             // Saves a draft of an edit.
-            var trail = _context.TrailEdits.Include(t => t.Images).FirstOrDefault(t => t.EditId == editId && t.TrailId == trailId);
+            var trail = _context.TrailEdits
+                .Include(t => t.Images)
+                .FirstOrDefault(t => t.EditId == editId && t.TrailId == trailId);
             if(trail == null)
             {
                 return NotFound();

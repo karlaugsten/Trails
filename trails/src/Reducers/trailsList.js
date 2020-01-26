@@ -1,8 +1,32 @@
 import { combineReducers } from 'redux';
 
-const handleHeart = (state, action) => {
-  return state; // For now just return state, later on we might want to maintain a list of heaarted trails.
-};
+let locallyStoredFavourites = JSON.parse(localStorage.getItem("favourites") || "[]");
+/*
+* This maintains a list of favourited/hearted trails for the user.
+*/
+const hearts = (state = locallyStoredFavourites, action) => {
+  let newState = state;
+  switch (action.type) {
+    case 'HEART_TRAIL_SUCCESS':
+    case 'HEART_TRAIL_UNAUTHORIZED':
+      newState = [...new Set([...state, action.id])];
+      localStorage.setItem("favourites", JSON.stringify(newState));
+      break;
+    case 'UNHEART_TRAIL_SUCCESS':
+    case 'UNHEART_TRAIL_UNAUTHORIZED':
+      newState = state.filter(id => id != action.id);
+      localStorage.setItem("favourites", JSON.stringify(newState));
+      break;
+    case 'GET_USER_HEARTS':
+      newState = action.response.result;
+      // TODO: Make a set and join the user's loclaly stored favourites with
+      // the returned lsit of favourites.
+      break;
+    default:
+      return state;
+  }
+  return newState;
+}
 
 const ids = (state = [], action) => {
   switch (action.type) {
@@ -14,8 +38,6 @@ const ids = (state = [], action) => {
       return [...state, action.response.result];
     case 'COMMIT_TRAIL_EDIT_SUCCESS':
       return [...state, action.response.result];
-    case 'HEART_TRAIL_SUCCESS':
-      return handleHeart(state, action);
     default:
       return state;
   }
@@ -56,6 +78,7 @@ const list = combineReducers({
   ids,
   isFetching,
   errorMessage,
+  hearts // TODO: Should this be in a userProfile reducer?
 });
 
 export default list;
@@ -63,3 +86,8 @@ export default list;
 export const getIds = (state) => state.ids;
 export const getIsFetching = (state) => state.isFetching;
 export const getErrorMessage = (state) => state.errorMessage;
+/**
+ * A list of the users favourite trails.
+ * @param {*} state 
+ */
+export const getUserFavourites = (state) => state.hearts;

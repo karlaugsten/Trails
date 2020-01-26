@@ -36,13 +36,14 @@ namespace Trails.Repositories
       var imageName = name + this.MimeTypeMap[image.ContentType];
       var thumbnailName = name + "-thumbnail" + this.MimeTypeMap[image.ContentType];
       var imagePath = this.folder + imageName;
+      var thumbnailPath = this.folder + thumbnailName;
       string base64Preview = null;
 
       using (var stream = new FileStream(imagePath, FileMode.CreateNew))
       {
           await _imageProcessor.ProcessImageToStream(image, stream);
       }
-      using (var stream = new FileStream(thumbnailName, FileMode.CreateNew))
+      using (var stream = new FileStream(thumbnailPath, FileMode.CreateNew))
       {
           base64Preview = await _imageProcessor.ProcessThumbnailImageToStream(image, stream);
       }

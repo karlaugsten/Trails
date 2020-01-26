@@ -68,4 +68,14 @@ export default class TrailsApi {
     })
     .then(TrailsApi.checkStatus);
   }
+
+  static heartTrail(trailId) {
+    return fetch(`/api/trails/${trailId}/heart`, {
+      method: 'POST',
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("token"),
+      }
+    })
+    .then(TrailsApi.checkStatus);
+  }
 }

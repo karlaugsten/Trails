@@ -68,4 +68,5 @@ const isValidToken = (token) => {
 export const getLoginRequested = (state) => state.loginRequested;
 export const getLoginError = (state) => state.loginError;
 export const isLoggedIn = (state) => state.token != null && isValidToken(state.token);
+export const getUserName = (state) => state.token != null && decode(state.token).name;
 

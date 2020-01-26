@@ -6,6 +6,7 @@ import ProfileButton from './Components/ProfileButton';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import ReduxTrailCards from './Components/ReduxTrailCards';
 import ReduxFullTrailCard from './Components/ReduxFullTrailCard';
+import ProfilePage from './Components/ProfilePage';
 
 export default class App extends React.Component {
     render() {
@@ -23,6 +24,7 @@ export default class App extends React.Component {
                   <Route path="/trails/:trailId" component={ReduxFullTrailCard} />
                   <Route path="/edit/:editId" component={TrailEditor} />
                   <Route exact path="/edit" component={TrailEditor} />
+                  <Route path="/profile" component={ProfilePage} />
               </div>
             </React.Fragment>
           </Router>

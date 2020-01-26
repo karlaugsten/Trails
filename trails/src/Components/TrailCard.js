@@ -1,6 +1,7 @@
 import React from 'react';
 import CardImages from './CardImages';
 import DraftContent from './DraftContent';
+import HeartButton from './HeartButton';
 import { withRouter } from "react-router-dom";
 
 class TrailCard extends React.Component {
@@ -34,7 +35,8 @@ class TrailCard extends React.Component {
     return (
       
       <div className="card" id={`trail-${this.props.trail.trailId}`}>
-          <CardImages images={this.props.trail.edit.images.map(i => i.thumbnailUrl)} />
+          <HeartButton id={this.props.trail.trailId} />
+          <CardImages images={this.props.trail.images.map(i => i.thumbnailUrl)} />
           <div onClick={() => this.handleClick()}>
             <div className="card-title">
                 {this.props.trail.title}

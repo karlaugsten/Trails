@@ -31,6 +31,9 @@ export const getIsFetchingId = (state, id) =>
 export const getErrorMessageForId = (state, id) => 
   fromById.getErrorMessageForId(state.byId, id);
 
+export const getFavouriteTrails = (state) =>
+  fromList.getUserFavourites(state.list);
+
 export const getIsFetching = (state) =>
   fromList.getIsFetching(state.list);
 
@@ -45,3 +48,6 @@ export const getLoginError = (state) =>
 
 export const isLoggedIn = (state) =>
   fromLogin.isLoggedIn(state.login);
+
+  export const getUserName = (state) =>
+  fromLogin.isLoggedIn(state.login) ? fromLogin.getUserName(state.login) : "User"; // some default

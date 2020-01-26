@@ -21,4 +21,7 @@ public class Trail : BaseTrail
   /// </summary>
   /// <value></value>
   public bool Approved { get; set; }
+
+  public ICollection<FavouriteTrails> FavouriteTrails { get; set;}
+
 }

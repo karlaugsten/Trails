@@ -11,4 +11,30 @@ public class TrailContext : IdentityDbContext<User, IdentityRole<int>, int>
     public DbSet<Trail> Trails { get; set; }
     public DbSet<TrailEdit> TrailEdits { get; set; }
     public DbSet<Image> Images { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<IdentityUserToken<int>>()
+                .HasKey(x => x.Value);
+            modelBuilder.Entity<IdentityUserRole<int>>(b =>
+            {
+                b.HasKey(i => new {i.UserId, i.RoleId});
+            });
+            modelBuilder.Entity<IdentityUserLogin<int>>()
+                .HasKey(x => x.UserId);
+            modelBuilder.Entity<User>()
+                .HasKey(x => x.Id);
+            modelBuilder.Entity<Trail>()
+                .HasKey(x => x.TrailId);
+            modelBuilder.Entity<FavouriteTrails>()
+                .HasKey(x => new { x.UserId, x.TrailId });
+            modelBuilder.Entity<FavouriteTrails>()
+                .HasOne(x => x.User)
+                .WithMany(m => m.FavouriteTrails)
+                .HasForeignKey(x => x.UserId);
+            modelBuilder.Entity<FavouriteTrails>()
+                .HasOne(x => x.Trail)
+                .WithMany(e => e.FavouriteTrails)
+                .HasForeignKey(x => x.TrailId);
+        }
 }

@@ -38,7 +38,9 @@ namespace Trails
             // For now use the test database.
             services.AddDbContext<TrailContext>(options => { 
                 if(CurrentEnvironment.IsDevelopment()) {
-                    options.UseSqlite("Data Source=trails.db");
+                    options.UseMySql(Configuration["DatabaseConnectionString"]);
+
+                    //options.UseSqlite("Data Source=trails.db");
                 } else {
                     options.UseMySql(Configuration["DatabaseConnectionString"]);
                 }  
@@ -179,8 +181,9 @@ namespace Trails
 
         public static void SeedUsers(UserManager<User> userManager)
         {
-            if (userManager.FindByNameAsync
-        ("karl").Result == null)
+            var karl = userManager.FindByNameAsync
+        ("karl").Result;
+            if (karl == null)
             {
                 User user = new User();
                 user.UserName = "karl";
@@ -194,6 +197,9 @@ namespace Trails
                     userManager.AddToRoleAsync(user,
                                         "Administrator").Wait();
                 }
+            } else {
+                userManager.AddToRoleAsync(karl,
+                                        "Administrator").Wait();
             }
         }
     }
