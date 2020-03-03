@@ -49,7 +49,7 @@ class FullTrailCard extends React.Component {
                         <i className="fas fa-map-marker-alt"></i> {this.props.trail.location}
                     </div>
                 </div>
-                <CardImages images={this.props.trail.images.map(i => i.url)} />
+                {/*<CardImages images={this.props.trail.images.map(i => i.url)} /> */}
                 
                 
                 

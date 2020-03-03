@@ -81,11 +81,11 @@ body {
 .card-fullscreen {
     z-index: 9999; 
     width: 90%; 
-    height: 2000px; 
+    height: auto; 
     /*position: fixed;*/
     /*top: -20px;*/
     /*left: -20px;*/
-    overflow: scroll;
+    /*overflow: scroll;*/
     position: relative;
     background-color: #424242;
 
@@ -152,10 +152,10 @@ body {
 }
 
 .card-fullscreen >* .card-title {
-    color: rgba(48, 48, 48, 0.56);;
+    /*color: rgba(48, 48, 48, 0.56);;*/
     z-index: 100;
     font-size: 60px;
-    font-weight: 300;
+    font-weight: 400;
     /*text-shadow: 1px 3px 2px rgba(0,0,0,0.2);*/
 }
 
@@ -176,13 +176,13 @@ body {
 }
 
 .card-fullscreen > .title-wrapper {
-    height: 250px;
+    /*height: 250px;*/
     display: flex;
     flex-direction: column;
 }
 
 .card-fullscreen >* .card-sub-title {
-    color: #0000006b;
+    /*color: #0000006b;*/
     font-size: 20px;
     line-height: 10px;
     font-weight: 200;
@@ -194,7 +194,7 @@ body {
 }
 
 .card-fullscreen >* .card-sub-title > i {
-    color: rgba(0, 0, 0, 0.253);
+    /*color: rgba(0, 0, 0, 0.253);*/
 }
 
 .card-sub-title {
