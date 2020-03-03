@@ -52,7 +52,7 @@ class TrailCard extends React.Component {
                 <div title="Best season" className="card-stat">{this.props.trail.minSeason}-{this.props.trail.maxSeason} <i className="card-icon far fa-calendar-check"></i></div>
             </div>
             <div className="card-description">
-              <DraftContent content={this.props.trail.description} />
+              <DraftContent short content={this.props.trail.description} />
             </div>
           </div>
       </div>

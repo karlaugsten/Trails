@@ -43,6 +43,7 @@ export default class Graph extends React.Component {
             type: 'area',
             backgroundColor:'none',
             borderColor: 'none',
+            height: "300px",
             tooltip: {
                 //backgroundColor: 'rgba(0,0,0,0)',
                 fontColor: 'var(--fontColor)',
@@ -132,7 +133,7 @@ export default class Graph extends React.Component {
                     lineWidth: 3,
                     alpha: '0.7',
                     marker: {
-                    visible: false
+                        visible: false
                     }
                 }
             ]       

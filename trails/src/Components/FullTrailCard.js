@@ -1,5 +1,6 @@
 import React from 'react';
 import CardImages from './CardImages';
+import DraftContent from './DraftContent';
 import Graph from './Graph';
 import { withRouter } from 'react-router-dom';
 
@@ -62,7 +63,7 @@ class FullTrailCard extends React.Component {
                 </div>
                 <Graph />
                 <div className="card-description">
-                {this.props.trail.summary}
+                    <DraftContent content={this.props.trail.description} />
                 </div>
             </div>
             </div>

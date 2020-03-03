@@ -7,47 +7,23 @@ import {
 } from 'draft-js';
 
 import AddImage from './AddImage';
+import TrailEditor from './Editor'
+
+import editorStyles from './editorStyles.css';
 
 import 'draft-js-image-plugin/lib/plugin.css';
 import 'draft-js/dist/Draft.css';
-
-import Editor, { composeDecorators } from 'draft-js-plugins-editor';
 
 import createImagePlugin from 'draft-js-image-plugin';
 
 import createAlignmentPlugin from 'draft-js-alignment-plugin';
 
-import createFocusPlugin from 'draft-js-focus-plugin';
-
-import createResizeablePlugin from 'draft-js-resizeable-plugin';
-
-import createBlockDndPlugin from 'draft-js-drag-n-drop-plugin';
-
-//import createDragNDropUploadPlugin from 'draft-js-drag-n-drop-upload-plugin';
-import editorStyles from './editorStyles.css';
-//import mockUpload from './mockUpload';
-
-const resizeablePlugin = createResizeablePlugin();
 const alignmentPlugin = createAlignmentPlugin();
-const focusPlugin = createFocusPlugin();
-const blockDndPlugin = createBlockDndPlugin();
+
 const { AlignmentTool } = alignmentPlugin;
 
-const decorator = composeDecorators(
-  resizeablePlugin.decorator,
-  alignmentPlugin.decorator,
-  focusPlugin.decorator,
-  blockDndPlugin.decorator
-);
-const imagePlugin = createImagePlugin({ decorator });
+const imagePlugin = createImagePlugin();
 
-const plugins = [
-  alignmentPlugin,
-  resizeablePlugin,
-  imagePlugin,
-  focusPlugin,
-  blockDndPlugin
-];
 
 export default class TrailDescriptionEditor extends Component {
   constructor(props) {
@@ -71,7 +47,7 @@ export default class TrailDescriptionEditor extends Component {
 
   addImage = (image) => {
     this.setState({
-      editorState: imagePlugin.addImage(this.state.editorState, image.url)
+      editorState: this.editor.imagePlugin.addImage(this.state.editorState, image.url)
     })
     this.props.addImage(image);
   }
@@ -95,10 +71,9 @@ export default class TrailDescriptionEditor extends Component {
     return (
       <div>
         <div className={editorStyles.editor} onClick={this.focus}>
-          <Editor
+          <TrailEditor
             editorState={this.state.editorState}
             onChange={this.onChange.bind(this)}
-            plugins={plugins}
             ref={(element) => { this.editor = element; }}
           />
           <AlignmentTool />

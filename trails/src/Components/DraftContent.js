@@ -1,7 +1,7 @@
 import React from 'react';
 import {convertFromRaw, Editor, EditorState} from 'draft-js';
-import contentStyles from './contentStyles.css';
- 
+import TrailEditor from './Editor';
+
 export default class DraftContent extends React.Component {
     constructor(props) {
       super(props);
@@ -9,12 +9,16 @@ export default class DraftContent extends React.Component {
     }
 
     render() {
-        const { content } = this.props;
+        const { content, short } = this.props;
+        if(short) {
+          let firstBlock = JSON.parse(content).blocks[0];
+          return firstBlock.text;
+        }
         const editorJSON = EditorState.createWithContent(convertFromRaw(JSON.parse(content)));
         return (
-            <Editor className="something-something"
-            editorState={editorJSON}
-            readonly={true}
+            <TrailEditor className="draft-content"
+              editorState={editorJSON}
+              readOnly={true}
           />
         );
     }
