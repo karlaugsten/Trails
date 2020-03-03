@@ -323,7 +323,7 @@ body {
 
 
 .graph-wrapper {
-    height: 250px;
+    /*height: 250px;*/
     /*width: 400px;*/
     position: relative;
     overflow: hidden;
@@ -331,9 +331,9 @@ body {
     /*top: -40px;*/
     margin-bottom: 10px;
     margin-top: 10px;
-    border-width: 1px;
+    /*border-width: 1px;
     border-color: #000000;
-    border-style: solid;
+    border-style: solid;*/
 }
 
 .graph-point {
