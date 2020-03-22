@@ -11,6 +11,7 @@ public class TrailContext : IdentityDbContext<User, IdentityRole<int>, int>
     public DbSet<Trail> Trails { get; set; }
     public DbSet<TrailEdit> TrailEdits { get; set; }
     public DbSet<Image> Images { get; set; }
+    public DbSet<Map> Maps { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

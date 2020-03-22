@@ -9,6 +9,11 @@ public class BaseTrail {
   public double MinDuration { get; set; }
   public double Distance { get; set; }
   public int Elevation { get; set; }
-  public string MinSeason {get; set; }
-  public string MaxSeason {get; set; }
+  public string MinSeason { get; set; }
+  public string MaxSeason { get; set; }
+  /// <summary>
+  /// This is the map related to this trail, if one exists.
+  /// </summary>
+  /// <value></value>
+  public int MapId { get; set; }
 }

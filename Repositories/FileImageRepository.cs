@@ -15,39 +15,35 @@ namespace Trails.Repositories
     private TrailContext _context;
     private IImageProcessor _imageProcessor;
 
+    private IFileRepository _fileRepository;
+
     private Dictionary<string, string> MimeTypeMap = new Dictionary<string, string>() {
       {"image/jpeg", ".jpeg"},
       {"image/png", ".png"},
       {"image/tiff", ".tiff"}
     };
 
-    private string folder;
-
     public FileImageRepository(TrailContext context, IConfiguration config, IImageProcessor imageProcessor)
     {
       _context = context;
-      folder = config["ImageRepoFolder"];
+      _fileRepository = new LocalFileRepository(config["ImageRepoFolder"]);
       _imageProcessor = imageProcessor;
     }
     
     public async Task<Image> AddImageAsync(IFormFile image, int editId) {
       // Save the image to wherever we are storing it.. for now just the file system.
-      var name = Guid.NewGuid().ToString();
-      var imageName = name + this.MimeTypeMap[image.ContentType];
-      var thumbnailName = name + "-thumbnail" + this.MimeTypeMap[image.ContentType];
-      var imagePath = this.folder + imageName;
-      var thumbnailPath = this.folder + thumbnailName;
-      string base64Preview = null;
-
-      using (var stream = new FileStream(imagePath, FileMode.CreateNew))
-      {
-          await _imageProcessor.ProcessImageToStream(image, stream);
-      }
-      using (var stream = new FileStream(thumbnailPath, FileMode.CreateNew))
-      {
-          base64Preview = await _imageProcessor.ProcessThumbnailImageToStream(image, stream);
-      }
+      var fileType = this.MimeTypeMap[image.ContentType];
       
+      string imageName = await _fileRepository.SaveAsync(fileType, 
+        async (stream) => await _imageProcessor.ProcessImageToStream(image, stream));
+
+      string base64Preview = null;
+      string thumbnailName = await _fileRepository.SaveAsync(fileType, 
+        async (stream) => {
+          base64Preview = await _imageProcessor.ProcessThumbnailImageToStream(image, stream);
+        }
+      );
+
       // Create an image record in the database.
       var newImage = new Image() {
         Url = $"/api/images/{imageName}",
@@ -64,14 +60,6 @@ namespace Trails.Repositories
       return newImage;
     }
 
-    public Stream GetImageStream(string imageName) 
-    {
-      var imagePath = this.folder + imageName;
-      if(!System.IO.File.Exists(imagePath)) { // TODO: Do the check in imagerepo somehow...
-        throw new KeyNotFoundException("No image.");
-      }
-      FileStream fileStream = new FileStream(imagePath, FileMode.Open);
-      return fileStream;      
-    }
+    public Stream GetImageStream(string imageName) => _fileRepository.Get(imageName);
   }
 }
