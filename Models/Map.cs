@@ -4,6 +4,8 @@ public class Map {
   [Key]
   public int Id { get; set; }
   public string Polyline { get; set; }
+  
+  public string ElevationPolyline { get; set; }
 
   public Location Start { get; set; }
 

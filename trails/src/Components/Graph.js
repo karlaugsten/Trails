@@ -57,7 +57,7 @@ export default class Graph extends React.Component {
          
             scaleX: {
                 minValue: 0,
-                step: 100,
+                step: 10,
                 lineWidth: 0,
                 tick: {
                     visible: false
@@ -127,7 +127,7 @@ export default class Graph extends React.Component {
             series: [
                 {
                     // plot 1 values, linear data
-                    values: this.state.points.map(p => p.y),
+                    values: this.props.values,
                     backgroundColor: '#3E84F9 #fff',
                     lineColor: 'var(--darkBlue)',
                     lineWidth: 3,

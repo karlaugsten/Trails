@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Trails.Repositories;
 
 namespace Trails.Controllers
@@ -20,7 +21,8 @@ namespace Trails.Controllers
         }
 
         public static IEnumerable<string> allowedMapTypes = new List<string>() {
-            "application/gpx+xml"
+            "application/gpx+xml",
+            "application/octet-stream"
         };
 
         private IGpxRepository _gpxRepo;
@@ -53,7 +55,9 @@ namespace Trails.Controllers
               // Set the map on this editId to the id of the map returned...
               var edit = _trailContext.TrailEdits.Find(mapUpload.EditId);
               edit.MapId = map.Id;
+              edit.Map = map;
               _trailContext.TrailEdits.Update(edit);
+              _trailContext.Entry(edit).State = EntityState.Modified;
               _trailContext.SaveChanges();
             } catch(Exception e) {
               return StatusCode(500, "failed to update the edit with the newly created map.");

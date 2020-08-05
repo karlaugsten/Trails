@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,7 @@ using Microsoft.IdentityModel.Tokens;
 using Trails.Encryption;
 using Trails.Authentication;
 using Trails.Repositories;
+using System.Text.Json;
 
 namespace Trails
 {
@@ -32,9 +34,16 @@ namespace Trails
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc(options => options.EnableEndpointRouting = false)
+            .SetCompatibilityVersion(CompatibilityVersion.Latest)
+            .AddJsonOptions(jo =>
+            {
+                jo.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+            });
 
             services.AddTransient<IImageRepository, FileImageRepository>();
+            services.AddTransient<IGpxRepository, GpxRepository>();
+
             // For now use the test database.
             services.AddDbContext<TrailContext>(options => { 
                 if(CurrentEnvironment.IsDevelopment()) {
@@ -52,10 +61,14 @@ namespace Trails
                 configuration.RootPath = "trails/build";
             });
 
-            services.AddDefaultIdentity<User>()
+            services.AddIdentity<User, IdentityRole<int>>()
+            .AddEntityFrameworkStores<TrailContext>()
+            .AddDefaultTokenProviders();
+
+            /*services.AddDefaultIdentity<User>()
             .AddDefaultTokenProviders()
             .AddRoles<IdentityRole<int>>()
-            .AddEntityFrameworkStores<TrailContext>();
+            .AddEntityFrameworkStores<TrailContext>();*/
 
             services.Configure<IdentityOptions>(options =>
             {

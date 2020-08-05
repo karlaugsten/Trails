@@ -1,4 +1,9 @@
+using System.ComponentModel.DataAnnotations;
+
 public class LoginRequest {
-  public string Email;
-  public string Password;
+  [Required]
+  public string Email { get; set;}
+
+  [Required]
+  public string Password { get; set; }
 }

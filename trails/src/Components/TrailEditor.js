@@ -1,5 +1,6 @@
 import React from 'react';
 import TrailDescriptionEditor from './TrailDescriptionEditor';
+import AddGpx from './AddGpx';
 import * as actions from '../Actions';
 import { getTrailEdit, isLoggedIn, getLoginRequested } from '../Reducers';
 import { connect } from 'react-redux';
@@ -72,6 +73,12 @@ class TrailEditor extends React.Component {
       this.setState({
           description: desc
         });
+    }
+
+    addMap = (map) => {
+      this.setState({
+        map: map
+      });
     }
   
     render() {
@@ -169,6 +176,7 @@ class TrailEditor extends React.Component {
               <label for="ratingInput">Rating (out of 5)</label>
               <input type="number" id="ratingInput" step="1" class="form-control" onChange={this.handleChange} name="rating" value={this.state.rating} max="5" min="0"  />
             </div>
+            <AddGpx trailId={this.state.trailId} editId={this.state.editId} map={this.state.map} onAdd={(map) => this.addMap(map)} />
             <TrailDescriptionEditor 
               trailId={this.state.trailId}
               editId={this.state.editId}

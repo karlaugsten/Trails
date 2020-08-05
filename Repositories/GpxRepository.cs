@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,6 +8,7 @@ using System.Xml;
 using System.Xml.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 public class GpxRepository : IGpxRepository
 {
@@ -14,9 +16,12 @@ public class GpxRepository : IGpxRepository
 
   private TrailContext _context;
 
-  public GpxRepository(TrailContext context, IConfiguration config) {
+  private ILogger<GpxRepository> _logger;
+
+  public GpxRepository(TrailContext context, IConfiguration config, ILoggerFactory factory) {
     _context = context;
     _fileRepository = new LocalFileRepository(config["GpxRepoFolder"]);
+    _logger = factory.CreateLogger<GpxRepository>();
   }
 
   public Map GetMap(int mapId)
@@ -28,20 +33,24 @@ public class GpxRepository : IGpxRepository
   {
     XmlDocument gpxDoc = new XmlDocument();
     gpxDoc.Load(gpxFileStream);
-    
+       
     var gpsPoints = parseLocationFromTrackXml(gpxDoc);
 
     if(gpsPoints.Count == 0) {
       // try to parse from the route elements instead.
       gpsPoints = parseLocationFromRouteXml(gpxDoc);
     }
-    
+
+    var elevation = parseElevationFromTrackXml(gpxDoc, 30);
+
+    gpxFileStream.Seek(0, SeekOrigin.Begin);
     // Now we need to convert the location list into a polyline to save it to the db
     Map map = new Map()
     {
       Start = gpsPoints.First(),
       End = gpsPoints.Last(),
       Polyline = PolylineConverter.Convert(gpsPoints),
+      ElevationPolyline = PolylineConverter.Convert(elevation),
       // Can we read from this stream twice?
       RawFileUrl = "/api/maps/raw/" + _fileRepository.Save(".gpx", (stream) => gpxFileStream.CopyTo(stream))
     };
@@ -51,36 +60,66 @@ public class GpxRepository : IGpxRepository
   }
 
   private List<Location> parseLocationFromTrackXml(XmlDocument gpx) {
+    XmlNamespaceManager nsmgr = new XmlNamespaceManager(gpx.NameTable);
+    nsmgr.AddNamespace("x", "http://www.topografix.com/GPX/1/1");     
     var gpsPoints = new List<Location>();
-
-    foreach(XmlNode trk in gpx.SelectSingleNode("gpx").SelectNodes("trk")) {
-      foreach(XmlNode segment in trk.SelectNodes("trkseg")) {
-        var points = segment.SelectNodes("trkpt");
-        foreach(XmlNode pointNode in points) {
-          Location location = new Location()
-          {
-            Latitude = decimal.Parse(pointNode.Attributes["lon"].Value),
-            Longitude = decimal.Parse(pointNode.Attributes["lon"].Value),
-          };
-          gpsPoints.Add(location);
-        }
-      }
+    var gpxNode = gpx.SelectSingleNode("//x:gpx", nsmgr);
+    var points = gpxNode.SelectNodes("//x:trkpt", nsmgr);
+    foreach(XmlNode pointNode in points) {
+      Location location = new Location()
+      {
+        Latitude = double.Parse(pointNode.Attributes["lat"].Value),
+        Longitude = double.Parse(pointNode.Attributes["lon"].Value),
+      };
+      gpsPoints.Add(location);
     }
     return gpsPoints;
   }
 
+  private List<int> parseElevationFromTrackXml(XmlDocument gpx, int numSamplesPerKm) {
+    XmlNamespaceManager nsmgr = new XmlNamespaceManager(gpx.NameTable);
+    nsmgr.AddNamespace("x", "http://www.topografix.com/GPX/1/1");     
+    var elevationLocations = new List<Tuple<Location, int>>();
+    var eleNodes = gpx.SelectNodes("//x:ele", nsmgr);
+    foreach(XmlNode eleNode in eleNodes) {
+      int elevation = (int)double.Parse(eleNode.InnerText);
+      var locationNode = eleNode.ParentNode;
+      Location location = new Location()
+      {
+        Latitude = double.Parse(locationNode.Attributes["lat"].Value),
+        Longitude = double.Parse(locationNode.Attributes["lon"].Value),
+      };
+      elevationLocations.Add(Tuple.Create(location, elevation));
+    }
+
+    // Parse the elevations and interpolate them to numSamplesPerKm number of samples per kilometer
+    double distance = 0.0;
+    Location lastLocation = elevationLocations.First().Item1;
+    foreach(var elevationLocation in elevationLocations) {
+      Location location = elevationLocation.Item1;
+      int elevation = elevationLocation.Item2;
+      double distanceFromLast = lastLocation.Distance(location);
+
+      distance += distanceFromLast;
+      lastLocation = location;
+    }
+    
+    _logger.LogInformation("Total distance for GPX: " + distance);
+
+    return elevationLocations.Select(e => e.Item2).ToList();
+  }
+
   private List<Location> parseLocationFromRouteXml(XmlDocument gpx) {
     var gpsPoints = new List<Location>();
-
-    foreach(XmlNode trk in gpx.SelectSingleNode("gpx").SelectNodes("rte")) {
-      foreach(XmlNode pointNode in trk.SelectNodes("rtept")) {
-        Location location = new Location()
-        {
-          Latitude = decimal.Parse(pointNode.Attributes["lon"].Value),
-          Longitude = decimal.Parse(pointNode.Attributes["lon"].Value),
-        };
-        gpsPoints.Add(location);
-      }
+    XmlNamespaceManager nsmgr = new XmlNamespaceManager(gpx.NameTable);
+    nsmgr.AddNamespace("x", "http://www.topografix.com/GPX/1/1");   
+    foreach(XmlNode pointNode in gpx.SelectNodes("//x:rtept", nsmgr)) {
+      Location location = new Location()
+      {
+        Latitude = double.Parse(pointNode.Attributes["lat"].Value),
+        Longitude = double.Parse(pointNode.Attributes["lon"].Value),
+      };
+      gpsPoints.Add(location);
     }
     return gpsPoints;
   }

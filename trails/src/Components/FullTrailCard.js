@@ -3,6 +3,7 @@ import CardImages from './CardImages';
 import DraftContent from './DraftContent';
 import Graph from './Graph';
 import { withRouter } from 'react-router-dom';
+import Polyline from './Polyline';
 
 class FullTrailCard extends React.Component {
     constructor(props) {
@@ -61,7 +62,11 @@ class FullTrailCard extends React.Component {
                     <div title="Overall rating" className="card-stat">{rating}</div>
                     <div title="Best season" className="card-stat">{this.props.trail.minSeason}-{this.props.trail.maxSeason}<i className="card-icon far fa-calendar-check"></i></div>
                 </div>
-                <Graph />
+                <Polyline polyline={this.props.trail.map.elevationPolyline}>
+                    {elevation => 
+                        <Graph values={elevation}/>
+                    }
+                </Polyline>
                 <div className="card-description">
                     <DraftContent content={this.props.trail.description} />
                 </div>

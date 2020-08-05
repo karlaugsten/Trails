@@ -45,7 +45,9 @@ namespace Trails.Controllers
             var trails = _context.Trails
                         .Where(t => t.Approved)
                         .Include(t => t.Edit)
-                        .ThenInclude(e => e.Images)
+                            .ThenInclude(e => e.Map)
+                        .Include(t => t.Edit)
+                            .ThenInclude(e => e.Images)
                         .ToList();
             return trails.Select(t => t.Edit).ToList();
         }
@@ -118,7 +120,10 @@ namespace Trails.Controllers
         public IActionResult GetEdit(int editId)
         {
             // Saves a draft of an edit.
-            var trail = _context.TrailEdits.Include(t => t.Images).FirstOrDefault(t => t.EditId == editId);
+            var trail = _context.TrailEdits
+                .Include(t => t.Images)
+                .Include(t => t.Map)
+                .FirstOrDefault(t => t.EditId == editId);
             if(trail == null)
             {
                 return NotFound();
@@ -133,6 +138,7 @@ namespace Trails.Controllers
             // Saves a draft of an edit.
             var trail = _context.TrailEdits
                 .Include(t => t.Images)
+                .Include(t => t.Map)
                 .FirstOrDefault(t => t.EditId == editId && t.TrailId == trailId);
             if(trail == null)
             {
@@ -141,7 +147,7 @@ namespace Trails.Controllers
             //trail.EditId = edit.EditId;
             trail.Title = edit.Title;
             trail.Rating = edit.Rating;
-            trail.Images = _context.Images.Where(i => edit.Images.FirstOrDefault(ei => ei.Id == i.Id) != null).ToList();
+            trail.Images = edit.Images;
             trail.Location = edit.Location;
             trail.Elevation = edit.Elevation;
             trail.Distance = edit.Distance;
