@@ -79,34 +79,40 @@ public class GpxRepository : IGpxRepository
   private List<int> parseElevationFromTrackXml(XmlDocument gpx, int numSamplesPerKm) {
     XmlNamespaceManager nsmgr = new XmlNamespaceManager(gpx.NameTable);
     nsmgr.AddNamespace("x", "http://www.topografix.com/GPX/1/1");     
-    var elevationLocations = new List<Tuple<Location, int>>();
+    var elevationLocations = new List<Tuple<double, double>>();
     var eleNodes = gpx.SelectNodes("//x:ele", nsmgr);
+    
+    double distance = 0.0;
+    Location lastLocation = null;
     foreach(XmlNode eleNode in eleNodes) {
-      int elevation = (int)double.Parse(eleNode.InnerText);
+      double elevation = double.Parse(eleNode.InnerText);
       var locationNode = eleNode.ParentNode;
       Location location = new Location()
       {
         Latitude = double.Parse(locationNode.Attributes["lat"].Value),
         Longitude = double.Parse(locationNode.Attributes["lon"].Value),
       };
-      elevationLocations.Add(Tuple.Create(location, elevation));
-    }
+      if(lastLocation != null) {
+        double distanceFromLast = lastLocation.Distance(location);
+        distance += distanceFromLast;
+      }
 
-    // Parse the elevations and interpolate them to numSamplesPerKm number of samples per kilometer
-    double distance = 0.0;
-    Location lastLocation = elevationLocations.First().Item1;
-    foreach(var elevationLocation in elevationLocations) {
-      Location location = elevationLocation.Item1;
-      int elevation = elevationLocation.Item2;
-      double distanceFromLast = lastLocation.Distance(location);
-
-      distance += distanceFromLast;
+      elevationLocations.Add(Tuple.Create(distance, elevation));
       lastLocation = location;
     }
-    
+
+    Interpolator interpolator = new LinearInterpolator(
+      elevationLocations.Select(tuple => tuple.Item1).ToArray(), 
+      elevationLocations.Select(tuple => tuple.Item2).ToArray()
+    );
+
     _logger.LogInformation("Total distance for GPX: " + distance);
 
-    return elevationLocations.Select(e => e.Item2).ToList();
+    return Enumerable.Range(0, (int)(distance*1000.0/20.0))
+      .Select(x => x * 20.0/1000.0)
+      .Select(x => interpolator.interpolate(x))
+      .Select(x => (int)Math.Round(x))
+      .ToList();
   }
 
   private List<Location> parseLocationFromRouteXml(XmlDocument gpx) {

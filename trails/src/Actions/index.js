@@ -187,8 +187,7 @@ export const heartTrail = (id) => (dispatch, getState) =>
     {
       dispatch({
         type: 'HEART_TRAIL_SUCCESS',
-        id,
-        response: normalize(response, schema.trail),
+        id
       });
       return response;
     },
@@ -212,8 +211,7 @@ export const heartTrail = (id) => (dispatch, getState) =>
     {
       dispatch({
         type: 'UNHEART_TRAIL_SUCCESS',
-        id,
-        response: normalize(response, schema.trail),
+        id
       });
       return response;
     },

@@ -10,35 +10,10 @@ export default class Graph extends React.Component {
       
     }
 
-    componentWillMount(){
-        var points = [];
-        var y = 250;
-        for(var i = 0; i < 1000; i+=10) {
-            points.push({x: i, y: y});
-        }
-        this.setState({points: points});
-        setTimeout(() => {
-            this.generatePoints();
-        }, 1000);
-    }
-  
-    generatePoints() {
-        var points = [
-
-
-
-        ]
-        var y = 125;
-        for(var i = 0; i < 1000; i+=10) {
-          points.push({x: i, y: y});
-          y += Math.random()*20-10;
-          y = Math.max(y, 0);
-        }
-        this.setState({points: points})
-    }
-
     render() {
-
+        const { values } = this.props;
+        var maxValue = Math.max(...values);
+        var minValue = Math.min(...values);
         let myConfig = {
             type: 'area',
             backgroundColor:'none',
@@ -57,7 +32,7 @@ export default class Graph extends React.Component {
          
             scaleX: {
                 minValue: 0,
-                step: 10,
+                step: 20, // Step has to match the interpolation step we do for elevation during GPX processing
                 lineWidth: 0,
                 tick: {
                     visible: false
@@ -92,7 +67,7 @@ export default class Graph extends React.Component {
                 tick: {
                     visible: false
                 },
-                values: '1000:0',
+                values: maxValue + ":" + minValue,
                 label: { 
                     text: "Elevation (m)",
                     borderColor: 'none',

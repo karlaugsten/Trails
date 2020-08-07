@@ -29,6 +29,10 @@ namespace Trails.Controllers
 
             var trail = _context.Trails.First(t => t.TrailId == trailId);
             if(trail == null) return NotFound();
+
+            // If the user already liked the trail, return
+            if(usr.FavouriteTrails.Select(fav => fav.TrailId == trailId).Any()) return Ok();
+            
             usr.FavouriteTrails.Add(new FavouriteTrails() {
                 User = usr,
                 Trail = trail
