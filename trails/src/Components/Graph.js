@@ -32,8 +32,10 @@ export default class Graph extends React.Component {
          
             scaleX: {
                 minValue: 0,
-                step: 20, // Step has to match the interpolation step we do for elevation during GPX processing
+                step: 0.02, // Step has to match the interpolation step we do for elevation during GPX processing
                 lineWidth: 0,
+                format: "%v",
+                decimals: 1,
                 tick: {
                     visible: false
                 },
@@ -81,7 +83,7 @@ export default class Graph extends React.Component {
             'crosshair-x': {
                 'plot-label': {
                     text: "%v meters",
-                    decimals: 1
+                    decimals: 0
                 }
             },
             plot: {
