@@ -8,6 +8,7 @@ export default class Image extends React.Component {
       isError: false,
       loaded: false,
     }
+    this.image = React.createRef();
   }
 
   componentWillReceiveProps( nextProps ) {
@@ -19,7 +20,14 @@ export default class Image extends React.Component {
         loaded: false 
       } );
 		}
-	}
+  }
+  
+  componentDidMount() {
+    const img = this.image.current;
+    if (img && img.complete) {
+        this.loaded();
+    }
+}
 
 	handleError = () => {
 		this.setState( { isError: true } );
@@ -30,16 +38,28 @@ export default class Image extends React.Component {
   }
 
   render() {
-    const {src, ...others } = this.props;
-    let img = (<img style={{display: "none"}} onLoad={ this.loaded } onError={ this.handleError } className="card-image" src={src} {...others} />);
+    const {src, style, ...others } = this.props;
+    const loadingStyle = {display: "none", position: "absolute", width: "0", height: "0"};
+
+    let img = (<img {...others} style={!this.state.loaded ? loadingStyle : style} ref={this.image} onLoad={ this.loaded } onError={ this.handleError } className="card-image" src={src} />);
 
     if(this.state.isError) return null;
 
+    const loadingIconStyle = {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      height: "100%"
+    };
+
     if(!this.state.loaded) {
       return (
-        <Loader style={{ width: "100%", height: "250px"}}>
+        <>
+          <div class="card-image" style={{...style, width: "400px", textAlign:"center", verticalAlign:"center" }} {...others}>
+            <i class="fa-4x fas fa-mountain card-image-loader" style={loadingIconStyle} ></i>
+          </div>
           {img}
-        </Loader>
+        </>
       );
     }
 

@@ -2,9 +2,10 @@ import React from 'react';
 
 export default ({ children, ...others }) => (
     <React.Fragment>
-      <div className="loader-wrapper" {...others}>
-        <div className="loader"  />
+      <div {...others}>
+        <div className="loader-wrapper">
+          <div className="loader"  />
+        </div>
       </div>
-      {children}
     </React.Fragment>
   );
