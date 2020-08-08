@@ -22,24 +22,44 @@ namespace Trails.Controllers
         [Authorize]
         public IActionResult HeartTrail(int trailId)
         {
-            // TODO: Save the users favourite to the database.
             var usr = _context.Users
                 .Include(u => u.FavouriteTrails)
                 .First(u => u.UserName == this.HttpContext.User.Identity.Name);
 
-            var trail = _context.Trails.First(t => t.TrailId == trailId);
+            var trail = _context.Trails.FirstOrDefault(t => t.TrailId == trailId);
             if(trail == null) return NotFound();
 
             // If the user already liked the trail, return
-            if(usr.FavouriteTrails.Select(fav => fav.TrailId == trailId).Any()) return Ok();
-            
+            if(usr.FavouriteTrails.Where(fav => fav.TrailId == trailId).Any()) return Ok(successJson());
+
             usr.FavouriteTrails.Add(new FavouriteTrails() {
                 User = usr,
                 Trail = trail
             });
             _context.Users.Update(usr);
             _context.SaveChanges();
-            return Ok();
+            return Ok(successJson());
+        }
+
+        [HttpPost("{trailId}/Unheart")]
+        [Authorize]
+        public IActionResult UnHeartTrail(int trailId)
+        {
+            var usr = _context.Users
+                .Include(u => u.FavouriteTrails)
+                .First(u => u.UserName == this.HttpContext.User.Identity.Name);
+
+            var trail = _context.Trails.FirstOrDefault(t => t.TrailId == trailId);
+            if(trail == null) return NotFound();
+
+            // If the user hasn't already liked the trail, return
+            var favourite = usr.FavouriteTrails.Where(fav => fav.TrailId == trailId);
+            if(!favourite.Any()) return Ok(successJson());
+            
+            usr.FavouriteTrails.Remove(favourite.First());
+            _context.Users.Update(usr);
+            _context.SaveChanges();
+            return Ok(successJson());
         }
 
         [HttpGet]
@@ -205,7 +225,17 @@ namespace Trails.Controllers
 
             // Save changes in database
             _context.SaveChanges();
-            return Ok();
+            return Ok(successJson());
+        }
+
+        /// <summary>
+        /// Return some json response on success?
+        /// </summary>
+        /// <returns></returns>
+        private static object successJson() {
+            return new {
+                message = "success"
+            };
         }
     }
 }

@@ -207,7 +207,7 @@ export const heartTrail = (id) => (dispatch, getState) =>
   );
 
   export const unHeartTrail = (id) => (dispatch, getState) =>
-  TrailsApi.heartTrail(id).then(response => 
+  TrailsApi.unHeartTrail(id).then(response => 
     {
       dispatch({
         type: 'UNHEART_TRAIL_SUCCESS',
