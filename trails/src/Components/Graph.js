@@ -14,7 +14,7 @@ export default class Graph extends React.Component {
         const { values } = this.props;
         var maxValue = Math.max(...values);
         var minValue = Math.min(...values);
-        let myConfig = {
+        let graph = {
             type: 'area',
             backgroundColor:'none',
             borderColor: 'none',
@@ -114,6 +114,42 @@ export default class Graph extends React.Component {
                     }
                 }
             ]       
+        };
+
+        let myConfig = {
+            gui: {
+                behaviors: [
+                {
+                    id: "Reload",
+                    enabled: "none"
+                },
+                {
+                    id: 'ViewSource',
+                    enabled: 'none'
+                },
+                {
+                    id: 'ExportData',
+                    enabled: 'none'
+                },
+                {
+                    id: 'CrosshairHide',
+                    enabled: 'none'
+                },
+                {
+                    id: 'About',
+                    enabled: 'none'
+                },
+                {
+                    id: 'ShowGuide',
+                    enabled: 'none'
+                },
+                {
+                    id: 'HideGuide',
+                    enabled: 'none'
+                }
+                ]
+              },
+              graphset: [graph]
         };
 
         return (
