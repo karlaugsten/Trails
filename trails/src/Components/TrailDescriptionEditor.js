@@ -13,10 +13,13 @@ import editorStyles from './editorStyles.css';
 
 import 'draft-js-image-plugin/lib/plugin.css';
 import 'draft-js/dist/Draft.css';
+import 'draft-js-alignment-plugin/lib/plugin.css';
 
 import createImagePlugin from 'draft-js-image-plugin';
 
 import createAlignmentPlugin from 'draft-js-alignment-plugin';
+
+
 
 const alignmentPlugin = createAlignmentPlugin();
 
@@ -42,7 +45,7 @@ export default class TrailDescriptionEditor extends Component {
   };
 
   focus = () => {
-    this.editor.focus();
+    setTimeout(this.editor.focus, 50);
   };
 
   addImage = (image) => {

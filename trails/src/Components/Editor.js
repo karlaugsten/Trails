@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 
 import 'draft-js-image-plugin/lib/plugin.css';
 import 'draft-js/dist/Draft.css';
+import 'draft-js-alignment-plugin/lib/plugin.css';
+import 'draft-js-inline-toolbar-plugin/lib/plugin.css';
+
 
 import Editor, { composeDecorators } from 'draft-js-plugins-editor';
 
@@ -15,12 +18,16 @@ import createResizeablePlugin from 'draft-js-resizeable-plugin';
 
 import createBlockDndPlugin from 'draft-js-drag-n-drop-plugin';
 
+import createInlineToolbarPlugin  from 'draft-js-inline-toolbar-plugin';
+
+
 const resizeablePlugin = createResizeablePlugin();
 const alignmentPlugin = createAlignmentPlugin();
 const focusPlugin = createFocusPlugin();
 const blockDndPlugin = createBlockDndPlugin();
+const toolbarPlugin = createInlineToolbarPlugin({});
 const { AlignmentTool } = alignmentPlugin;
-
+//const { Toolbar } =  toolbarPlugin;
 const decorator = composeDecorators(
   resizeablePlugin.decorator,
   alignmentPlugin.decorator,
@@ -34,6 +41,7 @@ const plugins = [
   resizeablePlugin,
   imagePlugin,
   focusPlugin,
+  toolbarPlugin,
   blockDndPlugin
 ];
 
@@ -44,18 +52,21 @@ export default class TrailEditor extends Component {
   }
 
   focus = () => {
-    this.editor.focus();
+    setTimeout(this.editor.focus, 50);
   };
 
   render() {
     return (
-          <Editor onClick={this.focus}
-            editorState={this.props.editorState}
-            onChange={this.props.onChange}
-            plugins={plugins}
-            readOnly={this.props.readOnly}
-            ref={(element) => { this.editor = element; }}
-          />
+      <div onClick={this.focus}>
+            <Editor onClick={this.focus}
+              editorState={this.props.editorState}
+              onChange={this.props.onChange}
+              plugins={plugins}
+              readOnly={this.props.readOnly}
+              ref={(element) => { this.editor = element; }}
+            />
+            <AlignmentTool />
+          </div>
     );
   }
 }
