@@ -23,10 +23,10 @@ namespace Trails.Repositories
       {"image/tiff", ".tiff"}
     };
 
-    public FileImageRepository(TrailContext context, IConfiguration config, IImageProcessor imageProcessor)
+    public FileImageRepository(IFileRepository fileRepository, TrailContext context, IConfiguration config, IImageProcessor imageProcessor)
     {
       _context = context;
-      _fileRepository = new LocalFileRepository(config["ImageRepoFolder"]);
+      _fileRepository = fileRepository;
       _imageProcessor = imageProcessor;
     }
     

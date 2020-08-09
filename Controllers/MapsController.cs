@@ -78,6 +78,7 @@ namespace Trails.Controllers
         [HttpGet("/raw/{name}")]
         public IActionResult GetRawMap(string name)
         {
+            // TODO: Allow signed in users to download raw maps?
             return Forbid();
         }
     }

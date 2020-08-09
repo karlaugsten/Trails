@@ -18,9 +18,9 @@ public class GpxRepository : IGpxRepository
 
   private ILogger<GpxRepository> _logger;
 
-  public GpxRepository(TrailContext context, IConfiguration config, ILoggerFactory factory) {
+  public GpxRepository(TrailContext context, IConfiguration config, ILoggerFactory factory, IFileRepository fileRepository) {
     _context = context;
-    _fileRepository = new LocalFileRepository(config["GpxRepoFolder"]);
+    _fileRepository = fileRepository;
     _logger = factory.CreateLogger<GpxRepository>();
   }
 

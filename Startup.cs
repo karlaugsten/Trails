@@ -16,6 +16,9 @@ using Trails.Encryption;
 using Trails.Authentication;
 using Trails.Repositories;
 using System.Text.Json;
+using Amazon.S3;
+using Amazon.Extensions.NETCore.Setup;
+using Microsoft.Extensions.Logging;
 
 namespace Trails
 {
@@ -41,8 +44,48 @@ namespace Trails
                 jo.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
             });
 
-            services.AddTransient<IImageRepository, FileImageRepository>();
-            services.AddTransient<IGpxRepository, GpxRepository>();
+            services.AddDefaultAWSOptions(Configuration.GetAWSOptions());
+            services.AddAWSService<IAmazonS3>();
+            if(CurrentEnvironment.IsDevelopment()) {
+                // In development, use the local file repository
+                // var imageRepo = new LocalFileRepository(Configuration["ImageRepoFolder"]);
+                //services.AddTransient<IFileRepository>((serviceProvider) => new LocalFileRepository(Configuration["ImageRepoFolder"]));
+                services.AddTransient<IImageRepository>((provider) => 
+                    new FileImageRepository(
+                        new LocalFileRepository(Configuration["ImageRepoFolder"]),
+                        provider.GetService<TrailContext>(),
+                        Configuration,
+                        provider.GetService<IImageProcessor>()
+                    ));
+
+                services.AddTransient<IGpxRepository>(provider =>
+                    new GpxRepository(provider.GetService<TrailContext>(),
+                        Configuration, 
+                        provider.GetService<ILoggerFactory>(),
+                        new LocalFileRepository(Configuration["GpxRepoFolder"]))
+                );
+            } else {
+                // In prod, use the S3 file repository
+                services.AddTransient<IImageRepository>((provider) => 
+                    new FileImageRepository(
+                        new S3FileRepository(provider.GetService<ILoggerFactory>(),
+                            Configuration["S3ImageBucket"],
+                            provider.GetService<IAmazonS3>()),
+                        provider.GetService<TrailContext>(),
+                        Configuration,
+                        provider.GetService<IImageProcessor>()
+                    ));
+
+                services.AddTransient<IGpxRepository>(provider =>
+                    new GpxRepository(provider.GetService<TrailContext>(),
+                        Configuration, 
+                        provider.GetService<ILoggerFactory>(),
+                        new S3FileRepository(provider.GetService<ILoggerFactory>(),
+                            Configuration["S3GPXBucket"],
+                            provider.GetService<IAmazonS3>())
+                        )
+                );
+            }  
 
             // For now use the test database.
             services.AddDbContext<TrailContext>(options => { 
