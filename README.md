@@ -20,6 +20,7 @@ Debugging tips on the ubuntu web-server:
 * `journalctl -u runnify.service -e` - Latest logs of web service
 * `sudo vim /etc/nginx/sites-available/runnify.ca` - edit Nginx config
 * `sudo nginx -s reload` - Reload nginx
+* `sudo dotnet publish --configuration Release` - Build the project!
 # Server Setup
 These are the commands to run to setup an Ubuntu 18.04 LTS server for running the code (For reference in case of docker or other)
 ## Nginx Setup

@@ -5,11 +5,10 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
+using SixLabors.ImageSharp.Formats;
 
 public class ImageProcessor : IImageProcessor
 {
-  public async Task ProcessImageToStream(IFormFile image, Stream stream) => await image.CopyToAsync(stream);
-
   public async Task<string> ProcessThumbnailImageToStream(IFormFile imageFile, Stream stream)
   {
     // Image.Load(string path) is a shortcut for our default type. 

@@ -53,33 +53,18 @@ public class S3FileRepository : IFileRepository
     }
   }
 
-  public string Save(string fileType, Action<Stream> saveFile)
-  {
-    Func<Stream, Task> asyncFuncAdapter = (Stream stream) =>
-    {
-      saveFile(stream);
-      return Task.CompletedTask;
-    };
+  public string Save(string fileType, Stream fileStream) =>
+    SaveAsync(fileType, fileStream).Result;
 
-    return SaveAsync(fileType, asyncFuncAdapter).Result;
-  }
-
-  public async Task<string> SaveAsync(string fileType, Func<Stream, Task> saveFile)
+  public async Task<string> SaveAsync(string fileType, Stream fileStream)
   {
     try
     {
         // The path in S3 to the object
-        
         var name = Guid.NewGuid().ToString();
         var fileName = name + fileType;
         String objectKey = fileName;
-        using(MemoryStream memStream = new MemoryStream(10000))
-        {
-          // Save the file to the memory stream first, and then upload it directly after without waiting?
-          Task saveTask = saveFile(memStream);
-          await client.UploadObjectFromStreamAsync(bucketName, objectKey, memStream, null);
-          await saveTask;
-        }
+        await client.UploadObjectFromStreamAsync(bucketName, objectKey, fileStream, null);
         return objectKey;
     }
     catch (AmazonS3Exception e)

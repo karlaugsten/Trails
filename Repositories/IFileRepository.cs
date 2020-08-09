@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 /// </summary>
 public interface IFileRepository
 {
-  string Save(String fileType, Action<Stream> saveFile);
+  string Save(String fileType, Stream fileStream);
 
-  Task<string> SaveAsync(String fileType, Func<Stream, Task> saveFile);
+  Task<string> SaveAsync(String fileType, Stream fileStream);
 
   Stream Get(string fileName);
 }

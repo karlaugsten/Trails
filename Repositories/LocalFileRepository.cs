@@ -11,7 +11,7 @@ public class LocalFileRepository : IFileRepository
     this.folder = folder;
   }
 
-  public string Save(String fileType, Action<Stream> saveFile)
+  public string Save(String fileType, Stream fileStream)
   {
       var name = Guid.NewGuid().ToString();
       var fileName = name + fileType;
@@ -19,13 +19,13 @@ public class LocalFileRepository : IFileRepository
 
       using (Stream stream = new FileStream(filePath, FileMode.CreateNew))
       {
-          saveFile(stream);
+          fileStream.CopyTo(stream);
       }
 
       return fileName;
   }
 
-  public async Task<string> SaveAsync(String fileType, Func<Stream, Task> saveFile)
+  public async Task<string> SaveAsync(String fileType, Stream fileStream)
   {
       var name = Guid.NewGuid().ToString();
       var fileName = name + fileType;
@@ -33,7 +33,7 @@ public class LocalFileRepository : IFileRepository
 
       using (Stream stream = new FileStream(filePath, FileMode.CreateNew))
       {
-          await saveFile(stream);
+          await fileStream.CopyToAsync(stream);
       }
       return fileName;
   }

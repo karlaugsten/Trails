@@ -35,29 +35,30 @@ namespace Trails.Repositories
       var fileType = this.MimeTypeMap[image.ContentType];
       
       string imageName = await _fileRepository.SaveAsync(fileType, 
-        async (stream) => await _imageProcessor.ProcessImageToStream(image, stream));
+        image.OpenReadStream());
 
       string base64Preview = null;
-      string thumbnailName = await _fileRepository.SaveAsync(fileType, 
-        async (stream) => {
-          base64Preview = await _imageProcessor.ProcessThumbnailImageToStream(image, stream);
-        }
-      );
 
-      // Create an image record in the database.
-      var newImage = new Image() {
-        Url = $"/api/images/{imageName}",
-        ThumbnailUrl = $"/api/images/{thumbnailName}",
-        Name = imageName,
-        EditId = editId,
-        Base64Preview = base64Preview
-      };
+      // Use a memory stream FOR NOW since it should only be about 200kb. Optimize this later
+      using(var memStream = new MemoryStream()) {
+        base64Preview = await _imageProcessor.ProcessThumbnailImageToStream(image, memStream);
+        memStream.Position = 0;
+        string thumbnailName = await _fileRepository.SaveAsync(fileType, memStream);
+        // Create an image record in the database.
+        var newImage = new Image() {
+          Url = $"/api/images/{imageName}",
+          ThumbnailUrl = $"/api/images/{thumbnailName}",
+          Name = imageName,
+          EditId = editId,
+          Base64Preview = base64Preview
+        };
 
-      _context.Images.Add(newImage);
+        _context.Images.Add(newImage);
 
-      _context.SaveChanges();
+        _context.SaveChanges();
 
-      return newImage;
+        return newImage;
+      }
     }
 
     public Stream GetImageStream(string imageName) => _fileRepository.Get(imageName);

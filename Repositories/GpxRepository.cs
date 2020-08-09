@@ -52,7 +52,7 @@ public class GpxRepository : IGpxRepository
       Polyline = PolylineConverter.Convert(gpsPoints),
       ElevationPolyline = PolylineConverter.Convert(elevation),
       // Can we read from this stream twice?
-      RawFileUrl = "/api/maps/raw/" + _fileRepository.Save(".gpx", (stream) => gpxFileStream.CopyTo(stream))
+      RawFileUrl = "/api/maps/raw/" + _fileRepository.Save(".gpx", gpxFileStream)
     };
     var entity = _context.Maps.Add(map);
     _context.SaveChanges();
