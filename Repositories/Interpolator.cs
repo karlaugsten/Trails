@@ -1,11 +1,13 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
-public abstract class Interpolator {
-  protected double[] x;
-  protected double[] y;
+public abstract class Interpolator<X, Y> {
+  protected X[] x;
+  protected Y[] y;
 
 
-  public Interpolator(double[] x, double[] y) {
+  public Interpolator(X[] x, Y[] y) {
     this.x = x;
     this.y = y;
   }
@@ -15,5 +17,7 @@ public abstract class Interpolator {
   /// Given the function x,y  return the interpolation at point xprime.
   /// </summary>
   /// <returns></returns>
-  public abstract double interpolate(double xprime);
+  public abstract Y interpolate(X xprime);
+
+  public abstract IEnumerable<Y> interpolateAll(X from, X to, X step);
 }

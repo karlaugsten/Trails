@@ -1,8 +1,10 @@
 
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
-public class LinearInterpolator : Interpolator
+public class LinearInterpolator : Interpolator<double, double>
 {
   public LinearInterpolator(double[] x, double[] y) : base(x, y)
   {
@@ -15,6 +17,7 @@ public class LinearInterpolator : Interpolator
     int xi = this.BinarySearch(this.x, xprime);
     // Value is somewhere between xi and xi + 1, 
     // return the linear interpolation between points at xi and xi+1 at xprime
+    if(xi == this.x.Length - 1) return this.y[this.x.Length - 1];
     if(Math.Abs(this.x[xi+1] - this.x[xi]) < 1E-8) return (this.y[xi] + this.y[xi+1])/2.0;
 
     return (this.y[xi] * (this.x[xi + 1] - xprime) + this.y[xi + 1] * (xprime - this.x[xi]))/(this.x[xi + 1] - this.x[xi]);
@@ -36,5 +39,13 @@ public class LinearInterpolator : Interpolator
               return mid;
       } while (first <= last);
       return mid;
+  }
+
+  public override IEnumerable<double> interpolateAll(double from, double to, double step) {
+    double current = from;
+    while (current <= to) {
+      yield return interpolate(current);
+      current += step;
+    }
   }
 }

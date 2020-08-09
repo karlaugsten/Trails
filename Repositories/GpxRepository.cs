@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -40,6 +41,11 @@ public class GpxRepository : IGpxRepository
       // try to parse from the route elements instead.
       gpsPoints = parseLocationFromRouteXml(gpxDoc);
     }
+
+    var locationInterpolator = new LocationInterpolator(gpsPoints);
+    var totalDistance = gpsPoints.ToTotalDistance();
+    
+    gpsPoints = locationInterpolator.interpolateAll(0, totalDistance, 50.0/1000.0).ToList();
 
     var elevation = parseElevationFromTrackXml(gpxDoc, 30);
 
@@ -101,17 +107,14 @@ public class GpxRepository : IGpxRepository
       lastLocation = location;
     }
 
-    Interpolator interpolator = new LinearInterpolator(
+    Interpolator<double, double> interpolator = new LinearInterpolator(
       elevationLocations.Select(tuple => tuple.Item1).ToArray(), 
       elevationLocations.Select(tuple => tuple.Item2).ToArray()
     );
 
     _logger.LogInformation("Total distance for GPX: " + distance);
-
-    return Enumerable.Range(0, (int)(distance*1000.0/20.0))
-      .Select(x => x * 20.0/1000.0)
-      .Select(x => interpolator.interpolate(x))
-      .Select(x => (int)Math.Round(x))
+    return interpolator.interpolateAll(0, distance, 20.0/1000.0)
+      .Select(value => (int)Math.Round(value))
       .ToList();
   }
 
