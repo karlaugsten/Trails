@@ -2,9 +2,7 @@
 Curated trail running guide website
 
 # Tools
-Built with a React.js front-end and .Net Core backend using a minimal set of dependencies.
-
-(TODO: Integrate Redux data flow to front end.)
+Built with a React.js+Redux front-end and .Net Core backend using a minimal set of dependencies.
 
 # Database Initialization
 This project runs on a MySQL database using EF core migrations for managing the SQL schema. You will need to initialize the database by installing MySQL and running these commands to create the schema:
