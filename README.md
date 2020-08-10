@@ -91,3 +91,14 @@ For HTTPS certificates, we will be using lets encrypt
 * Set the "DatabaseConnectionString" with the user you created previously
 * `sudo dotnet tool install -g dotnet-ef`
 * `dotnet ef database update -v` - NOTE: might have to `sudo chown ubuntu -R runnify.ca`
+## Create the systemd files
+TODO
+## Install CodeDeploy
+    #!/bin/bash
+    apt-get -y update
+    sudo apt-get -y install ruby
+    sudo apt-get -y install wget
+    cd /home/ubuntu
+    wget https://aws-codedeploy-us-east-1.s3.amazonaws.com/latest/install
+    chmod +x ./install
+    sudo ./install auto
