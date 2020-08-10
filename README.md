@@ -28,19 +28,9 @@ These are the commands to run to setup an Ubuntu 18.04 LTS server for running th
 * `sudo apt install nginx` - Install NGINX reverse proxy
 * `sudo ufw allow 'Nginx Full'` - Allow full HTTP and HTTPS access
 * `sudo ufw enable`
-* `sudo mkdir -p /var/www/runnify.ca/html` - Make the runnify.ca domain
-* `sudo chown -R $USER:$USER /var/www/runnify.ca/html` - Change permissions
+* `sudo mkdir -p /var/www/runnify.ca` - Make the runnify.ca domain
+* `sudo chown -R $USER:$USER /var/www/runnify.ca` - Change permissions
 * `sudo chmod -R 755 /var/www/runnify.ca` - Permissions
-* Paste the below file
-  <html>
-      <head>
-          <title>Welcome to runnify.ca!</title>
-      </head>
-      <body>
-          <h1>Success!  The runnify.ca server block is working!</h1>
-      </body>
-  </html>
-Into  /var/www/runnify.ca/index.html
 * `sudo vim /etc/nginx/sites-available/runnify.ca` - Paste the following text:
   server {
           listen 80;
