@@ -1,4 +1,6 @@
 #!/bin/bash
+cd /var/www/runnify.ca
+
 echo "Restoring dependencies..."
 sudo /usr/bin/dotnet restore
 
