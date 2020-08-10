@@ -4,17 +4,8 @@ files:
   - source: /
     destination: /var/www/runnify.ca
 hooks:
-  BeforeInstall:
-    - location: Scripts/install_dependencies.sh
-      timeout: 300
-      runas: ubuntu
-  AfterInstall:
-    - location: Scripts/change_permissions.sh
-      timeout: 300
-      runas: ubuntu
   ApplicationStart:
     - location: Scripts/start_server.sh
-    - location: Scripts/create_test_db.sh
       timeout: 300
       runas: ubuntu
   ApplicationStop:
