@@ -1,6 +1,10 @@
 #!/bin/bash
 cd /var/www/runnify.ca
 
+sudo chown -R ubuntu:ubuntu ./*
+
+sudo chmod -R +x ./*
+
 echo "Restoring dependencies..."
 sudo /usr/bin/dotnet restore
 
