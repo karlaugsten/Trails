@@ -37,11 +37,9 @@ namespace Trails.Repositories
       string imageName = await _fileRepository.SaveAsync(fileType, 
         image.OpenReadStream());
 
-      string base64Preview = null;
-
       // Use a memory stream FOR NOW since it should only be about 200kb. Optimize this later
       using(var memStream = new MemoryStream()) {
-        base64Preview = await _imageProcessor.ProcessThumbnailImageToStream(image, memStream);
+        await _imageProcessor.ProcessThumbnailImageToStream(image, memStream);
         memStream.Position = 0;
         string thumbnailName = await _fileRepository.SaveAsync(fileType, memStream);
         // Create an image record in the database.
@@ -50,7 +48,7 @@ namespace Trails.Repositories
           ThumbnailUrl = $"/api/images/{thumbnailName}",
           Name = imageName,
           EditId = editId,
-          Base64Preview = base64Preview
+          Base64Preview = await _imageProcessor.ProcessImageToBase64(image)
         };
 
         _context.Images.Add(newImage);

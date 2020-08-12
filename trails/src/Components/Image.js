@@ -1,5 +1,5 @@
 import React from 'react';
-import Loader from './Loader';
+import SvgBlur from './SvgBlur';
 
 export default class Image extends React.Component {
   constructor(props) {
@@ -38,10 +38,23 @@ export default class Image extends React.Component {
   }
 
   render() {
-    const {src, style, ...others } = this.props;
+    const {image, style, startLoad, ...others } = this.props;
     const loadingStyle = {display: "none", position: "absolute", width: "0", height: "0"};
 
-    let img = (<img {...others} style={!this.state.loaded ? loadingStyle : style} ref={this.image} onLoad={ this.loaded } onError={ this.handleError } className="card-image" src={src} />);
+    const imageStyle = {
+      height: "100%",
+      width: "100%"
+    };
+
+    let img = startLoad ? (
+        <img 
+          style={!this.state.loaded ? loadingStyle : imageStyle} 
+          ref={this.image} 
+          onLoad={ this.loaded } 
+          onError={ this.handleError } 
+          className="" 
+          src={image.thumbnailUrl} />
+      ) : <></>;
 
     if(this.state.isError) return null;
 
@@ -52,7 +65,7 @@ export default class Image extends React.Component {
       height: "100%"
     };
 
-    if(!this.state.loaded) {
+    if(!this.state.loaded && !image.base64Preview) {
       return (
         <>
           <div class="card-image" style={{...style, width: "400px", textAlign:"center", verticalAlign:"center" }} {...others}>
@@ -61,8 +74,20 @@ export default class Image extends React.Component {
           {img}
         </>
       );
+    } else if(!this.state.loaded && image.base64Preview) {
+      var imageString = "data:image/jpeg;base64," + image.base64Preview;
+      return (
+        <div class="card-image shine" style={style} {...others}>
+          <SvgBlur style={imageStyle} base64Image={imageString} height={250} width={400} />
+          {img}
+        </div>
+        );
     }
 
-    return img;
+    return (
+      <div class="card-image" style={style} {...others}>
+        {img}
+      </div>
+    );
   }
 }

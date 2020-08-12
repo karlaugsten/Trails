@@ -33,10 +33,9 @@ class TrailCard extends React.Component {
   render() {
     var rating = this.buildRating();
     return (
-      
       <div className="card" id={`trail-${this.props.trail.trailId}`}>
           <HeartButton id={this.props.trail.trailId} />
-          <CardImages images={this.props.trail.images.map(i => i.thumbnailUrl)} />
+          <CardImages images={this.props.trail.images} />
           <div onClick={() => this.handleClick()}>
             <div className="card-title">
                 {this.props.trail.title}

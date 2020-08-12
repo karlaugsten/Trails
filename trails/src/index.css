@@ -290,6 +290,34 @@ body {
     100%{opacity: 0.2}
 }
 
+.shine {
+    animation: shine 1s infinite;
+}
+
+@-webkit-keyframes shine {
+    0% {filter: brightness(70%)} 
+    50% {filter: brightness(100%)}
+    100%{filter: brightness(70%)}
+}
+    
+@-moz-keyframes shine {
+    0% {filter: brightness(70%)} 
+    50% {filter: brightness(100%)}
+    100%{filter: brightness(70%)}
+}
+    
+@keyframes shine {
+    0% {filter: brightness(70%)} 
+    50% {filter: brightness(100%)}
+    100%{filter: brightness(70%)}
+}
+
+@-o-keyframes shine {
+    0% {filter: brightness(70%)} 
+    50% {filter: brightness(100%)}
+    100%{filter: brightness(70%)}
+}
+
 .card-image-overlay {
         position: absolute;
         top: 100px;
