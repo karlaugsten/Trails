@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -34,19 +35,19 @@ namespace Trails.Repositories
       // Save the image to wherever we are storing it.. for now just the file system.
       var fileType = this.MimeTypeMap[image.ContentType];
       
-      string imageName = await _fileRepository.SaveAsync(fileType, 
+      string imageUrl = await _fileRepository.SaveAsync(fileType, 
         image.OpenReadStream());
 
       // Use a memory stream FOR NOW since it should only be about 200kb. Optimize this later
       using(var memStream = new MemoryStream()) {
         await _imageProcessor.ProcessThumbnailImageToStream(image, memStream);
         memStream.Position = 0;
-        string thumbnailName = await _fileRepository.SaveAsync(fileType, memStream);
+        string thumbnailUrl = await _fileRepository.SaveAsync(fileType, memStream);
         // Create an image record in the database.
         var newImage = new Image() {
-          Url = $"/api/images/{imageName}",
-          ThumbnailUrl = $"/api/images/{thumbnailName}",
-          Name = imageName,
+          Url = imageUrl,
+          ThumbnailUrl = thumbnailUrl,
+          Name = imageUrl.Split("/").Last(),
           EditId = editId,
           Base64Preview = await _imageProcessor.ProcessImageToBase64(image)
         };

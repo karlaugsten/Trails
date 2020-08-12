@@ -14,6 +14,8 @@ public class S3FileRepository : IFileRepository
 {
   private readonly string bucketName;
   private readonly IAmazonS3 client;
+
+  private readonly string region;
   
   private readonly ILogger logger;
 
@@ -23,6 +25,7 @@ public class S3FileRepository : IFileRepository
     this.bucketName = bucketName;
     this.client = client;
     this.logger = loggerFactory.CreateLogger<S3FileRepository>();
+    this.region = "us-west-2"; // hardcode region for now.
   }
 
   public Stream Get(string fileName)
@@ -65,7 +68,7 @@ public class S3FileRepository : IFileRepository
         var fileName = name + fileType;
         String objectKey = fileName;
         await client.UploadObjectFromStreamAsync(bucketName, objectKey, fileStream, null);
-        return objectKey;
+        return GetUrl(objectKey);
     }
     catch (AmazonS3Exception e)
     {
@@ -82,4 +85,7 @@ public class S3FileRepository : IFileRepository
             throw e;
     }
   }
+
+  public string GetUrl(string fileName) =>
+    $"https://{this.bucketName}.s3.{this.region}.amazonaws.com/{fileName}";
 }

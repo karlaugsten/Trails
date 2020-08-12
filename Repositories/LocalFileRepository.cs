@@ -22,7 +22,7 @@ public class LocalFileRepository : IFileRepository
           fileStream.CopyTo(stream);
       }
 
-      return fileName;
+      return GetUrl(fileName);
   }
 
   public async Task<string> SaveAsync(String fileType, Stream fileStream)
@@ -35,7 +35,7 @@ public class LocalFileRepository : IFileRepository
       {
           await fileStream.CopyToAsync(stream);
       }
-      return fileName;
+      return GetUrl(fileName);
   }
 
   public Stream Get(string fileName) {
@@ -46,4 +46,6 @@ public class LocalFileRepository : IFileRepository
     FileStream fileStream = new FileStream(filePath, FileMode.Open);
     return fileStream;
   }
+
+  public string GetUrl(string fileName) => $"/api/images/{fileName}";
 }

@@ -44,7 +44,7 @@ public class GpxRepository : IGpxRepository
 
     var locationInterpolator = new LocationInterpolator(gpsPoints);
     var totalDistance = gpsPoints.ToTotalDistance();
-    
+
     gpsPoints = locationInterpolator.interpolateAll(0, totalDistance, 50.0/1000.0).ToList();
 
     var elevation = parseElevationFromTrackXml(gpxDoc, 30);
@@ -58,7 +58,7 @@ public class GpxRepository : IGpxRepository
       Polyline = PolylineConverter.Convert(gpsPoints),
       ElevationPolyline = PolylineConverter.Convert(elevation),
       // Can we read from this stream twice?
-      RawFileUrl = "/api/maps/raw/" + _fileRepository.Save(".gpx", gpxFileStream)
+      RawFileUrl = _fileRepository.Save(".gpx", gpxFileStream)
     };
     var entity = _context.Maps.Add(map);
     _context.SaveChanges();
