@@ -3,6 +3,7 @@ os: linux
 files:
   - source: /
     destination: /var/www/runnify.ca
+    overwrite: true
 hooks:
   ApplicationStart:
     - location: Scripts/start_server.sh
