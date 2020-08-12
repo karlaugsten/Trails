@@ -1,5 +1,5 @@
 # Trails
-Curated trail running guide website
+Curated trail running guide website.
 
 # Tools
 Built with a React.js+Redux front-end and .Net Core backend using a minimal set of dependencies.
