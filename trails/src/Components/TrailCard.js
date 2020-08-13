@@ -3,6 +3,63 @@ import CardImages from './CardImages';
 import DraftContent from './DraftContent';
 import HeartButton from './HeartButton';
 import { withRouter } from "react-router-dom";
+import styled from 'styled-components';
+import CardStats from './Card/CardStats';
+
+const Card = styled.div`
+  position: relative;
+  background-color: #424242;
+  width: 400px;
+  height: 600px;
+  justify-content: center;
+  text-align: center;
+  margin: 25px;
+  padding: 0px 10px 10px 10px;
+  border-radius: 4px;
+  box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0,.19)!important;
+  cursor: pointer;
+  &:hover {
+    box-shadow: 0 12px 22px 0 rgba(0, 0, 0, 0.2), 0 10px 25px 0 rgba(0, 0, 0,.19)!important;
+  }
+`;
+
+const CardTitle = styled.div`
+  padding: 2px;
+  font-size: 30px;
+  font-weight: 500;
+  font-family: 'National Park';
+  text-transform: uppercase;
+  letter-spacing: -1.5px;
+  position: relative;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  letter-spacing: 8px;
+  flex-grow: 3;
+`;
+
+const CardSubtitle = styled.div`
+margin-bottom: 10px;
+padding: 1px;
+font-size: 12px;
+font-weight: 100;
+position: relative;
+text-overflow: ellipsis;
+white-space: nowrap;
+letter-spacing: 2px;
+`;
+
+
+const CardDescription = styled.div`
+font-family: 'National Park';
+margin-top: 5px;
+margin-bottom: 5px;
+font-weight: 100;
+font-size: 0.9em;
+position: relative;
+overflow: hidden;
+text-overflow: ellipsis;
+height: 200px;
+`;
 
 class TrailCard extends React.Component {
   constructor(props) {
@@ -33,28 +90,22 @@ class TrailCard extends React.Component {
   render() {
     var rating = this.buildRating();
     return (
-      <div className="card" id={`trail-${this.props.trail.trailId}`}>
+      <Card id={`trail-${this.props.trail.trailId}`}>
           <HeartButton id={this.props.trail.trailId} />
           <CardImages images={this.props.trail.images} />
           <div onClick={() => this.handleClick()}>
-            <div className="card-title">
+            <CardTitle>
                 {this.props.trail.title}
-            </div>
-            <div className="card-sub-title">
+            </CardTitle>
+            <CardSubtitle>
                 <i className="fas fa-map-marker-alt"></i> {this.props.trail.location}
-            </div>
-            <div className="card-stats">
-                <div title="Elevation gain" className="card-stat">{this.props.trail.elevation}<span className="units">m</span> <i className="card-icon fas fa-long-arrow-alt-up"></i></div>
-                <div title="Total distance" className="card-stat">{this.props.trail.distance}<span className="units">km</span> <i className="card-icon fas fa-long-arrow-alt-right"></i></div>
-                <div title="Estimated duration" className="card-stat">{this.props.trail.minDuration}-{this.props.trail.maxDuration}<span className="units">h</span> <i className="card-icon far fa-clock"></i></div>
-                <div title="Overall rating" className="card-stat">{rating}</div>
-                <div title="Best season" className="card-stat">{this.props.trail.minSeason}-{this.props.trail.maxSeason} <i className="card-icon far fa-calendar-check"></i></div>
-            </div>
-            <div className="card-description">
+            </CardSubtitle>
+            <CardStats id={this.props.id}/>
+            <CardDescription>
               <DraftContent short content={this.props.trail.description} />
-            </div>
+            </CardDescription>
           </div>
-      </div>
+      </Card>
     );
   }
 }

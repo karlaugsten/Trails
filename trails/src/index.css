@@ -52,35 +52,6 @@ body {
     min-width: 500px; 
 }
 
-.card-icon {
-    color: #929292;
-}
-
-.units {
-    color: #bebebe;
-    font-size: 0.65em;
-    margin: 2px;
-}
-
-.card {
-    position: relative;
-    background-color: #424242;
-    width: 400px;
-    height: 600px;
-    justify-content: center;
-    text-align: center;
-    /*display: flex;*/
-    margin: 25px;
-    padding: 0px 10px 10px 10px;
-    border-radius: 4px;
-    box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0,.19)!important;
-    cursor: pointer;
-}
-
-.card:hover {
-    box-shadow: 0 12px 22px 0 rgba(0, 0, 0, 0.2), 0 10px 25px 0 rgba(0, 0, 0,.19)!important;
-}
-
 .card-fullscreen {
     z-index: 9999; 
     width: 90%; 
@@ -102,12 +73,6 @@ body {
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) 0ms;
 }
 
-@media (max-width:600px)  {
-    /* .card {
-        width: 80%;
-    } */
-}
-
 .card-photo {
     border-color: #000000;
     position: absolute;
@@ -123,59 +88,12 @@ body {
     object-fit: cover;
 }
 
-.card-stats {
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-    border-bottom: 1px solid #bebebe86;
-    border-top: 1px solid #bebebe86;
-    position: relative;
-    /*top: -90px;*/
-    margin-top: 5px;
-    margin-bottom: 5px;
-    justify-content: center;
-}
-
-
-.card-stat {
-    margin-left: 15px;
-    margin-right: 15px;
-    padding: 5px;
-    transition: ease-in-out 0.2s all;
-    width: 70px;
-    white-space: nowrap;
-    height: 35px;
-    padding: 5px;
-    text-align: center;
-    vertical-align: middle;
-}
-.card-stat:hover {
-    transform: scale(1.2,1.2);
-    text-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.25), 0 6px 20px 0 rgba(0, 0, 0,.22);
-}
-
 .card-fullscreen >* .card-title {
     /*color: rgba(48, 48, 48, 0.56);;*/
     z-index: 100;
     font-size: 60px;
     font-weight: 400;
     /*text-shadow: 1px 3px 2px rgba(0,0,0,0.2);*/
-}
-
-.card-title {
-    /*margin: 5px;*/
-    padding: 2px;
-    font-size: 30px;
-    font-weight: 500;
-    font-family: 'National Park';
-    text-transform: uppercase;
-    letter-spacing: -1.5px;
-    /*top: -95px;*/
-    position: relative;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    letter-spacing: 8px;
-    flex-grow: 3;
 }
 
 .card-fullscreen > .title-wrapper {
@@ -194,66 +112,6 @@ body {
 
 .card-fullscreen > .icon-button {
     z-index: 1000;
-}
-
-.card-fullscreen >* .card-sub-title > i {
-    /*color: rgba(0, 0, 0, 0.253);*/
-}
-
-.card-sub-title {
-    /*margin: 5px;*/
-    margin-bottom: 10px;
-    padding: 1px;
-    font-size: 12px;
-    font-weight: 100;
-    position: relative;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    letter-spacing: 2px;
-}
-
-.card > .card-image-wrapper {
-    height: 250px;
-    /*width: 400px;*/
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    /*top: -40px;*/
-    margin: 0 -10px;
-    border-top-right-radius: 4px;
-    border-top-left-radius: 4px;
-    margin-bottom: 10px;
-}
-.card-fullscreen > .card-image-wrapper {
-    height: 250px;
-    /*width: 400px;*/
-    position: absolute;
-    top: 0;
-    overflow: hidden;
-    display: flex;
-    /*top: -40px;*/
-    margin: 0 -10px;
-    border-top-right-radius: 4px;
-    border-top-left-radius: 4px;
-    margin-bottom: 10px;
-    z-index: -1;
-}
-
-.card-fullscreen > .card-image-wrapper:after {
-    height: 250px;
-    width: 100%;
-    position: absolute;
-    top: 0;
-    overflow: hidden;
-    display: flex;
-    /*top: -40px;*/
-    margin: 0 -10px;
-    border-top-right-radius: 4px;
-    border-top-left-radius: 4px;
-    margin-bottom: 10px;
-    content: "";
-    background-color: rgba(147, 165, 187, 0.38);
-    z-index: 1;
 }
 
 .card-image {
@@ -280,7 +138,7 @@ body {
     50% { opacity: 0.6; transform: scale(1.2) }
     100% { opacity:0 }  
 }
-    
+
 @keyframes fade {
       0% { opacity: 0.2 } 
       50% { opacity: 0.6; transform: scale(1.2) }
@@ -319,40 +177,6 @@ body {
     0% {filter: brightness(70%)} 
     50% {filter: brightness(100%)}
     100%{filter: brightness(70%)}
-}
-
-.card-image-overlay {
-        position: absolute;
-        top: 100px;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 100%;
-        width: 100%;
-        opacity: 0;
-        transition: .3s ease;
-        z-index: 200;
-}
-.card-image-overlay > i {
-    font-size: 3em;
-    z-index: 200;
-    margin: 10px;
-}
-
-.card-image-overlay:hover {
-    opacity: 0.5;
-}
-
-.card-description {
-    font-family: 'National Park';
-    margin-top: 5px;
-    margin-bottom: 5px;
-    font-weight: 100;
-    font-size: 0.9em;
-    position: relative;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    height: 200px;
 }
 
 .card-fullscreen > .card-description {
@@ -492,34 +316,6 @@ body {
     align-content: inherit;
     justify-content: inherit;
     align-items: inherit;
-}
-
-.card-heart-button {
-    height: 50px;
-    width: 50px;
-    justify-content: center;
-    align-items: center;
-    display: flex;
-    position: absolute;
-    z-index: 100;
-    top: 0px;
-    right: 0px;
-    border-radius: 100px;
-    margin: 2px;
-    border-color: white;
-    border-width: 4px;
-    transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-    cursor: pointer;
-    font-size: 2.5em;
-    font-weight: 200;
-    color: rgba(70, 70, 70, 0.71);
-    margin-right: 5px;
-}
-
-.card-heart-button:hover {
-    /*background-color: rgba(75, 74, 74, 0.363);
-    color: rgba(100, 100, 100, 0.774);*/
-    transform: scale(1.2,1.2);
 }
 
 .login-modal {
