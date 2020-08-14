@@ -7,6 +7,7 @@ import CardStats from './Card/CardStats';
 import Title from './Card/Title';
 import Subtitle from './Card/Subtitle';
 import Description from './Card/Description';
+import withTrail from './withTrail';
 
 const Card = styled.div`
   position: relative;
@@ -19,7 +20,7 @@ const Card = styled.div`
   padding: 0px 10px 10px 10px;
   border-radius: 4px;
   box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0,.19)!important;
-  cursor: pointer;
+  cursor: ${props => props.loading ? "default" : "pointer"};
   &:hover {
     box-shadow: 0 12px 22px 0 rgba(0, 0, 0, 0.2), 0 10px 25px 0 rgba(0, 0, 0,.19)!important;
   }
@@ -37,23 +38,26 @@ class TrailCard extends React.Component {
   }
 
   handleClick() {
+    if(!this.props.trail) return;
     this.props.history.push(`/trails/${this.props.trail.trailId}`);
   }
 
   render() {
+    const { id, trail } = this.props;
+    var maybeTrail = trail || {};
     return (
-      <Card id={`trail-${this.props.trail.trailId}`}>
-          <HeartButton id={this.props.trail.trailId} />
-          <CardImages images={this.props.trail.images} />
+      <Card loading={!id || !trail} id={`trail-${id}`}>
+          <HeartButton id={id} />
+          <CardImages images={maybeTrail.images} />
           <div onClick={() => this.handleClick()}>
-            <Title id={this.props.id} />
-            <Subtitle id={this.props.id} />
-            <CardStats id={this.props.id} />
-            <Description id={this.props.id} />
+            <Title id={id} />
+            <Subtitle id={id} />
+            <CardStats id={id} />
+            <Description id={id} />
           </div>
       </Card>
     );
   }
 }
 
-export default withRouter(TrailCard);
+export default withTrail(TrailCard);

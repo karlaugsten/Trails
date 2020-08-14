@@ -18,7 +18,11 @@ class ReduxTrailCards extends Component {
   render() {
     const { isFetching, errorMessage, trails } = this.props;
     if (isFetching && !trails.length) {
-      return <p>Loading...</p>;
+      return (
+        <TrailCards
+          trails={[null, null, null, null]}
+        />
+      )
     }
     if (errorMessage && !trails.length) {
       return (
@@ -28,7 +32,7 @@ class ReduxTrailCards extends Component {
 
     return (
       <TrailCards
-        trails={trails}
+        trails={trails.map(t => t.trailId)}
       />
     );
   }

@@ -1,5 +1,9 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
+
+const spin = keyframes`
+to { -webkit-transform: rotate(360deg); }
+`;
 
 const Loader = styled.div`
   display: inline-block;
@@ -8,8 +12,7 @@ const Loader = styled.div`
   border: 3px solid rgba(255,255,255,.3);
   border-radius: 50%;
   border-top-color: #fff;
-  animation: spin 1s ease-in-out infinite;
-  -webkit-animation: spin 1s ease-in-out infinite;
+  animation: ${spin} 1s ease-in-out infinite;
 `;
 
 const LoaderWrapper = styled.div`

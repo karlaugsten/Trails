@@ -20,10 +20,10 @@ const Heart = styled.div`
   border-color: white;
   border-width: 4px;
   transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-  cursor: pointer;
+  cursor: ${props => props.loading ? "default" : "pointer"};
   font-size: 2.5em;
   font-weight: 200;
-  color: rgba(70, 70, 70, 0.71);
+  color: ${props => props.favourite ? "#e00000cc" : "rgba(70, 70, 70, 0.71)"};
   margin-right: 5px;
   &:hover {
     transform: scale(1.2,1.2);
@@ -40,14 +40,15 @@ class HeartButton extends React.Component {
     }
 
     clicked = () => {
+      if(!this.props.id) return;
       if(!this.props.isFavourite) this.props.heartTrail(this.props.id);
       else this.props.unHeartTrail(this.props.id)
     }
 
     render() {
-        const {isFavourite} = this.props;
+        const {isFavourite, id} = this.props;
         return (
-            <Heart style={{color: isFavourite ? "#e00000cc" : ""}} onClick={this.clicked}>
+            <Heart loading={!id} favourite={isFavourite} onClick={this.clicked}>
               <i className={isFavourite ? "fas fa-heart" : "far fa-heart"}></i>
             </Heart>
         );

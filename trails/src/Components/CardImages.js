@@ -15,15 +15,17 @@ const ImageWrapper = styled.div`
 
 const ImageOverlay = styled.div`
   position: absolute;
-  top: 100px;
   bottom: 0;
   left: 0;
   right: 0;
+  align-items: center;
+  justify-content: space-between;
   height: 100%;
   width: 100%;
+  display: flex;
   opacity: 0;
   transition: .3s ease;
-  z-index: 200;
+  z-index: 40;
   &:hover {
     opacity: 0.5;
   }
@@ -31,8 +33,9 @@ const ImageOverlay = styled.div`
 
 const TransitionIcon = styled.i`
   font-size: 3em;
-  z-index: 200;
+  z-index: 50;
   margin: 10px;
+  float: ${props => props.right ? "right" : "left"}
 `
 
 export default class CardImages extends React.Component {
@@ -81,18 +84,28 @@ export default class CardImages extends React.Component {
   render() {
     console.log("rendering currentIndex " + this.state.currentIndex);
     var imageTransitions = [];
-    if(this.props.images.length > 1) {
+    const { images } = this.props;
+
+    if(!images) {
+      let fakeImage = {thumbnailUrl: ""};
+      return (
+        <ImageWrapper>
+          <Image startLoad={false} style={{'transform': `translateX(-${100*this.state.currentIndex}%)`}} image={fakeImage} />
+        </ImageWrapper>
+      );
+    }
+    if(images.length > 1) {
       imageTransitions.push(
         <ImageOverlay>
-          <TransitionIcon className="fas fa-angle-left pull-left" onMouseOver={() => this.startLoad(this.state.currentIndex-1)} onClick={() => this.previousImage()}></TransitionIcon>
-          <TransitionIcon className="fas fa-angle-right pull-right" onMouseOver={() => this.startLoad(this.state.currentIndex+1)} onClick={() => this.nextImage()}></TransitionIcon>
+          <TransitionIcon left className="fas fa-angle-left" onMouseOver={() => this.startLoad(this.state.currentIndex-1)} onClick={() => this.previousImage()}></TransitionIcon>
+          <TransitionIcon right className="fas fa-angle-right" onMouseOver={() => this.startLoad(this.state.currentIndex+1)} onClick={() => this.nextImage()}></TransitionIcon>
         </ImageOverlay>
       )
     }
     return (
       <ImageWrapper>
         {imageTransitions}
-        {this.props.images.map((image, index) => <Image startLoad={this.state.loaded.includes(index)} style={{'transform': `translateX(-${100*this.state.currentIndex}%)`}} key={index} image={image} />)}
+        {images.map((image, index) => <Image startLoad={this.state.loaded.includes(index)} style={{'transform': `translateX(-${100*this.state.currentIndex}%)`}} key={index} image={image} />)}
       </ImageWrapper>
     );
   }

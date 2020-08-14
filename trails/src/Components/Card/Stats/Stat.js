@@ -9,7 +9,6 @@ transition: ease-in-out 0.2s all;
 width: 70px;
 white-space: nowrap;
 height: 35px;
-padding: 5px;
 text-align: center;
 vertical-align: middle;
 &:hover {

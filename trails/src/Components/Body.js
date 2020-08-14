@@ -7,4 +7,5 @@ color: rgb(233, 232, 232);
 font-family: 'National Park';
 height: 100%;
 min-width: fit-content;
+min-height: 100vh;
 `;

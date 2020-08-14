@@ -20,7 +20,8 @@ export default class TrailNav extends React.Component {
     this.state = {
       top: 0,
       position: 'absolute',
-      lastScroll: 0
+      lastScroll: 0,
+      startedDown: Infinity
     }
     //this.handleScroll = throttle(this.handleScroll.bind(this), 100, { trailing: true, leading: true });
     this.handleScroll = this.handleScroll.bind(this);
@@ -44,24 +45,36 @@ export default class TrailNav extends React.Component {
   handleScroll(event) {
     if(!event.currentTarget) return;
     let scrollY = event.currentTarget.scrollY;
+    let isMobile = window.screen.width < 1280;
     if(scrollY < this.state.lastScroll && this.state.position != 'fixed' && this.state.top < this.state.lastScroll - 100) {
+      // Scrolling down.
       this.setState({
         top: scrollY - 100,
-        position: 'absolute'
+        position: 'absolute',
+        startedDown: Infinity
       })
     } 
     else if(scrollY < this.state.lastScroll && this.state.top > scrollY)
     {
+      // Scrolling up.
       this.setState({
         top: 0,
-        position: 'fixed'
+        position: 'fixed',
+        startedDown: Infinity
       })
     }
-    else if(scrollY > this.state.lastScroll && this.state.position == 'fixed'){
-      this.setState({
-        top: scrollY,
-        position: 'absolute'
-      })
+    else if (scrollY > this.state.lastScroll && this.state.position == 'fixed') {
+      // Starting to scroll down!
+      if(!isMobile || new Date().getTime() - this.state.startedDown > 500) {
+        this.setState({
+          top: scrollY,
+          position: 'absolute'
+        })
+      } else {
+        this.setState({
+          startedDown: new Date().getTime()
+        });
+      }
     }
     this.setState({
       lastScroll: scrollY

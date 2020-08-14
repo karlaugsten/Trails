@@ -14,14 +14,10 @@ const mapStateToProps = (state, { id }) => {
 /**
  * Wraps a compnent by passing in the trail as a prop.
  */
-const withTrail = (Component) => class extends React.Component {
-  render() {
-    const ConnectedComponent = withRouter(connect(
-      mapStateToProps,
-      null
-    )(Component));
-    return <ConnectedComponent {...this.props} />
-  }
-}
+const withTrail = (Component) => 
+  withRouter(connect(
+    mapStateToProps,
+    null
+  )(Component));
 
 export default withTrail;

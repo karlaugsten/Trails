@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import LoadingText from './LoadingText';
 import withTrail from '../withTrail';
 
 const CardSubtitle = styled.div`
@@ -13,7 +14,20 @@ white-space: nowrap;
 letter-spacing: 2px;
 `;
 
-const Subtitle = ({trail}) =>
+const LoadingTextWrapper = styled.div`
+  align-items: center;
+  display: flex;
+  width: 100%;
+  padding-left: 15%;
+`;
+
+const Subtitle = ({trail}) => 
+!trail ? 
+(
+  <LoadingTextWrapper>
+    <LoadingText width="70%" height="22px" innerHeight="12px" />
+  </LoadingTextWrapper>
+) :
 (
   <CardSubtitle>
     <i className="fas fa-map-marker-alt"></i> {trail.location}

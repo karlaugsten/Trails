@@ -182,13 +182,14 @@ export const cancelLogin = () => (dispatch) =>
       type: 'END_LOGIN', // Cancel the login.
     });
 
-export const heartTrail = (id) => (dispatch, getState) =>
-  TrailsApi.heartTrail(id).then(response => 
+export const heartTrail = (id) => (dispatch, getState) => {
+  dispatch({
+    type: 'HEART_TRAIL_SUCCESS',
+    id
+  });
+  return TrailsApi.heartTrail(id).then(response => 
     {
-      dispatch({
-        type: 'HEART_TRAIL_SUCCESS',
-        id
-      });
+      
       return response;
     },
     error => 
@@ -205,30 +206,33 @@ export const heartTrail = (id) => (dispatch, getState) =>
       }
     }
   );
+}
 
   export const unHeartTrail = (id) => (dispatch, getState) =>
-  TrailsApi.unHeartTrail(id).then(response => 
-    {
-      dispatch({
-        type: 'UNHEART_TRAIL_SUCCESS',
-        id
-      });
-      return response;
-    },
-    error => 
-    {
-      // TODO: Check if unauthorized and dispatch a REQUEST_LOGIN action if so.
-      if(error.response.status == 401) {
-        dispatch({
-          type: 'UNHEART_TRAIL_UNAUTHORIZED', // This action signifies that we still want to allow the user to 
-          // save a subset of favourited trails, even if they are not logged in/dont have an account.
-          // We will later merge these heart's once the user logs in or creates an account.
-          id
-        });
-        login()(dispatch, getState) // Should somehow pop up a login modal.
+  {
+    dispatch({
+      type: 'UNHEART_TRAIL_SUCCESS',
+      id
+    });
+    return TrailsApi.unHeartTrail(id).then(response => 
+      {
+        return response;
+      },
+      error => 
+      {
+        // TODO: Check if unauthorized and dispatch a REQUEST_LOGIN action if so.
+        if(error.response.status == 401) {
+          dispatch({
+            type: 'UNHEART_TRAIL_UNAUTHORIZED', // This action signifies that we still want to allow the user to 
+            // save a subset of favourited trails, even if they are not logged in/dont have an account.
+            // We will later merge these heart's once the user logs in or creates an account.
+            id
+          });
+          login()(dispatch, getState) // Should somehow pop up a login modal.
+        }
       }
-    }
-  );
+    );
+  }
 
   export const fetchUserFavourites = () => (dispatch, getState) => {
     // TODO: Implement this.

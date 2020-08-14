@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import withTrail from '../withTrail';
+import LoadingText from './LoadingText';
 
 const CardTitle = styled.div`
   padding: 2px;
@@ -17,6 +18,9 @@ const CardTitle = styled.div`
 `;
 
 const Title = ({trail}) =>
+!trail ? (
+<LoadingText width="90%" height="40px" innerHeight="30px" />
+) :
 (
   <CardTitle>
     {trail.title}

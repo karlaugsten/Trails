@@ -13,7 +13,7 @@ export default class TrailCards extends React.Component {
     }
   
     render() {
-      var trails = this.props.trails.map((t, i) => (<TrailCard trail={t} key={t.trailId} id={t.trailId} />));
+      var trails = this.props.trails.map((id, i) => (<TrailCard id={id} />));
       return (
         <div className="card-container" id="card-container">
             {trails}

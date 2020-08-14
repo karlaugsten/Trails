@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import withTrail from '../withTrail';
 import DraftContent from '../DraftContent';
+import LoadingText from './LoadingText';
 
 const CardDescription = styled.div`
 font-family: 'National Park';
@@ -16,6 +17,15 @@ height: 200px;
 `;
 
 const Description = ({trail}) =>
+!trail ?
+(<>
+  <LoadingText innerHeight="0.7em" width="80%" height="auto" />
+  <LoadingText innerHeight="0.9em" width="90%" height="auto" />
+  <LoadingText innerHeight="0.9em" width="70%" height="auto" />
+  <LoadingText innerHeight="0.9em" width="60%" height="auto" />
+  <LoadingText innerHeight="0.9em" width="80%" height="auto" />
+</>
+) :
 (
   <CardDescription>
     <DraftContent short content={trail.description} />

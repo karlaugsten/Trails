@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import ReactDOM from "react-dom";
-import {Modal, Button} from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import * as actions from '../Actions';
@@ -95,20 +94,20 @@ class LoginModal extends Component {
     <StyledModal ref={node => {
                       this.node_modal = node;
                   }} style={{ transform: loginRequested && !loggedIn ? null : "translateY(-1500px)", top: this.state.top, left: this.state.left }} onHide={this.handleClose.bind(this)}>
-      <Modal.Header closeButton onHide={this.handleClose.bind(this)}>
-        <Modal.Title>You must login.</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
+      <div closeButton onHide={this.handleClose.bind(this)}>
+        <h1>You must login.</h1>
+      </div>
+      <div>
         {loginErrorMessage}
         <form>
           <input type="text" name="email" placeholder="Email" value={this.state.email} onChange={this.handleChange.bind(this)} />
           <input type="password" name="password" placeholder="Password" value={this.state.password} onChange={this.handleChange.bind(this)} />
         </form>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button class="pull-left" onClick={this.handleLogin.bind(this)}>Login</Button>
-        <Button class="pull-right" onClick={this.handleClose.bind(this)}>Cancel</Button>
-      </Modal.Footer>
+      </div>
+      <div>
+        <button class="pull-left" onClick={this.handleLogin.bind(this)}>Login</button>
+        <button class="pull-right" onClick={this.handleClose.bind(this)}>Cancel</button>
+      </div>
     </StyledModal>
     </React.Fragment>
     );

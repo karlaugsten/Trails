@@ -1,29 +1,5 @@
-@font-face {
-    font-family: 'National Park';
-    font-style: normal;
-    font-weight: normal;
-    src: url('/NationalPark/NationalPark-Regular.otf') format('opentype');
-}
-
-@font-face {
-    font-family: 'National Park Outline';
-    font-style: normal;
-    font-weight: normal;
-    src: url('/NationalPark/NationalPark-Outline.otf') format('opentype');
-}
-
-@font-face {
-    font-family: 'National Park';
-    font-style: normal;
-    font-weight: 100;
-    src: url('/NationalPark/NationalPark-Thin.otf') format('opentype');
-}
-
-@font-face {
-    font-family: 'National Park';
-    font-style: normal;
-    font-weight: bold;
-    src: url('/NationalPark/NationalPark-Heavy.otf') format('opentype');
+body {
+    margin: 0px;
 }
 
 .card-container {
@@ -82,71 +58,6 @@
     z-index: 1000;
 }
 
-.card-image {
-    height: 250px;
-    flex: 1 0 100%;
-    width: 100%;    
-    object-fit: cover;
-    object-position: 0 0;
-    transition: transform 500ms cubic-bezier(0.455, 0.03, 0.515, 0.955);
-}
-
-.card-image-loader {
-    animation: fade 1s infinite;
-}
-
-@-webkit-keyframes fade {
-    0% {opacity: 0.2} 
-    50% {opacity: 0.6; transform: scale(1.2)}
-    100% {opacity:0.2}
-}
-    
-@-moz-keyframes fade {
-    0% { opacity: 0.2 } 
-    50% { opacity: 0.6; transform: scale(1.2) }
-    100% { opacity:0 }  
-}
-
-@keyframes fade {
-      0% { opacity: 0.2 } 
-      50% { opacity: 0.6; transform: scale(1.2) }
-      100%{ opacity: 0.2 }
-}
-
-@-o-keyframes fade {
-    0% {opacity: 0.2} 
-    50% {opacity: 0.6; transform: scale(1.2)}
-    100%{opacity: 0.2}
-}
-
-.shine {
-    animation: shine 1s infinite;
-}
-
-@-webkit-keyframes shine {
-    0% {filter: brightness(70%)} 
-    50% {filter: brightness(100%)}
-    100%{filter: brightness(70%)}
-}
-    
-@-moz-keyframes shine {
-    0% {filter: brightness(70%)} 
-    50% {filter: brightness(100%)}
-    100%{filter: brightness(70%)}
-}
-    
-@keyframes shine {
-    0% {filter: brightness(70%)} 
-    50% {filter: brightness(100%)}
-    100%{filter: brightness(70%)}
-}
-
-@-o-keyframes shine {
-    0% {filter: brightness(70%)} 
-    50% {filter: brightness(100%)}
-    100%{filter: brightness(70%)}
-}
-
 .card-fullscreen > .card-description {
     height: auto;
 }
@@ -175,11 +86,4 @@
 }
 .icon-button:hover {
     background-color: rgba(63, 63, 63, 0.28);
-}
-
-@keyframes spin {
-to { -webkit-transform: rotate(360deg); }
-}
-@-webkit-keyframes spin {
-to { -webkit-transform: rotate(360deg); }
 }

@@ -1,5 +1,39 @@
 import React from 'react';
 import SvgBlur from './SvgBlur';
+import styled, { keyframes, css } from 'styled-components';
+
+const fade = keyframes`
+0% {opacity: 0.2} 
+50% {opacity: 0.6; transform: scale(1.2)}
+100% {opacity:0.2}
+`;
+
+const shine = keyframes`
+0% {filter: brightness(70%)} 
+50% {filter: brightness(100%)}
+100%{filter: brightness(70%)}
+`;
+
+const ImageStyle = styled.div`
+height: 250px;
+flex: 1 0 100%;
+width: 100%;    
+object-fit: cover;
+object-position: 0 0;
+transition: transform 500ms cubic-bezier(0.455, 0.03, 0.515, 0.955);
+${props => props.loading && css`
+  animation ${shine} 1s infinite;
+`}
+`;
+
+const ImageLoaderStyle = styled.i`
+animation: ${fade} 1s infinite;
+display: flex;
+align-items: center;
+justify-content: center;
+height: 100%;
+`;
+
 
 export default class Image extends React.Component {
   constructor(props) {
@@ -38,56 +72,50 @@ export default class Image extends React.Component {
   }
 
   render() {
-    const {image, style, startLoad, ...others } = this.props;
+    const {image, style, key, startLoad, ...others } = this.props;
     const loadingStyle = {display: "none", position: "absolute", width: "0", height: "0"};
 
     const imageStyle = {
       height: "100%",
       width: "100%"
     };
-
+    let imageId = image.thumbnailUrl.split("/").pop().split(".").shift();
     let img = startLoad ? (
         <img 
+          id={imageId}
+          key={key}
           style={!this.state.loaded ? loadingStyle : imageStyle} 
           ref={this.image} 
           onLoad={ this.loaded } 
           onError={ this.handleError } 
-          className="" 
           src={image.thumbnailUrl} />
       ) : <></>;
 
     if(this.state.isError) return null;
 
-    const loadingIconStyle = {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      height: "100%"
-    };
-
     if(!this.state.loaded && !image.base64Preview) {
       return (
         <>
-          <div class="card-image" style={{...style, width: "400px", textAlign:"center", verticalAlign:"center" }} {...others}>
-            <i class="fa-4x fas fa-mountain card-image-loader" style={loadingIconStyle} ></i>
-          </div>
+          <ImageStyle id={"wrapper-" + imageId} style={{...style, width: "400px", textAlign:"center", verticalAlign:"center" }} {...others}>
+            <ImageLoaderStyle className="fa-4x fas fa-mountain" ></ImageLoaderStyle>
+          </ImageStyle>
           {img}
         </>
       );
     } else if(!this.state.loaded && image.base64Preview) {
       var imageString = "data:image/jpeg;base64," + image.base64Preview;
       return (
-        <div class="card-image shine" style={style} {...others}>
+        <ImageStyle id={"wrapper-" + imageId} loading style={style} {...others}>
           <SvgBlur style={imageStyle} base64Image={imageString} height={250} width={400} />
           {img}
-        </div>
+        </ImageStyle>
         );
     }
 
     return (
-      <div class="card-image" style={style} {...others}>
+      <ImageStyle id={"wrapper-" + imageId} style={style} {...others}>
         {img}
-      </div>
+      </ImageStyle>
     );
   }
 }

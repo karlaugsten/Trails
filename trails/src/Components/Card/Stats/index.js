@@ -4,7 +4,9 @@ import DumbDuration from './Duration';
 import DumbElevation from './Elevation';
 import DumbRating from './Rating';
 import DumbDistance from './Distance';
+import LoadingText from '../LoadingText';
 import withTrail from '../../withTrail'
+import styled from 'styled-components';
 
 /**
  * Wraps the withTrail connector, and displays some text if the component is loading.
@@ -12,7 +14,7 @@ import withTrail from '../../withTrail'
  */
 const wrapLoading = (Component) => withTrail(class extends React.Component {
   render() {
-    if(this.props.isFetching || !this.props.trail) return (<div>----</div>);
+    if(this.props.isFetching || !this.props.trail) return (<LoadingText width="70px" height="35px" innerHeight="14px"  id={Component.name}></LoadingText>);
     return <Component {...this.props} />
   }
 });
