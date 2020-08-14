@@ -5,6 +5,33 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import * as actions from '../Actions';
 import { getLoginRequested, getLoginError, isLoggedIn } from '../Reducers';
+import styled from 'styled-components';
+
+const Overlay = styled.div`
+  position: fixed;
+  content: "";
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0,.5);
+  z-index: 99998;
+  transition: transform 0.5s ease-in-out;
+`;
+
+const StyledModal = styled.div`
+  position: absolute;
+  border-radius: 5;
+  width: 50%;
+  box-shadow: 0 7px 13px 0 rgba(0, 0, 0, 0.2), 0 4px 8px 0 rgba(0, 0, 0,.19)!important;
+  z-index: 99999;
+  height: 50%;
+  top: 25%;
+  left: 25%;
+  background-color: rgba(22,22,22,1.0);
+  transition: transform 0.5s ease-in-out;
+`;
+
 
 class LoginModal extends Component {
   constructor(props) {
@@ -64,10 +91,10 @@ class LoginModal extends Component {
 
     return (
     <React.Fragment>
-    <div className={loginRequested && !loggedIn ? "login-modal-overlay" : ""} />
-    <div ref={node => {
+    {loginRequested && !loggedIn ? <Overlay /> : null}
+    <StyledModal ref={node => {
                       this.node_modal = node;
-                  }} style={{ transform: loginRequested && !loggedIn ? null : "translateY(-1500px)", top: this.state.top, left: this.state.left }} className="login-modal" onHide={this.handleClose.bind(this)}>
+                  }} style={{ transform: loginRequested && !loggedIn ? null : "translateY(-1500px)", top: this.state.top, left: this.state.left }} onHide={this.handleClose.bind(this)}>
       <Modal.Header closeButton onHide={this.handleClose.bind(this)}>
         <Modal.Title>You must login.</Modal.Title>
       </Modal.Header>
@@ -82,7 +109,7 @@ class LoginModal extends Component {
         <Button class="pull-left" onClick={this.handleLogin.bind(this)}>Login</Button>
         <Button class="pull-right" onClick={this.handleClose.bind(this)}>Cancel</Button>
       </Modal.Footer>
-    </div>
+    </StyledModal>
     </React.Fragment>
     );
   }

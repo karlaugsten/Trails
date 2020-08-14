@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import * as actions from '../Actions';
-import { isLoggedIn, getLoginRequested } from '../Reducers';
+import * as actions from '../../Actions';
+import { isLoggedIn, getLoginRequested } from '../../Reducers';
 
 class ProfileButton extends Component {
 

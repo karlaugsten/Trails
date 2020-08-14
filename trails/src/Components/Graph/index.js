@@ -1,5 +1,15 @@
 import React from 'react';
 import ZingChart from 'zingchart-react';
+import styled from 'styled-components';
+
+const GraphWrapper = styled.div`
+  height: 300px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  margin-bottom: 10px;
+  margin-top: 10px;
+`;
 
 export default class Graph extends React.Component {
     constructor(props) {
@@ -153,9 +163,9 @@ export default class Graph extends React.Component {
         };
 
         return (
-            <div className="graph-wrapper">
+            <GraphWrapper>
                 <ZingChart data={myConfig} />
-            </div>
+            </GraphWrapper>
         );
     }
   }

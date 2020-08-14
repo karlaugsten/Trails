@@ -1,6 +1,18 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import throttle from 'lodash/throttle';
+import styled from 'styled-components';
+import Header from './Header';
+import Buttons from './Buttons';
+
+const StyledNav = styled.div`
+  height: auto;
+  width: 100%;
+  position: fixed;
+  background-color: #313131;
+  box-shadow: 0 7px 13px 0 rgba(0, 0, 0, 0.2), 0 4px 8px 0 rgba(0, 0, 0,.19)!important;
+  z-index: 99997;
+  min-width: fit-content;
+`;
 
 export default class TrailNav extends React.Component {
   constructor(props) {
@@ -15,10 +27,13 @@ export default class TrailNav extends React.Component {
   }
 
   componentDidMount() {
+    window.addEventListener('touchmove', this.handleScroll);
     window.addEventListener('scroll', this.handleScroll);
+
   }
 
   componentWillUnmount() {
+    window.removeEventListener('touchmove', this.handleScroll);
     window.removeEventListener('scroll', this.handleScroll);
   }
 
@@ -55,12 +70,10 @@ export default class TrailNav extends React.Component {
 
   render() {
     return (
-        <div style={{top: this.state.top, position: this.state.position}} className="trail-navbar">
-          <div className="trail-navbar-header"><Link to="/"><i className="fas fa-mountain"></i>Trails</Link></div>
-          <div className="trail-navbar-buttons">
-            {this.props.children}
-          </div>
-        </div>
+        <StyledNav style={{left: 0, top: this.state.top, position: this.state.position}}>
+          <Header />
+          <Buttons />
+        </StyledNav>
     );
   }
 }

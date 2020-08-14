@@ -3,44 +3,27 @@
     font-style: normal;
     font-weight: normal;
     src: url('/NationalPark/NationalPark-Regular.otf') format('opentype');
-  }
+}
 
-  @font-face {
+@font-face {
     font-family: 'National Park Outline';
     font-style: normal;
     font-weight: normal;
     src: url('/NationalPark/NationalPark-Outline.otf') format('opentype');
-  }
+}
 
-  @font-face {
+@font-face {
     font-family: 'National Park';
     font-style: normal;
     font-weight: 100;
     src: url('/NationalPark/NationalPark-Thin.otf') format('opentype');
-  }
+}
 
-  @font-face {
+@font-face {
     font-family: 'National Park';
     font-style: normal;
     font-weight: bold;
     src: url('/NationalPark/NationalPark-Heavy.otf') format('opentype');
-  }
-
-header {
-    background-color: #212121;
-    color: rgb(233, 232, 232);
-}
-
-dark-header {
-    background-color: #000000;
-    color: rgb(233, 232, 232);
-}
-
-body {
-    /*background-color: #303030;*/
-    background-image: linear-gradient(to bottom right, #303030 , #383838);
-    color: rgb(233, 232, 232);
-    font-family: 'National Park'
 }
 
 .card-container {
@@ -71,21 +54,6 @@ body {
     border-radius: 4px;
     box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0,.19)!important;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-}
-
-.card-photo {
-    border-color: #000000;
-    position: absolute;
-    left: 160px;
-    width: 80px;
-    height: 80px;
-    border-radius: 40px;
-    box-shadow: 0 2px 7px 0 rgba(0, 0, 0, 0.2), 0 1px 8px 0 rgba(0, 0, 0,.19)!important;
-    z-index: 100;
-    margin-bottom: -40px;
-    top: -40px;
-    overflow: hidden;
-    object-fit: cover;
 }
 
 .card-fullscreen >* .card-title {
@@ -209,164 +177,9 @@ body {
     background-color: rgba(63, 63, 63, 0.28);
 }
 
-
-.graph-wrapper {
-    height: 300px;
-    /*width: 400px;*/
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    /*top: -40px;*/
-    margin-bottom: 10px;
-    margin-top: 10px;
-    /*border-width: 1px;
-    border-color: #000000;
-    border-style: solid;*/
+@keyframes spin {
+to { -webkit-transform: rotate(360deg); }
 }
-
-.graph-point {
-    z-index: 100;
-    position: relative;
-    width: 6px;
-    height: 6px;
-    border-radius: 3px;
-    background-color: #1891da;
-    transition: all 1.0s cubic-bezier(0, 0.8, 0.6, 0.95);
-    box-shadow: 0 5px 8px rgba(0,0,0,0.7);
+@-webkit-keyframes spin {
+to { -webkit-transform: rotate(360deg); }
 }
-
-.graph-y-line {
-    z-index: -1;
-    position: absolute;
-    height: 100%;
-    border-width: 1px;
-    border-color: rgb(0,0,0,0.7);
-    border-style: dotted;
-    transition: all 1.0s cubic-bezier(0, 0.8, 0.6, 0.95)
-}
-
-.trail-navbar {
-    height: auto;
-    width: 100%;
-    position: fixed;
-    background-color: #313131;
-    box-shadow: 0 7px 13px 0 rgba(0, 0, 0, 0.2), 0 4px 8px 0 rgba(0, 0, 0,.19)!important;
-    z-index: 99997;
-}
-
-.trail-navbar-header {
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    float: left !important;
-    font-size: 2em;
-    margin: 2px;
-}
-
-.trail-navbar-header > a {
-    color: rgba(233, 232, 232, 0.5);
-    text-decoration: none;
-    transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-    padding: 5px;
-    border-radius: 4px;
-    letter-spacing: 4px;
-}
-
-.trail-navbar-header > a:hover {
-    color: rgba(233, 232, 232, 0.8);
-    text-decoration: none;
-    background-color: rgba(63, 63, 63, 0.28);
-}
-
-.trail-navbar-buttons {
-    float: right !important;
-    display: flex;
-    height: 100%;
-    width: auto;
-}
-
-.trail-navbar-button {
-    height: 50px;
-    width: 50px;
-    justify-content: center;
-    align-items: center;
-    display: flex;
-    border-radius: 100px;
-    margin: 2px;
-    border-color: white;
-    border-width: 4px;
-    transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-    cursor: pointer;
-    font-size: 2.5em;
-    font-weight: 200;
-    color: rgba(83, 83, 83, 0.397);
-    margin-right: 5px;
-}
-
-.trail-navbar-button:hover {
-    background-color: rgba(75, 74, 74, 0.363);
-    color: rgba(100, 100, 100, 0.774);
-}
-
-.trail-navbar-button > a {
-    text-decoration: none;
-    color: inherit;
-    display: inherit;
-    align-content: inherit;
-    justify-content: inherit;
-    align-items: inherit;
-}
-
-.login-modal {
-    position: absolute;
-    border-radius: 5;
-    width: 50%;
-    box-shadow: 0 7px 13px 0 rgba(0, 0, 0, 0.2), 0 4px 8px 0 rgba(0, 0, 0,.19)!important;
-    z-index: 99999;
-    height: 50%;
-    top: 25%;
-    left: 25%;
-    background-color: rgba(22,22,22,1.0);
-    transition: transform 0.5s ease-in-out;
-}
-
-.login-modal-overlay {
-    position: fixed;
-    content: "";
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0,.5);
-    z-index: 99998;
-    transition: transform 0.5s ease-in-out;
-}
-
-.loader {
-    display: inline-block;
-    width: 50px;
-    height: 50px;
-    border: 3px solid rgba(255,255,255,.3);
-    border-radius: 50%;
-    border-top-color: #fff;
-    animation: spin 1s ease-in-out infinite;
-    -webkit-animation: spin 1s ease-in-out infinite;
-  }
-  
-  @keyframes spin {
-    to { -webkit-transform: rotate(360deg); }
-  }
-  @-webkit-keyframes spin {
-    to { -webkit-transform: rotate(360deg); }
-  }
-
-  .loader-wrapper {
-      position: relative;
-      width: 100%;
-      height: 100%;
-  }
-
-  .draft-content {
-      user-select: none !important;
-  }
