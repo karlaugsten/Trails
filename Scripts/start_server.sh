@@ -1,6 +1,9 @@
 #!/bin/bash
 cd /var/www/runnify.ca
 
+set NODE_ENV=production
+set GENERATE_SOURCEMAP=false
+
 sudo chown -R ubuntu:ubuntu ./*
 
 sudo chmod -R +x ./*
