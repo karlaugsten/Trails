@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import CardImages from './CardImages';
 import DraftContent from './DraftContent';
-import Graph from './Graph';
 import { withRouter } from 'react-router-dom';
 import Polyline from './Polyline';
+// Lazy load graph since zingchart is 600kb!
+const Graph = React.lazy(() => import('./Graph'));
+
 
 class FullTrailCard extends React.Component {
     constructor(props) {
@@ -64,7 +66,9 @@ class FullTrailCard extends React.Component {
                 </div>
                 <Polyline polyline={this.props.trail.map.elevationPolyline}>
                     {elevation => 
-                        <Graph values={elevation}/>
+                        <Suspense fallback={<div>Loading...</div>}>
+                            <Graph values={elevation}/>
+                        </Suspense>
                     }
                 </Polyline>
                 <div className="card-description">

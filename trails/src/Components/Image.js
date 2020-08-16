@@ -21,13 +21,11 @@ width: 100%;
 object-fit: cover;
 object-position: 0 0;
 transition: transform 500ms cubic-bezier(0.455, 0.03, 0.515, 0.955);
-${props => props.loading && css`
-  animation ${shine} 1s infinite;
-`}
 `;
 
 const ImageLoaderStyle = styled.i`
-animation: ${fade} 1s infinite;
+animation: ${fade} 1s, ${shine} 1s;
+animation-iteration-count: infinite;
 display: flex;
 align-items: center;
 justify-content: center;
