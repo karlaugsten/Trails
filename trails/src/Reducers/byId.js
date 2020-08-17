@@ -13,6 +13,8 @@ const isFetching = (state = {}, action) => {
         ...state,
         [action.id]: false 
       };
+    case 'FETCH_TRAILS_SUCCESS':
+      return {};
     default:
       return state;
   }

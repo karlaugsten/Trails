@@ -48,7 +48,7 @@ export const fetchTrail = (id) => (dispatch, getState) => {
   return TrailsApi.getAll().then(
     response => {
       dispatch({
-        type: 'FETCH_TRAIL_SUCCESS',
+        type: 'FETCH_TRAILS_SUCCESS',
         id,
         response: normalize(response, schema.arrayOfTrails),
       });
