@@ -1,4 +1,4 @@
-import TrailCard from './TrailCard';
+import TrailCard from './Card';
 import React from 'react';
 
 const cardWidth = 450;
@@ -35,7 +35,7 @@ export default class TrailCardCarousel extends React.Component {
     }
   
     render() {
-      var trails = this.props.trails.map((t, i) => (<TrailCard trail={t} key={t.trailId} />));
+      var trails = this.props.trails.map((t, i) => (<TrailCard id={t.trailId} key={t.trailId} />));
       var transform = `translateX(${this.state.posX}px)`;
       return (
         <div 

@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import withTrail from '../withTrail';
 import LoadingText from './LoadingText';
 
@@ -15,14 +15,19 @@ const CardTitle = styled.div`
   white-space: wrap;
   letter-spacing: 8px;
   flex-grow: 3;
+  ${props => props.big && css`
+    z-index: 100;
+    font-size: 60px;
+    font-weight: 400;
+  `}
 `;
 
-const Title = ({trail}) =>
+const Title = ({trail, big}) =>
 !trail ? (
 <LoadingText width="90%" height="40px" innerHeight="30px" />
 ) :
 (
-  <CardTitle>
+  <CardTitle big={big}>
     {trail.title}
   </CardTitle>
 );

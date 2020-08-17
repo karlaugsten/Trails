@@ -11,6 +11,7 @@ const GlobalStyle = createGlobalStyle`
     height: 100%;
     min-width: fit-content;
     min-height: 100vh;
+    margin: 0px;
   }
 `
 

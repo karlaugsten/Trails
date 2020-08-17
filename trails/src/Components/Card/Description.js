@@ -13,10 +13,10 @@ font-size: 0.9em;
 position: relative;
 overflow: hidden;
 text-overflow: ellipsis;
-height: 200px;
+height: ${props => props.short ? "170px" : "auto"};
 `;
 
-const Description = ({trail}) =>
+const Description = ({ trail, short }) =>
 !trail ?
 (<>
   <LoadingText innerHeight="0.7em" width="80%" height="auto" />
@@ -27,8 +27,8 @@ const Description = ({trail}) =>
 </>
 ) :
 (
-  <CardDescription>
-    <DraftContent short content={trail.description} />
+  <CardDescription short={short}>
+    <DraftContent short={short} content={trail.description} />
   </CardDescription>
 );
 

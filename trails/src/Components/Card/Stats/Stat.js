@@ -6,7 +6,7 @@ margin-left: 15px;
 margin-right: 15px;
 padding: 5px;
 transition: ease-in-out 0.2s all;
-width: 70px;
+width: auto;
 white-space: nowrap;
 height: 35px;
 text-align: center;

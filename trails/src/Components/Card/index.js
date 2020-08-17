@@ -1,13 +1,13 @@
 import React from 'react';
-import CardImages from './CardImages';
-import HeartButton from './HeartButton';
+import CardImages from '../CardImages';
+import HeartButton from '../HeartButton';
 import { withRouter } from "react-router-dom";
 import styled from 'styled-components';
-import CardStats from './Card/CardStats';
-import Title from './Card/Title';
-import Subtitle from './Card/Subtitle';
-import Description from './Card/Description';
-import withTrail from './withTrail';
+import CardStats from './CardStats';
+import Title from './Title';
+import Subtitle from './Subtitle';
+import Description from './Description';
+import withTrail from '../withTrail';
 
 const Card = styled.div`
   position: relative;
@@ -53,7 +53,7 @@ class TrailCard extends React.Component {
             <Title id={id} />
             <Subtitle id={id} />
             <CardStats id={id} />
-            <Description id={id} />
+            <Description short id={id} />
           </div>
       </Card>
     );

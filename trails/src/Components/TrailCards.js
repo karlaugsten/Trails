@@ -1,5 +1,6 @@
-import TrailCard from './TrailCard';
+import TrailCard from './Card';
 import React from 'react';
+import CardContainer from './Card/Container';
 
 export default class TrailCards extends React.Component {
     constructor(props) {
@@ -15,9 +16,9 @@ export default class TrailCards extends React.Component {
     render() {
       var trails = this.props.trails.map((id, i) => (<TrailCard id={id} />));
       return (
-        <div className="card-container" id="card-container">
+        <CardContainer>
             {trails}
-        </div>
+        </CardContainer>
       );
     }
   }

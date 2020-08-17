@@ -11,6 +11,7 @@ border-top: 1px solid #bebebe86;
 position: relative;
 margin-top: 5px;
 margin-bottom: 5px;
+padding-top: 10px;
 justify-content: center;
 `
 

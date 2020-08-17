@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import LoadingText from './LoadingText';
 import withTrail from '../withTrail';
 
@@ -12,6 +12,12 @@ position: relative;
 text-overflow: ellipsis;
 white-space: nowrap;
 letter-spacing: 2px;
+  ${props => props.big && css`
+    font-size: 15px;
+    line-height: 10px;
+    font-weight: 200;
+    flex-grow: 0.5;
+  `}
 `;
 
 const LoadingTextWrapper = styled.div`
@@ -21,7 +27,7 @@ const LoadingTextWrapper = styled.div`
   padding-left: 15%;
 `;
 
-const Subtitle = ({trail}) => 
+const Subtitle = ({trail, big}) => 
 !trail ? 
 (
   <LoadingTextWrapper>
@@ -29,7 +35,7 @@ const Subtitle = ({trail}) =>
   </LoadingTextWrapper>
 ) :
 (
-  <CardSubtitle>
+  <CardSubtitle big={big}>
     <i className="fas fa-map-marker-alt"></i> {trail.location}
   </CardSubtitle>
 );

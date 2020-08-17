@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import * as actions from '../Actions';
 import { getTrail, getErrorMessageForId, getIsFetchingId } from '../Reducers';
-import FullTrailCard from './FullTrailCard';
+import FullTrailCard from './Trail';
 
 class ReduxFullTrailCard extends Component {
   componentDidMount() {
