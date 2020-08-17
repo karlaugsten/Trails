@@ -40,6 +40,39 @@ public class ImageProcessor : IImageProcessor
   /// <param name="imageFile"></param>
   /// <param name="stream"></param>
   /// <returns></returns>
+  public async Task ProcessMainImageToStream(IFormFile imageFile, Stream stream)
+  {
+    // The goal MP to scale down to if needed.
+    int standardMegaPixels = 3000000;
+    // Image.Load(string path) is a shortcut for our default type. 
+    // Other pixel formats use Image.Load<TPixel>(string path))
+    using (Image<Rgba32> image = SixLabors.ImageSharp.Image.Load(imageFile.OpenReadStream()))
+    {
+      int MP = image.Width * image.Height;
+
+      if(MP > standardMegaPixels) {
+        // Sqrt since we are scaling down height AND width;
+        double scaleFactor = Math.Sqrt((double)standardMegaPixels/(double)MP);
+        image.Mutate(x => x
+          .Resize(0, (int)(image.Height * scaleFactor)));
+      }
+      // Save with 94% quality. The goal is to preserve the picture quality but only have ~1MB size image.
+      image.SaveAsJpeg(stream, new JpegEncoder(){ 
+        Quality = 94,
+        IgnoreMetadata = true
+      });
+    }
+  }
+
+  /// <summary>
+  /// This processes the file image to a jpeg image intended to be shown
+  /// on the home page (400px x 250px size) as a jpeg format.
+  /// 
+  /// This then saves it to the passed in stream.
+  /// </summary>
+  /// <param name="imageFile"></param>
+  /// <param name="stream"></param>
+  /// <returns></returns>
   public async Task ProcessThumbnailImageToStream(IFormFile imageFile, Stream stream)
   {
     // Image.Load(string path) is a shortcut for our default type. 

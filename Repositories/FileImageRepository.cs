@@ -34,9 +34,12 @@ namespace Trails.Repositories
     public async Task<Image> AddImageAsync(IFormFile image, int editId) {
       // Save the image to wherever we are storing it.. for now just the file system.
       var fileType = this.MimeTypeMap[image.ContentType];
-      
-      string imageUrl = await _fileRepository.SaveAsync(fileType, 
-        image.OpenReadStream());
+      string imageUrl = null;
+      using(var memStream = new MemoryStream()) {
+        await _imageProcessor.ProcessMainImageToStream(image, memStream);
+        memStream.Position = 0;
+        imageUrl = await _fileRepository.SaveAsync(fileType, memStream);
+      }
 
       // Use a memory stream FOR NOW since it should only be about 200kb. Optimize this later
       using(var memStream = new MemoryStream()) {
