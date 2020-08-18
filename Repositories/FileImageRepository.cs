@@ -64,5 +64,8 @@ namespace Trails.Repositories
     }
 
     public Stream GetImageStream(string imageName) => _fileRepository.Get(imageName);
+
+    public string GetUrl(string imageName) => _fileRepository.GetUrl(imageName);
+
   }
 }

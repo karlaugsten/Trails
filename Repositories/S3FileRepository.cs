@@ -68,7 +68,7 @@ public class S3FileRepository : IFileRepository
         var fileName = name + fileType;
         String objectKey = fileName;
         await client.UploadObjectFromStreamAsync(bucketName, objectKey, fileStream, null);
-        return GetUrl(objectKey);
+        return GetLocalUrl(objectKey);
     }
     catch (AmazonS3Exception e)
     {
@@ -86,6 +86,17 @@ public class S3FileRepository : IFileRepository
     }
   }
 
-  public string GetUrl(string fileName) =>
-    $"https://{this.bucketName}.s3.{this.region}.amazonaws.com/{fileName}";
+  public string GetS3Url(string filename) =>    
+   $"https://{this.bucketName}.s3.{this.region}.amazonaws.com/{filename}";
+
+  public string GetLocalUrl(string filename) => $"/api/images/{filename}";
+
+  public string GetUrl(string fileName)
+  {
+    var request = new GetPreSignedUrlRequest();
+    request.BucketName = this.bucketName;
+    request.Key = fileName;
+    request.Expires = DateTime.Now.AddMinutes(1);
+    return client.GetPreSignedURL(request);
+  }
 }

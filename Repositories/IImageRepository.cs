@@ -8,5 +8,12 @@ namespace Trails.Repositories
     {
         Task<Image> AddImageAsync(IFormFile image, int editId);
         Stream GetImageStream(string imageName);
+
+        /// <summary>
+        /// Gets the URL where the image can be accessed from.
+        /// </summary>
+        /// <param name="imageName"></param>
+        /// <returns></returns>
+        string GetUrl(string imageName);
     }
 }

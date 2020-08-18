@@ -50,6 +50,17 @@ namespace Trails.Controllers
         public IActionResult GetImage(string image)
         {
             try {
+                // Redirect to the actual image URL, this is to support pre-signed download URLs from S3.
+                return Redirect(_imageRepo.GetUrl(image));
+            } catch (KeyNotFoundException e) { // Reusing this exception type...
+                return NotFound();
+            }
+        }
+
+        [HttpGet("direct/{image}")]
+        public IActionResult GetImageDirect(string image)
+        {
+            try {
                 return new FileStreamResult(_imageRepo.GetImageStream(image), "image/jpeg");
             } catch (KeyNotFoundException e) { // Reusing this exception type...
                 return NotFound();
