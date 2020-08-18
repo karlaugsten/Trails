@@ -161,13 +161,14 @@ namespace Trails.Controllers
         {
             // Saves a draft of an edit.
             var trail = _context.TrailEdits
-                .Include(t => t.Images)
-                .Include(t => t.Map)
+                /*.Include(t => t.Images)
+                .Include(t => t.Map)*/
                 .FirstOrDefault(t => t.EditId == editId && t.TrailId == trailId);
             if(trail == null)
             {
                 return NotFound();
             }
+            _context.TrailEdits.Attach(trail);
             //trail.EditId = edit.EditId;
             trail.Title = edit.Title;
             trail.Rating = edit.Rating;
