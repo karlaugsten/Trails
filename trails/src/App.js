@@ -14,7 +14,7 @@ export default class App extends React.Component {
       return (
         
           <Router>
-            <Body>
+            <>
               <TrailNav />
               <LoginModal />
               <Container>
@@ -24,7 +24,7 @@ export default class App extends React.Component {
                   <Route exact path="/edit" component={TrailEditor} />
                   <Route path="/profile" component={ProfilePage} />
               </Container>
-            </Body>
+            </>
           </Router>
       );
     }

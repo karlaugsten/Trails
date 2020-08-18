@@ -18,7 +18,7 @@ const FullTrailStyle = styled.div`
   width: 90%; 
   height: auto; 
   position: relative;
-  background-color: #424242;
+  background-color: ${props => props.theme.background};
 
   justify-content: center;
   text-align: center;

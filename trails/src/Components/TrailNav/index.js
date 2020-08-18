@@ -8,10 +8,10 @@ const StyledNav = styled.div`
   height: auto;
   width: 100%;
   position: fixed;
-  background-color: #313131;
+  background-color: ${props => props.theme.aboveBackground};
   box-shadow: 0 7px 13px 0 rgba(0, 0, 0, 0.2), 0 4px 8px 0 rgba(0, 0, 0,.19)!important;
   z-index: 99997;
-  min-width: fit-content;
+  min-width: 500px;
 `;
 
 export default class TrailNav extends React.Component {

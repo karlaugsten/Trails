@@ -1,15 +1,16 @@
 import React, { Suspense } from 'react';
 import { Provider } from 'react-redux';
 import styled, { keyframes, createGlobalStyle } from 'styled-components';
+import DarkTheme from './Components/DarkTheme';
 const App = React.lazy(() => import('./App'));
 
 const GlobalStyle = createGlobalStyle`
   body {
-    background-image: linear-gradient(to bottom right, #303030 , #383838);
-    color: rgb(233, 232, 232);
+    background-image: linear-gradient(to bottom, ${props => props.theme.background}, ${props => props.theme.aboveBackground});
+    color: ${props => props.theme.text};
     font-family: 'National Park';
     height: 100%;
-    min-width: fit-content;
+    min-width: 500px;
     min-height: 100vh;
     margin: 0px;
   }
@@ -52,14 +53,14 @@ const Loader = () =>
 );
 
 const Root = ({ store }) => (
-  <>
-  <GlobalStyle />
-  <Suspense fallback={<Loader />}>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </Suspense>
-  </>
+  <DarkTheme>
+    <GlobalStyle />
+    <Suspense fallback={<Loader />}>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </Suspense>
+  </DarkTheme>
 );
 
 export default Root;

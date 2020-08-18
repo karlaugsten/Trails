@@ -6,8 +6,8 @@ const CardStats = styled.div`
 display: flex;
 flex-wrap: wrap;
 width: 100%;
-border-bottom: 1px solid #bebebe86;
-border-top: 1px solid #bebebe86;
+border-bottom: 1px solid ${props => props.theme.subText}86;
+border-top: 1px solid ${props => props.theme.subText}86;
 position: relative;
 margin-top: 5px;
 margin-bottom: 5px;

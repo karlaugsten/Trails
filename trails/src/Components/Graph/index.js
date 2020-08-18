@@ -1,6 +1,6 @@
 import React from 'react';
 import ZingChart from 'zingchart-react';
-import styled from 'styled-components';
+import styled, { withTheme } from 'styled-components';
 
 const GraphWrapper = styled.div`
   height: 300px;
@@ -11,7 +11,7 @@ const GraphWrapper = styled.div`
   margin-top: 10px;
 `;
 
-export default class Graph extends React.Component {
+class Graph extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
@@ -21,7 +21,7 @@ export default class Graph extends React.Component {
     }
 
     render() {
-        const { values } = this.props;
+        const { values, theme } = this.props;
         var maxValue = Math.max(...values);
         var minValue = Math.min(...values);
         let graph = {
@@ -52,12 +52,12 @@ export default class Graph extends React.Component {
                 item: {
                     fontSize: '10px',
                     //alpha: '0.4',
-                    fontColor: "rgb(233, 232, 232)"
+                    fontColor: theme.text
                 },
                 label: { 
                     text: "Distance (km)",
                     borderColor: 'none',
-                    fontColor: 'rgb(233, 232, 232)',
+                    fontColor: theme.text,
                     fontSize: 14,
                     fontStyle: 'normal',
                     fontWeight: 'normal',
@@ -74,7 +74,7 @@ export default class Graph extends React.Component {
                 item: {
                     fontSize: '10px',
                     //alpha: '0.4'
-                    fontColor: "rgb(233, 232, 232)"
+                    fontColor: theme.text
                 },
                 tick: {
                     visible: false
@@ -83,7 +83,7 @@ export default class Graph extends React.Component {
                 label: { 
                     text: "Elevation (m)",
                     borderColor: 'none',
-                    fontColor: 'rgb(233, 232, 232)',
+                    fontColor: theme.text,
                     fontSize: 14,
                     fontStyle: 'normal',
                     fontWeight: 'normal',
@@ -169,3 +169,5 @@ export default class Graph extends React.Component {
         );
     }
   }
+
+  export default withTheme(Graph);

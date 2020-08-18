@@ -11,7 +11,8 @@ const NavbarHeader = styled.div`
   font-size: 2em;
   margin: 2px;
   & > a {
-    color: rgba(233, 232, 232, 0.5);
+    color: ${props => props.theme.text};
+    opacity: 50%;
     text-decoration: none;
     transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
     padding: 5px;
@@ -19,7 +20,8 @@ const NavbarHeader = styled.div`
     letter-spacing: 4px;
   }
   & > a:hover {
-    color: rgba(233, 232, 232, 0.8);
+    color: ${props => props.theme.text};
+    opacity: 80%;
     text-decoration: none;
     background-color: rgba(63, 63, 63, 0.28);
   }

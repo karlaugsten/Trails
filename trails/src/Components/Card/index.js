@@ -11,7 +11,7 @@ import withTrail from '../withTrail';
 
 const Card = styled.div`
   position: relative;
-  background-color: #424242;
+  background-color: ${props => props.theme.background};
   width: 400px;
   height: 600px;
   justify-content: center;
