@@ -14,6 +14,17 @@ const GlobalStyle = createGlobalStyle`
     min-height: 100vh;
     margin: 0px;
   }
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover, 
+  input:-webkit-autofill:focus,
+  textarea:-webkit-autofill,
+  textarea:-webkit-autofill:hover,
+  textarea:-webkit-autofill:focus,
+  select:-webkit-autofill,
+  select:-webkit-autofill:hover,
+  select:-webkit-autofill:focus {
+    background-color: grey;
+  }
 `
 
 const fade = keyframes`

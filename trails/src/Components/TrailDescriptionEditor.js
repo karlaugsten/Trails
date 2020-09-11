@@ -73,7 +73,7 @@ export default class TrailDescriptionEditor extends Component {
     //var editorState = this.getEditorState();
     return (
       <div>
-        <div className={editorStyles.editor} onClick={this.focus}>
+        <div className="editor" onClick={this.focus}>
           <TrailEditor
             editorState={this.state.editorState}
             onChange={this.onChange.bind(this)}

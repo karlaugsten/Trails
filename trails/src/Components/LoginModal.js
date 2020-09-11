@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import * as actions from '../Actions';
 import { getLoginRequested, getLoginError, isLoggedIn } from '../Reducers';
+import { TextInput, PasswordInput, Button } from './Forms';
 import styled from 'styled-components';
 
 const Overlay = styled.div`
@@ -27,8 +28,22 @@ const StyledModal = styled.div`
   height: 50%;
   top: 25%;
   left: 25%;
-  background-color: rgba(22,22,22,1.0);
+  background-color: ${props => props.theme.background};
   transition: transform 0.5s ease-in-out;
+`;
+
+const CenteredContainer = styled.div`
+display: flex;
+justify-content: center;
+align-items: center;
+width: 100%;
+`;
+
+const Header = styled.div`
+font-size: 2em;
+margin: 1em;
+font-weight: 100;
+letter-spacing: 0.15em;
 `;
 
 
@@ -75,6 +90,10 @@ class LoginModal extends Component {
     submitLogin(this.state.email, this.state.password);
   }
 
+  validateEmail(email) {
+    return email && email.includes("@");
+  }
+
   handleChange(event) {
     this.setState({[event.target.name]: event.target.value})
   }
@@ -94,20 +113,20 @@ class LoginModal extends Component {
     <StyledModal ref={node => {
                       this.node_modal = node;
                   }} style={{ transform: loginRequested && !loggedIn ? null : "translateY(-1500px)", top: this.state.top, left: this.state.left }} onHide={this.handleClose.bind(this)}>
-      <div closeButton onHide={this.handleClose.bind(this)}>
-        <h1>You must login.</h1>
-      </div>
+      <CenteredContainer closeButton onHide={this.handleClose.bind(this)}>
+        <Header>Please login.</Header>
+      </CenteredContainer>
       <div>
         {loginErrorMessage}
         <form>
-          <input type="text" name="email" placeholder="Email" value={this.state.email} onChange={this.handleChange.bind(this)} />
-          <input type="password" name="password" placeholder="Password" value={this.state.password} onChange={this.handleChange.bind(this)} />
+          <TextInput validate={this.validateEmail} type="text" name="email" placeholder="Email" value={this.state.email} onChange={this.handleChange.bind(this)} />
+          <PasswordInput name="password" placeholder="Password" value={this.state.password} onChange={this.handleChange.bind(this)} />
         </form>
       </div>
-      <div>
-        <button class="pull-left" onClick={this.handleLogin.bind(this)}>Login</button>
-        <button class="pull-right" onClick={this.handleClose.bind(this)}>Cancel</button>
-      </div>
+      <CenteredContainer>
+        <Button primary onClick={this.handleLogin.bind(this)}>Login</Button>
+        <Button onClick={this.handleClose.bind(this)}>Cancel</Button>
+      </CenteredContainer>
     </StyledModal>
     </React.Fragment>
     );

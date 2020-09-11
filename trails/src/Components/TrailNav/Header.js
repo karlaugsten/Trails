@@ -1,6 +1,6 @@
 import React from 'react';
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import styled, { css } from 'styled-components';
+import { withRouter } from 'react-router';
 
 const NavbarHeader = styled.div`
   height: 100%;
@@ -10,25 +10,46 @@ const NavbarHeader = styled.div`
   float: left !important;
   font-size: 2em;
   margin: 2px;
-  & > a {
-    color: ${props => props.theme.text};
-    opacity: 50%;
-    text-decoration: none;
-    transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-    padding: 5px;
-    border-radius: 4px;
-    letter-spacing: 4px;
-  }
-  & > a:hover {
-    color: ${props => props.theme.text};
-    opacity: 80%;
-    text-decoration: none;
-    background-color: rgba(63, 63, 63, 0.28);
+  border-radius: 0px;
+  opacity: 60%;
+
+  & > i {
+    margin-right: 10px;
+    margin-left: 10px;
   }
 `;
 
-export default () => (
+const Link = styled.a`
+  font-size: 1.0em;
+  color: ${props => props.theme.text};
+  text-decoration: none;
+  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  padding: 5px;
+  border-radius: 0px;
+  letter-spacing: 4px;
+  border-bottom: 2px solid;
+  border-color: transparent;
+  margin-left: 10px;
+
+  &:hover {
+    color: ${props => props.theme.text};
+    text-decoration: none;
+    border-bottom: 2px solid;
+    border-color: ${props => props.theme.text};
+  }
+  ${props => props.selected && css`
+    border-bottom: 2px solid;
+    border-color: ${props.theme.text};
+  `}
+`;
+
+const Header = (props) => (
   <NavbarHeader>
-    <Link to="/"><i className="fas fa-mountain"></i>Trails</Link>
+    <i className="fas fa-mountain"></i>
+    <Link selected={props.location.pathname == "/"} href="/">Trails</Link>
+    <Link selected={props.location.pathname == "/races"} href="/races">Races</Link>
   </NavbarHeader>
 );
+
+export default withRouter(Header);
+

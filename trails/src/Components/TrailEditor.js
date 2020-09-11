@@ -1,11 +1,51 @@
 import React from 'react';
 import TrailDescriptionEditor from './TrailDescriptionEditor';
 import AddGpx from './AddGpx';
+import { TextInput, NumberInput } from './Forms';
 import * as actions from '../Actions';
 import { getTrailEdit, isLoggedIn, getLoginRequested } from '../Reducers';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import throttle from 'lodash/throttle'
+import styled from 'styled-components';
+
+const FullTrailStyle = styled.div`
+  z-index: 9999; 
+  width: 90%; 
+  height: auto; 
+  position: relative;
+  background-color: ${props => props.theme.background};
+
+  justify-content: center;
+  text-align: center;
+  margin: 30px;
+  padding: 10px 10px 10px 10px;
+  border-radius: 4px;
+  box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0,.19)!important;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+`;
+
+const FormStyle = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+`;
+
+
+const FormGroup = styled.div`
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+`;
+
+const LabelStyle = styled.div`
+margin-top: 1em;
+margin-bottom: 1em;
+margin-left: 10%;
+margin-right: -5%;
+flex: 1 1 auto;
+font-size: 1.5em;
+`
 
 class TrailEditor extends React.Component {
     constructor(props) {
@@ -89,93 +129,73 @@ class TrailEditor extends React.Component {
           return (<div className="card-fullscreen"></div>)
         }
         return (
-          <div className="card-fullscreen">
-            <div class="form-group">
-              <label for="titleInput">Title</label>
-              <input type="text" id="titleInput" class="form-control" onChange={this.handleChange} name="title" value={this.state.title} />
-            </div>
-            <div class="form-group">
-              <label for="locationInput">Location</label>
-              <input type="text" id="locationInput" class="form-control" onChange={this.handleChange} name="location" value={this.state.location} />
-            </div>
-            <div class="form-group">
-              <label for="distanceInput">Distance (km)</label>
-              <input type="number" id="distanceInput" step="1" class="form-control" onChange={this.handleChange} name="distance" value={this.state.distance} />
-            </div>
-            <div class="form-group">
-              <label for="elevationInput">Elevation (m)</label>
-              <input type="number" id="elevationInput" step="1" class="form-control" onChange={this.handleChange} name="elevation" value={this.state.elevation} />
-            </div>
-            <div class="form-group">
-              <div class="row">
-                <label>Duration</label>
-              </div>
-              <div class="row">
+          <FullTrailStyle>
+            <FormStyle>
+              <TextInput style={{fontSize:"1.8em", flexBasis: "100%"}} type="text" placeholder="Title" onChange={this.handleChange} name="title" value={this.state.title} />
+              <TextInput style={{fontSize:"0.8em", flexBasis: "100%"}} type="text" placeholder="Location" onChange={this.handleChange} name="location" value={this.state.location} />
+              <FormGroup>
+                <NumberInput style={{flex: "1 1 auto"}} placeholder="Distance (km)" onChange={this.handleChange} name="distance" value={this.state.distance} />
+                <NumberInput style={{flex: "1 1 auto"}} placeholder="Elevation (m)" onChange={this.handleChange} name="elevation" value={this.state.elevation} />
+              </FormGroup>
+              <FormGroup>
+                <LabelStyle>
+                  <label>Duration:</label>
+                </LabelStyle>
+                <NumberInput style={{flex: "1 1 auto"}} placeholder="From (hr)" onChange={this.handleChange} name="minDuration" value={this.state.minDuration} />
+                <NumberInput style={{flex: "1 1 auto"}} placeholder="To (hr)" onChange={this.handleChange} name="maxDuration" value={this.state.maxDuration} />
+              </FormGroup>
+              <FormGroup>
+                <LabelStyle>
+                  <label>Season:</label>
+                </LabelStyle>
+                <TextInput style={{flex: "1 1 auto"}} type="text" placeholder="From" onChange={this.handleChange} name="minSeason" value={this.state.minSeason} />
+                <TextInput style={{flex: "1 1 auto"}} type="text" placeholder="To" onChange={this.handleChange} name="maxSeason" value={this.state.maxSeason} />
 
-                <div class="col col-xs-offset-2 col-xs-1">
-                  <label for="minDurationInput">From (hr)</label>
-                </div>
-                <div class="col col-xs-1">
-                  <input type="number" id="minDurationInput" step="1" class="form-control" onChange={this.handleChange} name="minDuration" value={this.state.minDuration} max="24" min="0"  />
-                </div>
-                <div class="col col-xs-1">
-                  <label for="minDurationInput">To (hr)</label>
-                </div>
-                <div class="col col-xs-1">
-                  <input type="number" id="ratingInput" step="1" class="form-control" onChange={this.handleChange} name="maxDuration" value={this.state.maxDuration} max="24" min="0"  />
-                </div>
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="row">
-                <label>Season</label>
-              </div>
-              <div class="row">
+                {/**<div class="row">
 
-                <div class="col col-sm-offset-2 col-sm-1">
-                  <label for="minDurationInput">From</label>
-                </div>
-                <div class="col col-sm-1">
-                  <select name="minSeason" onChange={this.handleChange} value={this.state.minSeason}>
-                    <option value="January">January</option>
-                    <option value="February">February</option>
-                    <option value="March">March</option>
-                    <option value="April">April</option>
-                    <option value="May">May</option>
-                    <option value="June">June</option>
-                    <option value="July">July</option>
-                    <option value="August">August</option>
-                    <option value="September">September</option>
-                    <option value="October">October</option>
-                    <option value="November">November</option>
-                    <option value="December">December</option>
-                  </select>
-                </div>
-                <div class="col col-sm-1">
-                  <label for="minDurationInput">To</label>
-                </div>
-                <div class="col col-sm-1">
-                  <select name="maxSeason" onChange={this.handleChange} value={this.state.maxSeason}>
-                    <option value="January">January</option>
-                    <option value="February">February</option>
-                    <option value="March">March</option>
-                    <option value="April">April</option>
-                    <option value="May">May</option>
-                    <option value="June">June</option>
-                    <option value="July">July</option>
-                    <option value="August">August</option>
-                    <option value="September">September</option>
-                    <option value="October">October</option>
-                    <option value="November">November</option>
-                    <option value="December">December</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="ratingInput">Rating (out of 5)</label>
-              <input type="number" id="ratingInput" step="1" class="form-control" onChange={this.handleChange} name="rating" value={this.state.rating} max="5" min="0"  />
-            </div>
+                  <div class="col col-sm-offset-2 col-sm-1">
+                    <label for="minDurationInput">From</label>
+                  </div>
+                  <div class="col col-sm-1">
+                    <select name="minSeason" onChange={this.handleChange} value={this.state.minSeason}>
+                      <option value="January">January</option>
+                      <option value="February">February</option>
+                      <option value="March">March</option>
+                      <option value="April">April</option>
+                      <option value="May">May</option>
+                      <option value="June">June</option>
+                      <option value="July">July</option>
+                      <option value="August">August</option>
+                      <option value="September">September</option>
+                      <option value="October">October</option>
+                      <option value="November">November</option>
+                      <option value="December">December</option>
+                    </select>
+                  </div>
+                  <div class="col col-sm-1">
+                    <label for="minDurationInput">To</label>
+                  </div>
+                  <div class="col col-sm-1">
+                    <select name="maxSeason" onChange={this.handleChange} value={this.state.maxSeason}>
+                      <option value="January">January</option>
+                      <option value="February">February</option>
+                      <option value="March">March</option>
+                      <option value="April">April</option>
+                      <option value="May">May</option>
+                      <option value="June">June</option>
+                      <option value="July">July</option>
+                      <option value="August">August</option>
+                      <option value="September">September</option>
+                      <option value="October">October</option>
+                      <option value="November">November</option>
+                      <option value="December">December</option>
+                    </select>
+                  </div>
+                </div>*/}
+              </FormGroup>
+
+              <NumberInput style={{width:"20%"}} placeholder="Rating (out of 5)" onChange={this.handleChange} name="rating" value={this.state.rating} />
+            </FormStyle>
             <AddGpx trailId={this.state.trailId} editId={this.state.editId} map={this.state.map} onAdd={(map) => this.addMap(map)} />
             <TrailDescriptionEditor 
               trailId={this.state.trailId}
@@ -185,7 +205,7 @@ class TrailEditor extends React.Component {
               description={this.state.description}
               updateDescription={(desc) => this.updateDescription(desc)}
             />
-          </div>
+          </FullTrailStyle>
         )
     }
   }

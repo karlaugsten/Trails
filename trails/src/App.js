@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import ReduxTrailCards from './Components/ReduxTrailCards';
 import ReduxFullTrailCard from './Components/ReduxFullTrailCard';
 import ProfilePage from './Components/ProfilePage';
+import Races from './Components/Races';
 import Body from './Components/Body';
 import Container from './Components/Container';
 
@@ -19,6 +20,7 @@ export default class App extends React.Component {
               <LoginModal />
               <Container>
                   <Route exact path="/" component={ReduxTrailCards} />
+                  <Route path="/races" component={Races} />
                   <Route path="/trails/:trailId" component={ReduxFullTrailCard} />
                   <Route path="/edit/:editId" component={TrailEditor} />
                   <Route exact path="/edit" component={TrailEditor} />

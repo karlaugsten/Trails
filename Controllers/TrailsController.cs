@@ -159,6 +159,7 @@ namespace Trails.Controllers
         [Authorize(Policy = "CanEdit")]
         public IActionResult SaveEdit(int trailId, int editId, [FromBody]TrailEdit edit)
         {
+            if(!this.ModelState.IsValid) return BadRequest();
             // Saves a draft of an edit.
             var trail = _context.TrailEdits
                 /*.Include(t => t.Images)
