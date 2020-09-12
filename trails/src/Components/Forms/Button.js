@@ -18,7 +18,7 @@ let StyledButton = styled.button`
   &:hover {
     background: ${props => props.primary ? props.theme.text : "rgba(0,0,0,0.3)"};
     color: ${props => props.primary ? props.theme.background :  props.theme.text};
-    box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.2), 7px 7px 7px 7px rgba(0, 0, 0,.19);
+    box-shadow: ${props => props.primary ? "0px 5px 4px 2px rgba(0,0,0,0.2), 0px 7px 9px 5px rgba(0,0,0,.19)" : "none"};
   }
 `;
 

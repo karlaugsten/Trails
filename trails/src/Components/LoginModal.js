@@ -23,9 +23,11 @@ const StyledModal = styled.div`
   position: absolute;
   border-radius: 5;
   width: 50%;
+  min-width: 300px;
   box-shadow: 0 7px 13px 0 rgba(0, 0, 0, 0.2), 0 4px 8px 0 rgba(0, 0, 0,.19)!important;
   z-index: 99999;
   height: 50%;
+  min-height: 400px;
   top: 25%;
   left: 25%;
   background-color: ${props => props.theme.background};
@@ -44,6 +46,12 @@ font-size: 2em;
 margin: 1em;
 font-weight: 100;
 letter-spacing: 0.15em;
+`;
+
+const LoginForm = styled.form`
+display: flex;
+align-items: center;
+flex-direction: column;
 `;
 
 
@@ -118,10 +126,10 @@ class LoginModal extends Component {
       </CenteredContainer>
       <div>
         {loginErrorMessage}
-        <form>
-          <TextInput validate={this.validateEmail} type="text" name="email" placeholder="Email" value={this.state.email} onChange={this.handleChange.bind(this)} />
-          <PasswordInput name="password" placeholder="Password" value={this.state.password} onChange={this.handleChange.bind(this)} />
-        </form>
+        <LoginForm>
+          <TextInput style={{maxWidth:"300px"}} validate={this.validateEmail} type="text" name="email" placeholder="Email" value={this.state.email} onChange={this.handleChange.bind(this)} />
+          <PasswordInput style={{maxWidth:"300px"}} name="password" placeholder="Password" value={this.state.password} onChange={this.handleChange.bind(this)} />
+        </LoginForm>
       </div>
       <CenteredContainer>
         <Button primary onClick={this.handleLogin.bind(this)}>Login</Button>
