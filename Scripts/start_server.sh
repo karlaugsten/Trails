@@ -1,5 +1,11 @@
 #!/bin/bash
+echo "Copying deployment files"
+
+sudo cp -R /home/ubuntu/runnify.ca /var/www/runnify.ca
+
 cd /var/www/runnify.ca
+
+echo "Setting permissions"
 
 set NODE_ENV=production
 set GENERATE_SOURCEMAP=false

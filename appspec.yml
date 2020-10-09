@@ -1,8 +1,8 @@
-version: 0.0
+version: 0.1
 os: linux
 files:
   - source: /
-    destination: /var/www/runnify.ca
+    destination: /home/ubuntu/runnify.ca
     overwrite: true
 hooks:
   ApplicationStart:
