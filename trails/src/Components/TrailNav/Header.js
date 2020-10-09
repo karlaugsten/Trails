@@ -19,9 +19,40 @@ const NavbarHeader = styled.div`
   }
 `;
 
+const LinkContainer = styled.div`
+  height: 54px;
+  display: flex;
+  width: auto;
+  margin-left: 0.5em;
+  align-items: center;
+  text-align: center;
+  vertical-align: center;
+  position: relative;
+  color: ${props => props.theme.text}AA;
+  &:hover {
+    color: ${props => props.theme.text};
+  }
+  &:hover:after {
+    height: 3px;
+    background-color: ${props => props.theme.text}; 
+  }
+  &::after {
+    content: "";
+    background-color: ${props => props.theme.text}AA; 
+    position: absolute;
+    content: '';
+    height: ${props => props.selected ? "2px" : ""};
+    bottom: -2px;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    width: 100%;
+  }
+`;
+
 const Link = styled.a`
-  font-size: 1.0em;
-  color: ${props => props.theme.text};
+  color: inherit;
+  font-size: 0.7em;
   text-decoration: none;
   transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   padding: 5px;
@@ -29,25 +60,17 @@ const Link = styled.a`
   letter-spacing: 4px;
   border-bottom: 2px solid;
   border-color: transparent;
-  margin-left: 10px;
-
-  &:hover {
-    color: ${props => props.theme.text};
-    text-decoration: none;
-    border-bottom: 2px solid;
-    border-color: ${props => props.theme.text};
-  }
-  ${props => props.selected && css`
-    border-bottom: 2px solid;
-    border-color: ${props.theme.text};
-  `}
+  
+  padding-bottom: 0.5em;
+  padding-top: 0.3em;
+  align-self: vertical;
 `;
 
 const Header = (props) => (
   <NavbarHeader>
-    <i className="fas fa-mountain"></i>
-    <Link selected={props.location.pathname == "/"} href="/">Trails</Link>
-    <Link selected={props.location.pathname == "/races"} href="/races">Races</Link>
+    <i style={{marginRight: "20px"}} className="fas fa-mountain"></i>
+    <LinkContainer selected={props.location.pathname == "/"}><Link selected={props.location.pathname == "/"} href="/">Trails</Link></LinkContainer>
+    <LinkContainer selected={props.location.pathname == "/races"}><Link selected={props.location.pathname == "/races"} href="/races">Races</Link></LinkContainer>
   </NavbarHeader>
 );
 

@@ -106,6 +106,10 @@ class LoginModal extends Component {
     this.setState({[event.target.name]: event.target.value})
   }
 
+  handleSignUp() {
+    // do stuff
+  }
+
   render() {
     const { loginRequested, loginError, loggedIn } = this.props;
     let loginErrorMessage;
@@ -135,6 +139,7 @@ class LoginModal extends Component {
         <Button primary onClick={this.handleLogin.bind(this)}>Login</Button>
         <Button onClick={this.handleClose.bind(this)}>Cancel</Button>
       </CenteredContainer>
+      <div style={{alignSelf: "flex-end", textAlign: "end", marginTop:"60px"}}><Button style={{fontSize:"0.8em"}} text onClick={this.handleSignUp.bind(this)}>Register</Button></div>
     </StyledModal>
     </React.Fragment>
     );

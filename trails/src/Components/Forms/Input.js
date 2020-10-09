@@ -27,7 +27,6 @@ const StyledLabel = styled.label`
 `;
 
 const StyledInput = styled.input`
-  border-bottom: ${props => props.float ? "2px" : "1px"} solid;
   border-top: none;
   border-left: none;
   border-right: none;
@@ -46,6 +45,19 @@ const StyledInput = styled.input`
   &:-webkit-autofill {
     background-color: transparent !important;
     color: ${props => props.theme.text};
+  }
+  &::after {
+    content: "";
+    background-color: ${props => props.theme.text}80; 
+    position: absolute;
+    content: '';
+    height: ${props => props.selected ? "2px" : "1px"};
+    bottom: -2px; 
+
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    width: 100%;
   }
 `;
 
