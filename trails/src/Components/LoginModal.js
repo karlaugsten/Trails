@@ -26,7 +26,7 @@ const StyledModal = styled.div`
   min-width: 300px;
   box-shadow: 0 7px 13px 0 rgba(0, 0, 0, 0.2), 0 4px 8px 0 rgba(0, 0, 0,.19)!important;
   z-index: 99999;
-  height: 50%;
+  height: auto;
   min-height: 400px;
   top: 25%;
   left: 25%;
@@ -63,7 +63,9 @@ class LoginModal extends Component {
       password: '',
       show: false,
       top: 0,
-      left: 0
+      left: 0,
+      login: true,
+      registration: false
     }
   }
 
@@ -106,8 +108,24 @@ class LoginModal extends Component {
     this.setState({[event.target.name]: event.target.value})
   }
 
+  handleLoginNav() {
+    // do stuff
+    this.setState({
+      login: true,
+      registration: false
+    });
+  }
+
   handleSignUp() {
     // do stuff
+    this.setState({
+      login: false,
+      registration: true
+    });
+  }
+
+  handleRegistration() {
+    // do the registration
   }
 
   render() {
@@ -119,6 +137,30 @@ class LoginModal extends Component {
       );
     }
 
+    let login = (
+    <LoginForm>
+      <TextInput style={{maxWidth:"300px"}} validate={this.validateEmail} type="text" name="email" placeholder="Email" value={this.state.email} onChange={this.handleChange.bind(this)} />
+      <PasswordInput style={{maxWidth:"300px"}} name="password" placeholder="Password" value={this.state.password} onChange={this.handleChange.bind(this)} />
+    </LoginForm>
+    );
+    let loginHeader = "Please login."
+    let registration = (
+      <LoginForm>
+        <TextInput style={{maxWidth:"300px"}} validate={this.validateEmail} type="text" name="email" placeholder="Email" value={this.state.email} onChange={this.handleChange.bind(this)} />
+        <TextInput style={{maxWidth:"300px"}} validate={this.validateEmail} type="text" name="confirmeamil" placeholder="Confirm your email" value={this.state.confirmemail} onChange={this.handleChange.bind(this)} />
+        <TextInput style={{maxWidth:"300px"}} validate={this.validateEmail} type="text" name="username" placeholder="Username" value={this.state.username} onChange={this.handleChange.bind(this)} />
+        <PasswordInput style={{maxWidth:"300px"}} name="password" placeholder="Password" value={this.state.password} onChange={this.handleChange.bind(this)} />
+        <PasswordInput style={{maxWidth:"300px"}} name="confirmpassword" placeholder="Confirm your password" value={this.state.confirmpassword} onChange={this.handleChange.bind(this)} />
+      </LoginForm>
+    );
+    let registrationHeader = "Join us!";
+
+    let loginButton = (<Button primary onClick={this.handleLogin.bind(this)}>Login</Button>);
+    let registrationButton = (<Button primary onClick={this.handleRegistration.bind(this)}>Register</Button>);
+
+    let loginNavigation = (<div style={{alignSelf: "flex-end", textAlign: "end", marginTop:"40px"}}><Button style={{fontSize:"0.8em"}} text onClick={this.handleSignUp.bind(this)}>Register</Button></div>);
+    let registrationNavigation = (<div style={{alignSelf: "flex-end", textAlign: "start", marginTop:"40px"}}><Button style={{fontSize:"0.8em"}} text onClick={this.handleLoginNav.bind(this)}>Back</Button></div>)
+
     return (
     <React.Fragment>
     {loginRequested && !loggedIn ? <Overlay /> : null}
@@ -126,20 +168,16 @@ class LoginModal extends Component {
                       this.node_modal = node;
                   }} style={{ transform: loginRequested && !loggedIn ? null : "translateY(-1500px)", top: this.state.top, left: this.state.left }} onHide={this.handleClose.bind(this)}>
       <CenteredContainer closeButton onHide={this.handleClose.bind(this)}>
-        <Header>Please login.</Header>
+        <Header>{this.state.login ? loginHeader: registrationHeader}</Header>
       </CenteredContainer>
       <div>
         {loginErrorMessage}
-        <LoginForm>
-          <TextInput style={{maxWidth:"300px"}} validate={this.validateEmail} type="text" name="email" placeholder="Email" value={this.state.email} onChange={this.handleChange.bind(this)} />
-          <PasswordInput style={{maxWidth:"300px"}} name="password" placeholder="Password" value={this.state.password} onChange={this.handleChange.bind(this)} />
-        </LoginForm>
+        {this.state.login ? login: registration}
       </div>
       <CenteredContainer>
-        <Button primary onClick={this.handleLogin.bind(this)}>Login</Button>
-        <Button onClick={this.handleClose.bind(this)}>Cancel</Button>
+        {this.state.login ? loginButton : registrationButton}<Button onClick={this.handleClose.bind(this)}>Cancel</Button>
       </CenteredContainer>
-      <div style={{alignSelf: "flex-end", textAlign: "end", marginTop:"60px"}}><Button style={{fontSize:"0.8em"}} text onClick={this.handleSignUp.bind(this)}>Register</Button></div>
+      {this.state.login ? loginNavigation : registrationNavigation}
     </StyledModal>
     </React.Fragment>
     );

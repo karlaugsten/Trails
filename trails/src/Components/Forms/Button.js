@@ -14,6 +14,7 @@ let StyledButton = styled.button`
   margin-left: 0.5em;
   margin-right: 0.5em;
   margin-top: 1em;
+  margin-bottom: 1em;
   padding: 0.4em;
   &:hover {
     background: ${props => props.text ? "none" : (props.primary ? props.theme.text : "rgba(0,0,0,0.3)")};

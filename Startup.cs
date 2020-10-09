@@ -1,4 +1,3 @@
-using System;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -15,10 +14,11 @@ using Microsoft.IdentityModel.Tokens;
 using Trails.Encryption;
 using Trails.Authentication;
 using Trails.Repositories;
-using System.Text.Json;
 using Amazon.S3;
 using Amazon.Extensions.NETCore.Setup;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace Trails
 {
@@ -37,11 +37,12 @@ namespace Trails
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc(options => options.EnableEndpointRouting = false)
+            services
+            .AddMvc(options => options.EnableEndpointRouting = false)
             .SetCompatibilityVersion(CompatibilityVersion.Latest)
             .AddJsonOptions(jo =>
             {
-                jo.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+                jo.JsonSerializerOptions.IgnoreNullValues = true;
             });
 
             services.AddDefaultAWSOptions(Configuration.GetAWSOptions());
@@ -104,7 +105,11 @@ namespace Trails
                 configuration.RootPath = "trails/build";
             });
 
-            services.AddIdentity<User, IdentityRole<int>>()
+            services.AddIdentity<User, IdentityRole<int>>(config =>
+            {
+                config.SignIn.RequireConfirmedEmail = true;
+                config.User.RequireUniqueEmail = true;
+            })
             .AddEntityFrameworkStores<TrailContext>()
             .AddDefaultTokenProviders();
 
@@ -124,7 +129,7 @@ namespace Trails
                 options.Password.RequiredLength = 6;
 
                 // Lockout settings.
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.DefaultLockoutTimeSpan = System.TimeSpan.FromMinutes(5);
                 options.Lockout.MaxFailedAccessAttempts = 5;
                 options.Lockout.AllowedForNewUsers = true;
 
@@ -152,7 +157,7 @@ namespace Trails
                     IssuerSigningKey = signingKey.GetSecurityKey(),
                     ValidateIssuer = false,
                     ValidateAudience = false,
-                    ClockSkew = TimeSpan.FromMinutes(5),
+                    ClockSkew = System.TimeSpan.FromMinutes(5),
                     RequireSignedTokens = true,
                     // Ensure the token hasn't expired:
                     RequireExpirationTime = true,
