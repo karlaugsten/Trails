@@ -1,4 +1,5 @@
 
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
@@ -17,8 +18,13 @@ namespace Trails.Tests
         var client = _factory.CreateClient();
 
         // Act
+        var response = await SendGet(client, "/api/trails");
 
         // Assert
+        var responseBody = await response.Content.ReadAsStringAsync();
+        response.EnsureSuccessStatusCode();
+        var trails = JsonConvert.DeserializeObject<List<Trail>>(responseBody);
+        Assert.NotEmpty(trails);
     }
   }
 }
