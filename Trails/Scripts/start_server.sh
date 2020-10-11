@@ -1,7 +1,7 @@
 #!/bin/bash
 echo "Copying deployment files"
 
-sudo cp -R /home/ubuntu/runnify.ca /var/www/runnify.ca
+sudo cp -R /home/ubuntu/runnify.ca/Trails /var/www/runnify.ca
 
 cd /var/www/runnify.ca
 
