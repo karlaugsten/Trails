@@ -6,10 +6,10 @@ files:
     overwrite: true
 hooks:
   ApplicationStart:
-    - location: Scripts/start_server.sh
+    - location: Trails/Scripts/start_server.sh
       timeout: 300
       runas: ubuntu
   ApplicationStop:
-    - location: Scripts/stop_server.sh
+    - location: Trails/Scripts/stop_server.sh
       timeout: 300
       runas: ubuntu
