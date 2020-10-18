@@ -19,6 +19,9 @@ using Amazon.Extensions.NETCore.Setup;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
+using Trails.FileProcessing;
+using Trails.Transforms;
+using Trails.Models;
 
 namespace Trails
 {
@@ -51,14 +54,15 @@ namespace Trails
                 // In development, use the local file repository
                 // var imageRepo = new LocalFileRepository(Configuration["ImageRepoFolder"]);
                 //services.AddTransient<IFileRepository>((serviceProvider) => new LocalFileRepository(Configuration["ImageRepoFolder"]));
-                services.AddTransient<IImageRepository>((provider) => 
+                /*services.AddTransient<IImageRepository>((provider) => 
                     new FileImageRepository(
                         new LocalFileRepository(Configuration["ImageRepoFolder"]),
                         provider.GetService<TrailContext>(),
                         Configuration,
                         provider.GetService<IImageProcessor>()
-                    ));
-
+                    ));*/
+                services.AddTransient<IFileRepository>(sp => new LocalFileRepository(Configuration["ImageRepoFolder"]));
+                services.AddTransient<IImageRepository, ProcessedImageRepository>();
                 services.AddTransient<IGpxRepository>(provider =>
                     new GpxRepository(provider.GetService<TrailContext>(),
                         Configuration, 
@@ -67,7 +71,12 @@ namespace Trails
                 );
             } else {
                 // In prod, use the S3 file repository
-                services.AddTransient<IImageRepository>((provider) => 
+                services.AddTransient<IFileRepository>(provider => new S3FileRepository(provider.GetService<ILoggerFactory>(),
+                            Configuration["S3ImageBucket"],
+                            provider.GetService<IAmazonS3>()));
+                services.AddTransient<IImageRepository, ProcessedImageRepository>();
+
+                /*services.AddTransient<IImageRepository>((provider) => 
                     new FileImageRepository(
                         new S3FileRepository(provider.GetService<ILoggerFactory>(),
                             Configuration["S3ImageBucket"],
@@ -75,7 +84,7 @@ namespace Trails
                         provider.GetService<TrailContext>(),
                         Configuration,
                         provider.GetService<IImageProcessor>()
-                    ));
+                    ));*/
 
                 services.AddTransient<IGpxRepository>(provider =>
                     new GpxRepository(provider.GetService<TrailContext>(),
@@ -98,6 +107,17 @@ namespace Trails
                     options.UseMySql(Configuration["DatabaseConnectionString"]);
                 }  
             });
+
+            services.AddDbContext<FileProcessingDbContext>(options => { 
+                if(CurrentEnvironment.IsDevelopment()) {
+                    options.UseMySql(Configuration["DatabaseConnectionString"]);
+
+                    //options.UseSqlite("Data Source=trails.db");
+                } else {
+                    options.UseMySql(Configuration["DatabaseConnectionString"]);
+                }  
+            });
+            
             services.AddScoped<IImageProcessor, ImageProcessor>();
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -171,6 +191,8 @@ namespace Trails
                 options.AddPolicy("CanEdit", policy => policy.RequireClaim("CanEditTrails", new[] { "true" }));
                 options.AddPolicy("CanCommit", policy => policy.RequireClaim("CanCommitTrails", new[] { "true" }));
             });
+
+            ConfigureFileProcessing(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -248,7 +270,7 @@ namespace Trails
                 User user = new User();
                 user.UserName = "karl";
                 user.Email = "karlaugsten@gmail.com";
-                
+                user.EmailConfirmed = true;
                 IdentityResult result = userManager.CreateAsync
                 (user, "test123").Result;
 
@@ -258,9 +280,33 @@ namespace Trails
                                         "Administrator").Wait();
                 }
             } else {
+                karl.EmailConfirmed = true;
+                userManager.UpdateAsync(karl).Wait();
                 userManager.AddToRoleAsync(karl,
                                         "Administrator").Wait();
             }
+        }
+
+        public void ConfigureFileProcessing(IServiceCollection services) {
+            // Add all the transforms.
+            services.AddScoped<S3StreamTransform>();
+            services.AddScoped<SaveBlurBase64EndTransform>();
+            services.AddScoped<SaveJpgImageToS3Transform>();
+            services.AddScoped<SaveMainImageEndTransform>();
+            services.AddScoped<SaveThumbnailImageEndTransform>();
+            services.AddScoped<StreamToBase64>();
+            services.AddScoped<StreamToImageTransform>();
+            services.AddScoped<ImagePreserveAspectResizeTransform>();
+            services.AddScoped<ImageResizeAndCropTransform40x25>();
+            services.AddScoped<ImageResizeAndCropTransform800x500>();
+            services.AddScoped<ImageToJpegMemStreamTransform94>();
+            services.AddScoped<ImageToJpegMemStreamTransform90>();
+            services.AddScoped<ImageToJpegMemStreamTransform20>();
+            services.AddSingleton<ITransformJobQueue, InMemoryTransformJobQueue>();
+            services.AddFileProcessing(transforms => {
+                TrailsTransforms.loadTrailImageTransforms(services.BuildServiceProvider(), transforms);
+            });
+            services.AddScoped<IFileProcessingRepository, FileProcessingRepository>();
         }
     }
 }

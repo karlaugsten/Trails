@@ -67,6 +67,7 @@ public class S3FileRepository : IFileRepository
         var name = Guid.NewGuid().ToString();
         var fileName = name + fileType;
         String objectKey = fileName;
+        
         await client.UploadObjectFromStreamAsync(bucketName, objectKey, fileStream, null);
         return GetLocalUrl(objectKey);
     }

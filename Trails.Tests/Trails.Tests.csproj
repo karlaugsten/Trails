@@ -19,4 +19,8 @@
     <ProjectReference Include="..\Trails\trails.csproj" />
   </ItemGroup>
 
+    <ItemGroup>
+    <ProjectReference Include="..\Trails.FileProcessing\Trails.FileProcessing.csproj" />
+  </ItemGroup>
+
 </Project>

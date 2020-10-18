@@ -80,11 +80,13 @@ public class ImageProcessor : IImageProcessor
     using (Image<Rgba32> image = SixLabors.ImageSharp.Image.Load(imageFile.OpenReadStream()))
     {
       this.ResizeAndCrop(image, 800, 500);
+
       // Double the displayed size to allowed for better picture quality. 0 width to preserve aspect.
       image.SaveAsJpeg(stream, new JpegEncoder(){ 
         Quality = 90,
         IgnoreMetadata = true
       }); // Should still save to about 250Kb
+     
     }
   }
 
