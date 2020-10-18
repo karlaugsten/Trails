@@ -32,7 +32,7 @@ namespace Trails.Models
                 x => (FileStatus) Enum.Parse(typeof(FileStatus), x));
         });
 
-        modelBuilder.Entity<AppliedFileTransforms>(b => b.HasKey(v => new { v.fileId, v.transformJobId }));
+        modelBuilder.Entity<AppliedFileTransforms>(b => b.HasKey(v => new { v.fileId, v.transformName }));
 
         modelBuilder.Entity<AppliedFileTransforms>()
             .Property(e => e.appliedTransforms)

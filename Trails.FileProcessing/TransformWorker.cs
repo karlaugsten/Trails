@@ -26,6 +26,8 @@ namespace Trails.FileProcessing {
         _logger.LogInformation(
               $"TransformWorker hosted service is running");
 
+        this.ApplyTransforms().Wait();
+
         return Task.Run(() => BackgroundProcessing(stoppingToken));
       }
 
@@ -50,6 +52,25 @@ namespace Trails.FileProcessing {
                       "Error occurred executing transform job with transform {}.", transformJob.transform);
               }
           }
+      }
+
+      private async Task ApplyTransforms() {
+        _logger.LogInformation(
+              $"TransformWorker starting to apply any changed transforms");
+        try
+        {
+            using (var scope = _serviceFactory.CreateScope())
+            {
+                var processor = scope.ServiceProvider.GetRequiredService<FileProcessor>();
+                processor.ApplyTransforms();
+            }
+            _logger.LogInformation("Finished executing applying transforms");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, 
+                "Error occurred executing ApplyTransforms");
+        }
       }
 
       public override async Task StopAsync(CancellationToken stoppingToken)

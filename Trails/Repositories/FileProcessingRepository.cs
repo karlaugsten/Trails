@@ -57,12 +57,21 @@ namespace Trails.Repositories
       } else {
         _context.Transforms.Add(transform);
       }
-      _context.AppliedFileTransforms.Add(new AppliedFileTransforms() {
-        appliedTransforms = transforms.ToArray(),
-        fileId = transform.fileId,
-        transformJobId = transform.id,
-        transformName = transform.transform
-      });
+      var existingTransform = _context.AppliedFileTransforms.Where(aft => 
+        aft.fileId == transform.fileId && aft.transformName == transform.transform
+      ).FirstOrDefault();
+      if (existingTransform != null) {
+        existingTransform.appliedTransforms = transforms.ToArray();
+        existingTransform.transformJobId = transform.id;
+        _context.AppliedFileTransforms.Update(existingTransform);
+      } else {
+        _context.AppliedFileTransforms.Add(new AppliedFileTransforms() {
+          appliedTransforms = transforms.ToArray(),
+          fileId = transform.fileId,
+          transformJobId = transform.id,
+          transformName = transform.transform
+        });
+      }
       _context.SaveChanges();
     }
 

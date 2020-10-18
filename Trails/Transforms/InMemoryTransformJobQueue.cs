@@ -14,6 +14,7 @@ namespace Trails.Transforms {
 
     public InMemoryTransformJobQueue() {
       _queue = new ConcurrentQueue<TransformJob>();
+      waiter.Reset();
     }
 
     public TransformJob dequeue(CancellationToken stoppingToken)
@@ -23,7 +24,7 @@ namespace Trails.Transforms {
         waiter.WaitOne();
       }
       var result = _queue.TryDequeue(out job);
-      if(result) return job;
+      if (result) return job;
       return null;
     }
 

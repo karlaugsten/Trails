@@ -52,14 +52,14 @@ namespace Trails.FileProcessing
     /// the existing file. If not, it will re-apply the transforms.
     /// </summary>
     public void ApplyTransforms() {
-      // TODO: Kick off jobs for all files which have not had the correct transforms applied.
       foreach(var file in _fileRepository.GetFiles()) {
         var appliedTransforms = _fileRepository.GetAppliedTransforms(file.id);
         var currentTransformsForFile = _transformResolver.resolveTransformsForFile(file.fileType);
         foreach(var curTransform in currentTransformsForFile) {
           TransformChain chain = _transformResolver.resolve(curTransform);
           var currentTransforms = chain.getTransformNames();
-          if(!appliedTransforms.ContainsKey(curTransform) || !currentTransforms.SequenceEqual(currentTransformsForFile)) {
+          var appliedTransformChain = appliedTransforms[curTransform];
+          if(!appliedTransforms.ContainsKey(curTransform) || !currentTransforms.SequenceEqual(appliedTransformChain)) {
             // Add a job for the current transform
             queueTransform(file, curTransform);
           }
@@ -80,7 +80,8 @@ namespace Trails.FileProcessing
         status = FileStatus.QUEUED,
         startTime = DateTime.Now,
         input = file.s3Location,
-        context = file.context
+        context = file.context,
+        fileId = file.id
       });
     }
 
