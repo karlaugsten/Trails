@@ -6,7 +6,8 @@ namespace Trails.Repositories
 {
     public interface IImageRepository
     {
-        Task<Image> AddImageAsync(IFormFile image, int editId);
+        Task<FileProcessingTask> AddImageAsync(IFormFile image, int editId);
+
         Stream GetImageStream(string imageName);
 
         /// <summary>
@@ -15,5 +16,10 @@ namespace Trails.Repositories
         /// <param name="imageName"></param>
         /// <returns></returns>
         string GetUrl(string imageName);
+        Image Get(int imageId);
+
+        Task<FileProcessingTask> GetProcessingTask(int fileId);
+
+
     }
 }

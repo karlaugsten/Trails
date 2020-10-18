@@ -81,5 +81,21 @@ namespace Trails.Repositories
       entity.status = status;
       _context.SaveChanges();
     }
+
+    public FileTransform GetFile(int fileId) {
+      var file = _context.FileTransforms.Find(fileId);
+      if (file == null) return null;
+      var transformJobs = _context.Transforms.Where(t => t.fileId == fileId);
+      var status = FileStatus.UPLOADING;
+      if (transformJobs.All(t => t.status == FileStatus.DONE)) {
+        status = FileStatus.DONE;
+      } else if(transformJobs.Any(t => t.status == FileStatus.ERRORED)) {
+        status = FileStatus.ERRORED;
+      } else if(transformJobs.Any(t => t.status == FileStatus.QUEUED)) {
+        status = FileStatus.QUEUED;
+      }
+      file.status = status;
+      return file;
+    }
   }
 }

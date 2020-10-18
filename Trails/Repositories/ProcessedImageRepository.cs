@@ -33,18 +33,15 @@ namespace Trails.Repositories
       _imageProcessor = imageProcessor;
     }
     
-    public async Task<Image> AddImageAsync(IFormFile image, int editId) {
+    public async Task<FileProcessingTask> AddImageAsync(IFormFile image, int editId) {
       // Save the image to wherever we are storing it.. for now just the file system.
       var fileType = this.MimeTypeMap[image.ContentType];
       string originalImageUrl = null;
       originalImageUrl = await _fileRepository.SaveAsync(fileType, image.OpenReadStream());
       string name = originalImageUrl.Split("/").Last();
       var newImage = new Image() {
-        Url = "TODO",
-        ThumbnailUrl = "TODO",
         Name = originalImageUrl.Split("/").Last(),
         EditId = editId,
-        Base64Preview = "TODO"
       };
 
       _context.Images.Add(newImage);
@@ -55,12 +52,36 @@ namespace Trails.Repositories
         imageId = newImage.Id
       });
 
-      return newImage;
+      newImage.fileId = file.id;
+      _context.Images.Update(newImage);
+      
+      _context.SaveChanges();
+
+      return new FileProcessingTask() {
+        CallbackUrl = $"/api/images/file/{file.id}",
+        Status = file.status
+      };
+    }
+
+    public async Task<FileProcessingTask> GetProcessingTask(int fileId) {
+      var file = _imageProcessor.GetFile(fileId);
+      if (file == null) throw new KeyNotFoundException();
+      var task = new FileProcessingTask() {
+        CallbackUrl = $"/api/images/file/{file.id}",
+        Status = file.status
+      };
+      var image = _context.Images.Where(i => i.fileId == fileId).FirstOrDefault();
+      if (image == null) throw new KeyNotFoundException();
+      if (file.status == FileProcessing.Models.FileStatus.DONE) {
+        task.FinishedUrl = $"/api/images/data/{image.Id}";
+      }
+      return task;
     }
 
     public Stream GetImageStream(string imageName) => _fileRepository.Get(imageName);
 
     public string GetUrl(string imageName) => _fileRepository.GetUrl(imageName);
 
+    public Image Get(int imageId) => _context.Images.Find(imageId);
   }
 }

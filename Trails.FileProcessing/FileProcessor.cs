@@ -47,6 +47,8 @@ namespace Trails.FileProcessing
       return file;
     }
 
+    public FileTransform GetFile(int fileId) => _fileRepository.GetFile(fileId);
+
     /// <summary>
     /// Iterates through all existing files, and checks if the transforms have been applied to 
     /// the existing file. If not, it will re-apply the transforms.

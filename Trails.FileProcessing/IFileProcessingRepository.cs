@@ -34,6 +34,7 @@ namespace Trails.FileProcessing
 
     void SetFileStatus(int fileId, FileStatus status);
 
+    FileTransform GetFile(int fileId);
 
   }
 }
