@@ -47,11 +47,11 @@ namespace Trails.Controllers
         }
 
         [HttpGet("file/{fileId}")]
-        public IActionResult GetFileTask(int fileId)
+        public async Task<IActionResult> GetFileTask(int fileId)
         {
             try {
                 // Redirect to the actual image URL, this is to support pre-signed download URLs from S3.
-                return Ok(_imageRepo.GetProcessingTask(fileId));
+                return Ok(await _imageRepo.GetProcessingTask(fileId));
             } catch (KeyNotFoundException e) { // Reusing this exception type...
                 return NotFound();
             }

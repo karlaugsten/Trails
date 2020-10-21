@@ -201,7 +201,8 @@ class TrailEditor extends React.Component {
               trailId={this.state.trailId}
               editId={this.state.editId}
               images={this.state.images} 
-              addImage={(image) => this.setState({images: this.state.images.concat([image])})} 
+              addImage={(image) => this.setState({images: this.state.images.concat([image])})}
+              deleteImage={(image) => this.setState({images: this.state.images.filter(i => i.id != image.id)})} 
               description={this.state.description}
               updateDescription={(desc) => this.updateDescription(desc)}
             />

@@ -49,7 +49,7 @@ namespace Trails.FileProcessing {
               catch (Exception ex)
               {
                   _logger.LogError(ex, 
-                      "Error occurred executing transform job with transform {}.", transformJob.transform);
+                      "Error occurred executing transform job with transform {}.", transformJob != null ? transformJob.transform : "null");
               }
           }
       }

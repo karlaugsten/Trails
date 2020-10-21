@@ -87,7 +87,7 @@ namespace Trails.Repositories
       if (file == null) return null;
       var transformJobs = _context.Transforms.Where(t => t.fileId == fileId);
       var status = FileStatus.UPLOADING;
-      if (transformJobs.All(t => t.status == FileStatus.DONE)) {
+      if (transformJobs.Count() > 0 && transformJobs.All(t => t.status == FileStatus.DONE)) {
         status = FileStatus.DONE;
       } else if(transformJobs.Any(t => t.status == FileStatus.ERRORED)) {
         status = FileStatus.ERRORED;

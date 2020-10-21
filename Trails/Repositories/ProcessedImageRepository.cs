@@ -45,7 +45,6 @@ namespace Trails.Repositories
       };
 
       _context.Images.Add(newImage);
-
       _context.SaveChanges();
 
       var file = await _imageProcessor.process("TrailImage", name, new ImageJobContext() {
@@ -54,12 +53,15 @@ namespace Trails.Repositories
 
       newImage.fileId = file.id;
       _context.Images.Update(newImage);
-      
+      _context.TrailEditImages.Add(new TrailEditImage() {
+        ImageId = newImage.Id,
+        EditId = editId
+      });
       _context.SaveChanges();
 
       return new FileProcessingTask() {
         CallbackUrl = $"/api/images/file/{file.id}",
-        Status = file.status
+        Status = file.status.ToString()
       };
     }
 
@@ -68,7 +70,7 @@ namespace Trails.Repositories
       if (file == null) throw new KeyNotFoundException();
       var task = new FileProcessingTask() {
         CallbackUrl = $"/api/images/file/{file.id}",
-        Status = file.status
+        Status = file.status.ToString()
       };
       var image = _context.Images.Where(i => i.fileId == fileId).FirstOrDefault();
       if (image == null) throw new KeyNotFoundException();

@@ -60,8 +60,7 @@ namespace Trails.FileProcessing
         foreach(var curTransform in currentTransformsForFile) {
           TransformChain chain = _transformResolver.resolve(curTransform);
           var currentTransforms = chain.getTransformNames();
-          var appliedTransformChain = appliedTransforms[curTransform];
-          if(!appliedTransforms.ContainsKey(curTransform) || !currentTransforms.SequenceEqual(appliedTransformChain)) {
+          if(!appliedTransforms.ContainsKey(curTransform) || !currentTransforms.SequenceEqual(appliedTransforms[curTransform])) {
             // Add a job for the current transform
             queueTransform(file, curTransform);
           }
