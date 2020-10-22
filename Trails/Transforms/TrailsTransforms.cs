@@ -14,7 +14,7 @@ namespace Trails.Transforms {
     public static void loadTrailImageTransforms(IServiceProvider services, IFileTransformLoader transformChains) {
       // Loads the TrailImage transforms
       var blurImageTransform = new TransformChainBuilder<ImageJobContext>()
-        .loadTransform(services.GetService<S3StreamTransform>())
+        .loadTransform(services.GetService<S3ImageStreamTransform>())
         .loadTransform(services.GetService<StreamToImageTransform>())
         .loadTransform(services.GetService<ImageResizeAndCropTransform40x25>())
         .loadTransform(services.GetService<ImageToJpegMemStreamTransform20>())
@@ -24,7 +24,7 @@ namespace Trails.Transforms {
         .build();
 
       var thumbnailImageTransform = new TransformChainBuilder<ImageJobContext>()
-        .loadTransform(services.GetService<S3StreamTransform>())
+        .loadTransform(services.GetService<S3ImageStreamTransform>())
         .loadTransform(services.GetService<StreamToImageTransform>())
         .loadTransform(services.GetService<ImageResizeAndCropTransform800x500>())
         .loadTransform(services.GetService<ImageToJpegMemStreamTransform90>())
@@ -34,7 +34,7 @@ namespace Trails.Transforms {
         .build();
 
       var mainImageTransform = new TransformChainBuilder<ImageJobContext>()
-        .loadTransform(services.GetService<S3StreamTransform>())
+        .loadTransform(services.GetService<S3ImageStreamTransform>())
         .loadTransform(services.GetService<StreamToImageTransform>())
         .loadTransform(services.GetService<ImagePreserveAspectResizeTransform>())
         .loadTransform(services.GetService<ImageToJpegMemStreamTransform94>())
@@ -46,6 +46,40 @@ namespace Trails.Transforms {
       transformChains.loadTransform("TrailImage", "BlurImageTransform", blurImageTransform);
       transformChains.loadTransform("TrailImage", "ThumbnailImageTransform", thumbnailImageTransform);
       transformChains.loadTransform("TrailImage", "MainImageTransform", mainImageTransform);
+    }
+
+    public static void loadGpxFileTransforms(IServiceProvider services, IFileTransformLoader transformChains) {
+      // Loads the GpxFile transforms
+      var elevationPolylineTransform = new TransformChainBuilder<MapJobContext>()
+        .loadTransform(services.GetService<S3MapStreamTransform>())
+        .loadTransform(services.GetService<StreamToXmlDocument>())
+        .loadTransform(services.GetService<XmlDocumentElevation20MeterStep>())
+        .loadTransform(services.GetService<ElevationPolylineConverter>())
+        .loadEndTransform(services.GetService<ElevationPolylinePopulator>())
+        .loadContextSerializer(new JsonSerializer<MapJobContext>())
+        .build();
+
+      var locationPolylineTransform = new TransformChainBuilder<MapJobContext>()
+        .loadTransform(services.GetService<S3MapStreamTransform>())
+        .loadTransform(services.GetService<StreamToXmlDocument>())
+        .loadTransform(services.GetService<XmlDocumentToLocations>())
+        .loadTransform(services.GetService<LocationInterpolator50MeterStep>())
+        .loadTransform(services.GetService<LocationPolylineConverter>())
+        .loadEndTransform(services.GetService<LocationPolylinePopulator>())
+        .loadContextSerializer(new JsonSerializer<MapJobContext>())
+        .build();
+
+      var startEndLocationTransform = new TransformChainBuilder<MapJobContext>()
+        .loadTransform(services.GetService<S3MapStreamTransform>())
+        .loadTransform(services.GetService<StreamToXmlDocument>())
+        .loadTransform(services.GetService<XmlDocumentToLocations>())
+        .loadEndTransform(services.GetService<StartEndLocationPopulator>())
+        .loadContextSerializer(new JsonSerializer<MapJobContext>())
+        .build();
+
+      transformChains.loadTransform("MapFile", "ElevationPolylineTransform", elevationPolylineTransform);
+      transformChains.loadTransform("MapFile", "LocationPolylineTransform", locationPolylineTransform);
+      transformChains.loadTransform("MapFile", "StartEndLocationTransform", startEndLocationTransform);
     }
 
     public static void loadGpxFileTransforms() {

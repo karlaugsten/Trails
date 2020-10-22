@@ -4,7 +4,7 @@ using Trails.FileProcessing;
 
 namespace Trails.Transforms {
 
-  public class S3StreamTransform : ITransform<string, Stream, ImageJobContext>
+  public class S3StreamTransform<TContext> : ITransform<string, Stream, TContext>
   {
     private IFileRepository _repository;
 
@@ -12,12 +12,12 @@ namespace Trails.Transforms {
       _repository = repository;
     }
 
-    public Stream transform(string input, ImageJobContext context)
+    public Stream transform(string input, TContext context)
     {
       return _repository.Get(input);
     }
 
-    public async System.Threading.Tasks.Task<Stream> transformAsync(string input, ImageJobContext context)
+    public async System.Threading.Tasks.Task<Stream> transformAsync(string input, TContext context)
     {
       return _repository.Get(input);
     }

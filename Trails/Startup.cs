@@ -288,7 +288,7 @@ namespace Trails
 
         public void ConfigureFileProcessing(IServiceCollection services) {
             // Add all the transforms.
-            services.AddScoped<S3StreamTransform>();
+            services.AddScoped<S3ImageStreamTransform>();
             services.AddScoped<SaveBlurBase64EndTransform>();
             services.AddScoped<SaveJpgImageToS3Transform>();
             services.AddScoped<SaveMainImageEndTransform>();
@@ -301,9 +301,23 @@ namespace Trails
             services.AddScoped<ImageToJpegMemStreamTransform94>();
             services.AddScoped<ImageToJpegMemStreamTransform90>();
             services.AddScoped<ImageToJpegMemStreamTransform20>();
+
+            // Map transforms
+            services.AddScoped<S3MapStreamTransform>();
+            services.AddScoped<ElevationPolylineConverter>();
+            services.AddScoped<ElevationPolylinePopulator>();
+            services.AddScoped<LocationInterpolator50MeterStep>();
+            services.AddScoped<LocationPolylineConverter>();
+            services.AddScoped<LocationPolylinePopulator>();
+            services.AddScoped<StartEndLocationPopulator>();
+            services.AddScoped<StreamToXmlDocument>();
+            services.AddScoped<XmlDocumentElevation20MeterStep>();
+            services.AddScoped<XmlDocumentToLocations>();
+            
             services.AddSingleton<ITransformJobQueue, InMemoryTransformJobQueue>();
             services.AddFileProcessing(transforms => {
                 TrailsTransforms.loadTrailImageTransforms(services.BuildServiceProvider(), transforms);
+                TrailsTransforms.loadGpxFileTransforms(services.BuildServiceProvider(), transforms);
             });
             services.AddScoped<IFileProcessingRepository, FileProcessingRepository>();
         }
