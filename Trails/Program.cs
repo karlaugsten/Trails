@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Elastic.Apm.SerilogEnricher;
 using Microsoft.AspNetCore;
@@ -12,6 +13,7 @@ using Serilog;
 using Serilog.Events;
 using Serilog.Exceptions;
 using Serilog.Formatting.Elasticsearch;
+using Serilog.Sinks.Elasticsearch;
 using Serilog.Sinks.Http.BatchFormatters;
 
 namespace Trails
@@ -20,17 +22,20 @@ namespace Trails
     {
         public static void Main(string[] args)
         {
-            var elasticHost = "localhost";
-            var elasticPort = "9200";
+            
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile(
+                    $"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json",
+                    optional: true)
+                .Build();
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Information)
                 .Enrich.WithElasticApmCorrelationInfo()
                 .Enrich.WithExceptionDetails()
                 .WriteTo.RollingFile("runnify-info-log-{Date}.log")
-                .WriteTo.DurableHttpUsingFileSizeRolledBuffers(
-                    requestUri: new Uri($"http://{elasticHost}:{elasticPort}").ToString(),
-                    batchFormatter: new ArrayBatchFormatter(),
-                    textFormatter: new ElasticsearchJsonFormatter())
+                .WriteTo.Elasticsearch(ConfigureElasticSink(configuration, environment))
                 .CreateLogger();
 
             Log.Information("Starting Runnify service");
@@ -42,6 +47,17 @@ namespace Trails
             }
 
             Log.CloseAndFlush();
+        }
+
+        private static ElasticsearchSinkOptions ConfigureElasticSink(IConfigurationRoot configuration, string environment)
+        {
+            var elasticHost = "localhost";
+            var elasticPort = "9200";
+            return new ElasticsearchSinkOptions(new Uri($"http://{elasticHost}:{elasticPort}"))
+            {
+                AutoRegisterTemplate = true,
+                IndexFormat = $"{Assembly.GetExecutingAssembly().GetName().Name.ToLower().Replace(".", "-")}-{environment?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM}"
+            };
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
