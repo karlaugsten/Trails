@@ -10,6 +10,9 @@ sudo chown -R ubuntu:ubuntu ./*
 
 sudo chmod -R +x ./*
 
+sudo rm -rf ./**/bin
+sudo rm -rf ./**/obj
+
 echo "Restoring dependencies..."
 cd /home/ubuntu/runnify.ca/Trails
 
