@@ -10,6 +10,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
+using Serilog.Exceptions;
+using Serilog.Formatting.Elasticsearch;
+using Serilog.Sinks.Http.BatchFormatters;
 
 namespace Trails
 {
@@ -17,10 +20,17 @@ namespace Trails
     {
         public static void Main(string[] args)
         {
+            var elasticHost = "localhost";
+            var elasticPort = "5044";
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Information)
-                .WriteTo.RollingFile("runnify-info-log-{Date}.log")
                 .Enrich.WithElasticApmCorrelationInfo()
+                .Enrich.WithExceptionDetails()
+                .WriteTo.RollingFile("runnify-info-log-{Date}.log")
+                .WriteTo.DurableHttpUsingFileSizeRolledBuffers(
+                    requestUri: new Uri($"http://{elasticHost}:{elasticPort}").ToString(),
+                    batchFormatter: new ArrayBatchFormatter(),
+                    textFormatter: new ElasticsearchJsonFormatter())
                 .CreateLogger();
 
             Log.Information("Starting Runnify service");

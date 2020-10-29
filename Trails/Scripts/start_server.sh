@@ -1,9 +1,4 @@
 #!/bin/bash
-echo "Copying deployment files"
-
-sudo cp -R /home/ubuntu/runnify.ca/Trails /var/www/runnify.ca
-
-cd /var/www/runnify.ca
 
 echo "Setting permissions"
 
@@ -18,13 +13,16 @@ echo "Restoring dependencies..."
 sudo /usr/bin/dotnet restore
 
 echo "Updating database TrailContext..."
-/usr/bin/dotnet ef database update --context TrailContext
+/usr/bin/dotnet ef database update --context TrailContext -v
 
 echo "Updating database FileProcessingDbContext..."
-/usr/bin/dotnet ef database update --context FileProcessingDbContext
+/usr/bin/dotnet ef database update --context FileProcessingDbContext -v
 
 echo "Building source code..."
 sudo /usr/bin/dotnet publish --configuration Release
+
+echo "Copying source files"
+sudo cp -Rrf /home/ubuntu/runnify.ca/Trails/* /var/www/runnify.ca
 
 echo "Starting server..."
 sudo systemctl start runnify.service
