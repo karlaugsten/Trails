@@ -30,8 +30,8 @@ namespace Trails
                 .Enrich.WithElasticApmCorrelationInfo()
                 .Enrich.WithExceptionDetails()
                 .Enrich.WithProperty("Environment", environment)  
-                .WriteTo.RollingFile("runnify-info-log-{Date}.log")
                 .WriteTo.Elasticsearch(ConfigureElasticSink(environment))
+                .WriteTo.RollingFile("runnify-info-log-{Date}.log")
                 .CreateLogger();
 
             Log.Information("Starting Runnify service");
@@ -47,14 +47,11 @@ namespace Trails
 
         private static ElasticsearchSinkOptions ConfigureElasticSink(string environment)
         {
-            var elasticHost = "localhost";
-            var elasticPort = "9200";
-            return new ElasticsearchSinkOptions(new Uri($"http://{elasticHost}:{elasticPort}"))
+            return new ElasticsearchSinkOptions(new Uri("http://localhost:9200/"))
             {
                 AutoRegisterTemplate = true,
                 IndexFormat = "trails-{0:yyyy.MM.dd}",
-                MinimumLogEventLevel = LogEventLevel.Information,
-                EmitEventFailure = EmitEventFailureHandling.WriteToSelfLog
+                DeadLetterIndexName = "trails-deadletter-{0:yyyy.MM.dd}"
             };
         }
 
