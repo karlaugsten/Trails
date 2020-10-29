@@ -56,7 +56,7 @@ namespace Trails
             return new ElasticsearchSinkOptions(new Uri($"http://{elasticHost}:{elasticPort}"))
             {
                 AutoRegisterTemplate = true,
-                IndexFormat = $"{Assembly.GetExecutingAssembly().GetName().Name.ToLower().Replace(".", "-")}-{environment?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM}",
+                IndexFormat = "{Trails-{0:yyyy.MM.dd}",
                 MinimumLogEventLevel = LogEventLevel.Information
             };
         }
