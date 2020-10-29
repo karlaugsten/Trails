@@ -21,7 +21,7 @@ namespace Trails
         public static void Main(string[] args)
         {
             var elasticHost = "localhost";
-            var elasticPort = "5044";
+            var elasticPort = "9200";
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Information)
                 .Enrich.WithElasticApmCorrelationInfo()
