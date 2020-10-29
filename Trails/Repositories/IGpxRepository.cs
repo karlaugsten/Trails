@@ -4,8 +4,9 @@ using Microsoft.AspNetCore.Http;
 
 public interface IGpxRepository {
 
-  Task<Map> UploadMap(Stream gpxFile);
+  Task<FileProcessingTask> UploadMap(Stream gpxFile, int editId);
 
   Map GetMap(int mapId);
 
+  FileProcessingTask GetFileStatus(int fileId);
 }

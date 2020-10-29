@@ -43,16 +43,24 @@ export default class FileUploader extends React.Component {
       processing: true
     });
     this.props.upload(file)
-      .then(result => result.json())
-      .catch(error => {
-        console.log(error);
-        alert(error);
+      .then(response => {
+        if(response.ok)
+        {
+          return response.json();         
+        }
+        // TODO: Set an error message
+        throw new Error('Something went wrong, please try again');
       })
       .then(fileTask => {
+        console.log(fileTask);
         this.setState({
           task: fileTask
         });
         this.startPolling();
+      }).catch(error => {
+        this.setState({
+          processing: false
+        });
       });
   }
 
@@ -63,6 +71,13 @@ export default class FileUploader extends React.Component {
   doPoll = () => {
     fetch(this.state.task.callbackUrl, {
       method: 'GET'
+    })
+    .catch(error => {
+      // TODO: handle error
+      console.log(error);
+      this.setState({
+        processing: false
+      });
     })
     .then(result => result.json())
     .then(fileTask => {

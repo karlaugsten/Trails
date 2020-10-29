@@ -1,5 +1,10 @@
-import React from 'react';
+import React, { Suspense } from 'react';
+import FileUploader from './Forms/FileUploader';
 import Polyline from './Polyline';
+import Row from './Styles/Row';
+import Column from './Styles/Column';
+
+const Graph = React.lazy(() => import('./Graph'));
 
 export default class AddGpx extends React.Component {
   constructor(props) {
@@ -9,42 +14,33 @@ export default class AddGpx extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
-    console.log(
-      `Selected file - ${
-        this.fileInput.current.files[0].name
-      }`
-    );
+  handleSubmit(file) {
     let data = new FormData()
-    data.append("file", this.fileInput.current.files[0]);
+    data.append("file", file);
     data.append("editId", this.props.editId);
-    // post the image file to the server and return url to onAdd props method
-    fetch('/api/maps', {
+    return fetch('/api/maps', {
       method: 'POST',
       body: data
-    }).then(result => result.json()
-    ).catch(error => {
-      console.log(error);
-      alert(error);
-    }).then(map => {
-      
-      this.props.onAdd(map);
     });
   }
 
+  onAdd = (map) => {
+    this.props.onAdd(map);
+  }
+
   render() {
-    
     return (
       <React.Fragment>
-      <form onSubmit={this.handleSubmit}>
-        <label>
-          Upload GPX:
-          <input type="file" ref={this.fileInput} />
-        </label>
-        <br />
-        <button type="submit">Add</button>
-      </form>
+        <Row style={{width: "50%"}}><Column>Add Map:</Column><Column><FileUploader upload={this.handleSubmit} finished={this.onAdd}/></Column></Row>
+        <Row>
+          {this.props.map.elevationPolyline ? <Polyline polyline={this.props.map.elevationPolyline}>
+              {elevation => 
+                  <Suspense fallback={<div>Loading...</div>}>
+                      <Graph values={elevation}/>
+                  </Suspense>
+              }
+          </Polyline> : null}
+        </Row>
       </React.Fragment>
     );
   }

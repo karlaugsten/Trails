@@ -1,15 +1,12 @@
 
-using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Linq;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Trails.FileProcessing;
+using Trails.FileProcessing.Models;
+using Trails.Transforms;
 
 public class GpxRepository : IGpxRepository
 {
@@ -19,10 +16,32 @@ public class GpxRepository : IGpxRepository
 
   private ILogger<GpxRepository> _logger;
 
-  public GpxRepository(TrailContext context, IConfiguration config, ILoggerFactory factory, IFileRepository fileRepository) {
+  private FileProcessor _fileProcessor;
+
+  public GpxRepository(TrailContext context, FileProcessor fileProcessor, ILoggerFactory factory, IFileRepository fileRepository) {
     _context = context;
     _fileRepository = fileRepository;
+    _fileProcessor = fileProcessor;
     _logger = factory.CreateLogger<GpxRepository>();
+  }
+
+  public FileProcessingTask GetFileStatus(int fileId)
+  {
+    var file = _fileProcessor.GetFile(fileId);
+    if (file == null) throw new KeyNotFoundException();
+    var task = new FileProcessingTask() {
+      CallbackUrl = $"/maps/files/{fileId}",
+      Status = file.status.ToString(),
+      FinishedUrl = $"/maps/{file.context}"
+    };
+    var map = _context.Maps.Where(m => m.FileId == fileId).FirstOrDefault();
+    if (map == null) throw new KeyNotFoundException();
+
+    if (file.status == Trails.FileProcessing.Models.FileStatus.DONE) {
+      task.FinishedUrl = $"/api/maps/{map.Id}";
+    }
+
+    return task;
   }
 
   public Map GetMap(int mapId)
@@ -30,106 +49,34 @@ public class GpxRepository : IGpxRepository
     return _context.Maps.Find(mapId);
   }
 
-  public async Task<Map> UploadMap(Stream gpxFileStream)
+  public async Task<FileProcessingTask> UploadMap(Stream gpxFileStream, int editId)
   {
-    XmlDocument gpxDoc = new XmlDocument();
-    gpxDoc.Load(gpxFileStream);
-       
-    var gpsPoints = parseLocationFromTrackXml(gpxDoc);
+    var edit = await _context.TrailEdits.FindAsync(editId);
+    if (edit == null) throw new KeyNotFoundException("Edit does not exist");
 
-    if(gpsPoints.Count == 0) {
-      // try to parse from the route elements instead.
-      gpsPoints = parseLocationFromRouteXml(gpxDoc);
-    }
-
-    var locationInterpolator = new LocationInterpolator(gpsPoints);
-    var totalDistance = gpsPoints.ToTotalDistance();
-
-    gpsPoints = locationInterpolator.interpolateAll(0, totalDistance, 50.0/1000.0).ToList();
-
-    var elevation = parseElevationFromTrackXml(gpxDoc, 30);
-
-    gpxFileStream.Seek(0, SeekOrigin.Begin);
     // Now we need to convert the location list into a polyline to save it to the db
+    string originalFileUrl = await _fileRepository.SaveAsync(".gpx", gpxFileStream);
+    string name = originalFileUrl.Split("/").Last();
     Map map = new Map()
     {
-      Start = gpsPoints.First(),
-      End = gpsPoints.Last(),
-      Polyline = PolylineConverter.Convert(gpsPoints),
-      ElevationPolyline = PolylineConverter.Convert(elevation),
-      // Can we read from this stream twice?
-      RawFileUrl = _fileRepository.Save(".gpx", gpxFileStream)
+      RawFileUrl = originalFileUrl
     };
+
     var entity = _context.Maps.Add(map);
     _context.SaveChanges();
-    return entity.Entity;
-  }
 
-  private List<Location> parseLocationFromTrackXml(XmlDocument gpx) {
-    XmlNamespaceManager nsmgr = new XmlNamespaceManager(gpx.NameTable);
-    nsmgr.AddNamespace("x", "http://www.topografix.com/GPX/1/1");     
-    var gpsPoints = new List<Location>();
-    var gpxNode = gpx.SelectSingleNode("//x:gpx", nsmgr);
-    var points = gpxNode.SelectNodes("//x:trkpt", nsmgr);
-    foreach(XmlNode pointNode in points) {
-      Location location = new Location()
-      {
-        Latitude = double.Parse(pointNode.Attributes["lat"].Value),
-        Longitude = double.Parse(pointNode.Attributes["lon"].Value),
-      };
-      gpsPoints.Add(location);
-    }
-    return gpsPoints;
-  }
+    edit.MapId = entity.Entity.Id;
+    _context.TrailEdits.Update(edit);
+    _context.SaveChanges();
 
-  private List<int> parseElevationFromTrackXml(XmlDocument gpx, int numSamplesPerKm) {
-    XmlNamespaceManager nsmgr = new XmlNamespaceManager(gpx.NameTable);
-    nsmgr.AddNamespace("x", "http://www.topografix.com/GPX/1/1");     
-    var elevationLocations = new List<Tuple<double, double>>();
-    var eleNodes = gpx.SelectNodes("//x:ele", nsmgr);
-    
-    double distance = 0.0;
-    Location lastLocation = null;
-    foreach(XmlNode eleNode in eleNodes) {
-      double elevation = double.Parse(eleNode.InnerText);
-      var locationNode = eleNode.ParentNode;
-      Location location = new Location()
-      {
-        Latitude = double.Parse(locationNode.Attributes["lat"].Value),
-        Longitude = double.Parse(locationNode.Attributes["lon"].Value),
-      };
-      if(lastLocation != null) {
-        double distanceFromLast = lastLocation.Distance(location);
-        distance += distanceFromLast;
-      }
+    FileTransform transform = await _fileProcessor.process<MapJobContext>("MapFile", name, new MapJobContext() {
+      mapId = entity.Entity.Id
+    });
 
-      elevationLocations.Add(Tuple.Create(distance, elevation));
-      lastLocation = location;
-    }
-
-    Interpolator<double, double> interpolator = new LinearInterpolator(
-      elevationLocations.Select(tuple => tuple.Item1).ToArray(), 
-      elevationLocations.Select(tuple => tuple.Item2).ToArray()
-    );
-
-    _logger.LogInformation("Total distance for GPX: " + distance);
-    return interpolator.interpolateAll(0, distance, 20.0/1000.0)
-      .Select(value => (int)Math.Round(value))
-      .ToList();
-  }
-
-  private List<Location> parseLocationFromRouteXml(XmlDocument gpx) {
-    var gpsPoints = new List<Location>();
-    XmlNamespaceManager nsmgr = new XmlNamespaceManager(gpx.NameTable);
-    nsmgr.AddNamespace("x", "http://www.topografix.com/GPX/1/1");   
-    foreach(XmlNode pointNode in gpx.SelectNodes("//x:rtept", nsmgr)) {
-      Location location = new Location()
-      {
-        Latitude = double.Parse(pointNode.Attributes["lat"].Value),
-        Longitude = double.Parse(pointNode.Attributes["lon"].Value),
-      };
-      gpsPoints.Add(location);
-    }
-    return gpsPoints;
+    return new FileProcessingTask() {
+      CallbackUrl = $"/maps/files/{transform.id}",
+      Status = transform.status.ToString(),
+      FinishedUrl = $"/maps/{entity.Entity.Id}"
+    };
   }
 }

@@ -2,9 +2,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
@@ -15,10 +13,7 @@ using Trails.Encryption;
 using Trails.Authentication;
 using Trails.Repositories;
 using Amazon.S3;
-using Amazon.Extensions.NETCore.Setup;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Serialization;
-using Newtonsoft.Json;
 using Trails.FileProcessing;
 using Trails.Transforms;
 using Trails.Models;
@@ -65,7 +60,7 @@ namespace Trails
                 services.AddTransient<IImageRepository, ProcessedImageRepository>();
                 services.AddTransient<IGpxRepository>(provider =>
                     new GpxRepository(provider.GetService<TrailContext>(),
-                        Configuration, 
+                        provider.GetService<FileProcessor>(), 
                         provider.GetService<ILoggerFactory>(),
                         new LocalFileRepository(Configuration["GpxRepoFolder"]))
                 );
@@ -76,19 +71,9 @@ namespace Trails
                             provider.GetService<IAmazonS3>()));
                 services.AddTransient<IImageRepository, ProcessedImageRepository>();
 
-                /*services.AddTransient<IImageRepository>((provider) => 
-                    new FileImageRepository(
-                        new S3FileRepository(provider.GetService<ILoggerFactory>(),
-                            Configuration["S3ImageBucket"],
-                            provider.GetService<IAmazonS3>()),
-                        provider.GetService<TrailContext>(),
-                        Configuration,
-                        provider.GetService<IImageProcessor>()
-                    ));*/
-
                 services.AddTransient<IGpxRepository>(provider =>
                     new GpxRepository(provider.GetService<TrailContext>(),
-                        Configuration, 
+                        provider.GetService<FileProcessor>(), 
                         provider.GetService<ILoggerFactory>(),
                         new S3FileRepository(provider.GetService<ILoggerFactory>(),
                             Configuration["S3GPXBucket"],
@@ -303,7 +288,16 @@ namespace Trails
             services.AddScoped<ImageToJpegMemStreamTransform20>();
 
             // Map transforms
-            services.AddScoped<S3MapStreamTransform>();
+            services.AddScoped<S3MapStreamTransform>(sp => {
+                if(CurrentEnvironment.IsDevelopment()) {
+                    return new S3MapStreamTransform(new LocalFileRepository(Configuration["GpxRepoFolder"]));
+                } else {
+                    return new S3MapStreamTransform(new S3FileRepository(sp.GetService<ILoggerFactory>(),
+                            Configuration["S3GPXBucket"],
+                            sp.GetService<IAmazonS3>())
+                        );
+                }
+            });
             services.AddScoped<ElevationPolylineConverter>();
             services.AddScoped<ElevationPolylinePopulator>();
             services.AddScoped<LocationInterpolator50MeterStep>();

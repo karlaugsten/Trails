@@ -9,6 +9,7 @@ const GraphWrapper = styled.div`
   display: flex;
   margin-bottom: 10px;
   margin-top: 10px;
+  width: 100%;
 `;
 
 class Graph extends React.Component {
