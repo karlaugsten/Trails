@@ -39,7 +39,7 @@ namespace Trails
             try {
                 CreateWebHostBuilder(args).Build().Run();
             } catch (Exception e) {
-                Log.Logger.Error("Error starting service", e);
+                Log.Error(e, "Error starting service");
             }
 
             Log.CloseAndFlush();
