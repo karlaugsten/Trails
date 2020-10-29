@@ -52,9 +52,10 @@ namespace trails.Migrations
                     b.Property<string>("Url")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.HasKey("Id");
+                    b.Property<int>("fileId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("EditId");
+                    b.HasKey("Id");
 
                     b.ToTable("Images");
                 });
@@ -67,6 +68,9 @@ namespace trails.Migrations
 
                     b.Property<string>("ElevationPolyline")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<int>("FileId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Polyline")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
@@ -289,6 +293,21 @@ namespace trails.Migrations
                     b.ToTable("TrailEdits");
                 });
 
+            modelBuilder.Entity("TrailEditImage", b =>
+                {
+                    b.Property<int>("ImageId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EditId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ImageId", "EditId");
+
+                    b.HasIndex("EditId");
+
+                    b.ToTable("TrailEditImages");
+                });
+
             modelBuilder.Entity("User", b =>
                 {
                     b.Property<int>("Id")
@@ -357,15 +376,6 @@ namespace trails.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Image", b =>
-                {
-                    b.HasOne("TrailEdit", null)
-                        .WithMany("Images")
-                        .HasForeignKey("EditId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Map", b =>
                 {
                     b.OwnsOne("Location", "End", b1 =>
@@ -419,6 +429,21 @@ namespace trails.Migrations
                     b.HasOne("Map", "Map")
                         .WithMany()
                         .HasForeignKey("MapId");
+                });
+
+            modelBuilder.Entity("TrailEditImage", b =>
+                {
+                    b.HasOne("TrailEdit", "Edit")
+                        .WithMany("Images")
+                        .HasForeignKey("EditId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Image", "Image")
+                        .WithMany()
+                        .HasForeignKey("ImageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

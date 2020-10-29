@@ -27,6 +27,24 @@ const { AlignmentTool } = alignmentPlugin;
 
 const imagePlugin = createImagePlugin();
 
+function enumerateEntities(contentState, callback) {
+  var blocks = contentState.getBlocksAsArray();
+    
+  for(var block in blocks) {
+    blocks[block].findEntityRanges(
+      (character) => {
+        const entityKey = character.getEntity();
+        if(entityKey != null) callback(contentState.getEntity(entityKey), entityKey);
+        return (
+          entityKey !== null &&
+          contentState.getEntity(entityKey).getType() === 'IMAGE'
+        );
+      },
+      () => {}
+    );
+  }
+  
+}
 
 export default class TrailDescriptionEditor extends Component {
   constructor(props) {
@@ -52,8 +70,28 @@ export default class TrailDescriptionEditor extends Component {
     this.setState({
       editorState: this.editor.imagePlugin.addImage(this.state.editorState, image.url)
     })
+    
     this.props.addImage(image);
   }
+
+  deleteImage = (image) => {
+    enumerateEntities(this.state.editorState.getCurrentContent(), (entity, key) => {
+      if(entity.getType() == "IMAGE") {
+        var data = entity.getData();
+        if (data.src == image.url) {
+          var currentContent = this.state.editorState.getCurrentContent();
+          var newContent = currentContent.replaceEntityData(key, '');
+          const removeEntity = EditorState.push(this.state.editorState, newContent, 'delete-entity');
+          const selection = removeEntity.getSelection();
+          this.onChange(EditorState.forceSelection(removeEntity, selection));
+        }
+      }
+    });
+
+    this.props.deleteImage(image);
+  }
+
+  
 
   getEditorState(description) {
     if(!description) return EditorState.createEmpty();
@@ -80,8 +118,8 @@ export default class TrailDescriptionEditor extends Component {
             ref={(element) => { this.editor = element; }}
           />
           <AlignmentTool />
-          <AddImage trailId={this.props.trailId} editId={this.props.editId} images={this.props.images} onAdd={(image) => this.addImage(image)} />
         </div>
+        <AddImage onDelete={this.deleteImage} trailId={this.props.trailId} editId={this.props.editId} images={this.props.images} onAdd={(image) => this.addImage(image)} />
       </div>
     );
   }

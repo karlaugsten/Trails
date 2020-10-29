@@ -14,8 +14,7 @@ public class TrailEdit : BaseTrail {
   /// </summary>
   /// <value></value>
   //public int UserId { get; set; }
-  [ForeignKey("EditId")]
-  public ICollection<Image> Images { get; set; }
+  public ICollection<TrailEditImage> Images { get; set; }
 
   public Map Map { get; set; }
 

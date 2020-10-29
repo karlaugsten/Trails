@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+import BoxShadow from '../Styles/BoxShadow';
 
 let StyledButton = styled.button`
   text-transform: uppercase;
@@ -18,7 +19,7 @@ let StyledButton = styled.button`
   padding: 0.4em;
   &:hover {
     background: ${props => props.text ? "none" : (props.primary ? props.theme.text : "rgba(0,0,0,0.3)")};
-    box-shadow: ${props => props.primary ? "0px 5px 4px 2px rgba(0,0,0,0.2), 0px 7px 9px 5px rgba(0,0,0,.19)" : "none"};
+    ${props => props.primary ? BoxShadow : "none"};
     text-shadow: ${props => props.text ? "3px 2px 1px rgba(0,0,0,0.2), 4px 3px 2px rgba(0,0,0,.19)" : "none"};
     ${props => props.text && css`
       color: ${props.theme.text}AA

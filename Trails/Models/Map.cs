@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 public class Map {
   [Key]
   public int Id { get; set; }
+  public int FileId { get; set; }
   public string Polyline { get; set; }
   
   public string ElevationPolyline { get; set; }

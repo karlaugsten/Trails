@@ -64,7 +64,7 @@ namespace Trails.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IEnumerable<TrailEdit> Trails()
+        public IEnumerable<TrailRequest> Trails()
         {
             var trails = _context.Trails
                         .Where(t => t.Approved)
@@ -72,8 +72,9 @@ namespace Trails.Controllers
                             .ThenInclude(e => e.Map)
                         .Include(t => t.Edit)
                             .ThenInclude(e => e.Images)
+                            .ThenInclude(i => i.Image)
                         .ToList();
-            return trails.Select(t => t.Edit).ToList();
+            return trails.Select(t => TrailRequest.fromEdit(t.Edit)).ToList();
         }
 
         [HttpPost]
@@ -106,10 +107,11 @@ namespace Trails.Controllers
                 Distance = 0,
                 Elevation = 0,
                 MaxSeason = "",
-                MinSeason = ""
+                MinSeason = "",
+                Images = new List<TrailEditImage>()
             });
             _context.SaveChanges();
-            return Ok(newEdit.Entity);
+            return GetEdit(newEdit.Entity.EditId);
         }
 
         [HttpPost("{trailId}/Edit")]
@@ -132,11 +134,17 @@ namespace Trails.Controllers
                 Distance = trail.Distance,
                 Elevation = trail.Elevation,
                 MaxSeason = trail.MaxSeason,
-                MinSeason = trail.MinSeason
-                //Images = trail.Images // TODO: Will foreign key's be automatically mapped here? Or do we need to do the mapping ourselves.
+                MinSeason = trail.MinSeason,
             });
             _context.SaveChanges();
-            return Ok(newEdit.Entity);
+            var edit = newEdit.Entity;
+            edit.Images = _context.TrailEditImages.Where(im => im.EditId == trail.EditId).Select(im => new TrailEditImage() {
+                    EditId = edit.EditId,
+                    ImageId = im.ImageId
+                }).ToList();
+            _context.TrailEdits.Update(edit);
+            _context.SaveChanges();
+            return GetEdit(edit.EditId);
         }
 
         [HttpGet("edit/{editId}")]
@@ -146,24 +154,25 @@ namespace Trails.Controllers
             // Saves a draft of an edit.
             var trail = _context.TrailEdits
                 .Include(t => t.Images)
+                    .ThenInclude(i => i.Image)
                 .Include(t => t.Map)
                 .FirstOrDefault(t => t.EditId == editId);
             if(trail == null)
             {
                 return NotFound();
             }
-            return Ok(trail);
+            var response = TrailRequest.fromEdit(trail);
+            return Ok(response);
         }
 
         [HttpPost("{trailId}/Edit/{editId}")]
         [Authorize(Policy = "CanEdit")]
-        public IActionResult SaveEdit(int trailId, int editId, [FromBody]TrailEdit edit)
+        public IActionResult SaveEdit(int trailId, int editId, [FromBody]TrailRequest edit)
         {
             if(!this.ModelState.IsValid) return BadRequest();
             // Saves a draft of an edit.
             var trail = _context.TrailEdits
-                /*.Include(t => t.Images)
-                .Include(t => t.Map)*/
+                .Include(t => t.Images)
                 .FirstOrDefault(t => t.EditId == editId && t.TrailId == trailId);
             if(trail == null)
             {
@@ -173,7 +182,6 @@ namespace Trails.Controllers
             //trail.EditId = edit.EditId;
             trail.Title = edit.Title;
             trail.Rating = edit.Rating;
-            trail.Images = edit.Images;
             trail.Location = edit.Location;
             trail.Elevation = edit.Elevation;
             trail.Distance = edit.Distance;
@@ -182,12 +190,16 @@ namespace Trails.Controllers
             trail.MinDuration = edit.MinDuration;
             trail.MaxSeason = edit.MaxSeason;
             trail.MinSeason = edit.MinSeason;
-
+            
             _context.TrailEdits.Update(trail);
+            // If any of the images on trail dont exist, add them.
+            // If any of the images on edit are deleted, delete them.
+            var imagesToDelete = trail.Images.Where(im => edit.Images.FirstOrDefault(i => im.ImageId == i.Id) == null);
+            imagesToDelete.Select(image => _context.TrailEditImages.Remove(image)).ToList();
 
             // Save changes in database
             _context.SaveChanges();
-            return Ok(trail);
+            return GetEdit(editId);
         }
 
         [HttpPost("{trailId}/Commit/{editId}")]

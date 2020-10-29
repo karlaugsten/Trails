@@ -17,8 +17,11 @@ sudo chmod -R +x ./*
 echo "Restoring dependencies..."
 sudo /usr/bin/dotnet restore
 
-echo "Updating database..."
-/usr/bin/dotnet ef database update
+echo "Updating database TrailContext..."
+/usr/bin/dotnet ef database update --context TrailContext
+
+echo "Updating database FileProcessingDbContext..."
+/usr/bin/dotnet ef database update --context FileProcessingDbContext
 
 echo "Building source code..."
 sudo /usr/bin/dotnet publish --configuration Release

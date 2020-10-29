@@ -8,7 +8,7 @@ const darkTheme = {
   subText: "#BEBEBE",
   subSubText: "#929292",
   errorText: "#ff6666",
-  successText: "66ff66"
+  successText: "#66ff66"
 };
 
 const lightTheme = {

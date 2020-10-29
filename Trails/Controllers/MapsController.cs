@@ -50,19 +50,24 @@ namespace Trails.Controllers
                 return BadRequest("Map file format is not supported. Please upload a .gpx map file.");
             }
             // Save the image to the image repository and return a url pointing to the image.
-            var map = await _gpxRepo.UploadMap(mapUpload.File.OpenReadStream());
             try {
-              // Set the map on this editId to the id of the map returned...
-              var edit = _trailContext.TrailEdits.Find(mapUpload.EditId);
-              edit.MapId = map.Id;
-              edit.Map = map;
-              _trailContext.TrailEdits.Update(edit);
-              _trailContext.Entry(edit).State = EntityState.Modified;
-              _trailContext.SaveChanges();
-            } catch(Exception e) {
-              return StatusCode(500, "failed to update the edit with the newly created map.");
+                var fileTask = await _gpxRepo.UploadMap(mapUpload.File.OpenReadStream(), mapUpload.EditId);
+                return Ok(fileTask);
+            } catch (KeyNotFoundException e) { // Reusing this exception type...
+                return NotFound();
+            } catch (Exception e) {
+                return StatusCode(500, "Something went wrong, please try again");
             }
-            return Ok(map);
+        }
+
+        [HttpGet("/files/{fileId}")]
+        public IActionResult GetFileStatus(int fileId)
+        {
+            try {
+                return Ok(_gpxRepo.GetFileStatus(fileId));
+            } catch (KeyNotFoundException e) { // Reusing this exception type...
+                return NotFound();
+            }
         }
 
         [HttpGet("{mapId}")]
