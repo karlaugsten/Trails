@@ -57,7 +57,8 @@ namespace Trails
             {
                 AutoRegisterTemplate = true,
                 IndexFormat = "{Trails-{0:yyyy.MM.dd}",
-                MinimumLogEventLevel = LogEventLevel.Information
+                MinimumLogEventLevel = LogEventLevel.Information,
+                EmitEventFailure = EmitEventFailureHandling.WriteToSelfLog
             };
         }
 
