@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Elastic.Apm.SerilogEnricher;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
@@ -24,12 +23,7 @@ namespace Trails
         {
             
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            var configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile(
-                    $"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json",
-                    optional: true)
-                .Build();
+            
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Information)
                 .Enrich.FromLogContext()
@@ -37,7 +31,7 @@ namespace Trails
                 .Enrich.WithExceptionDetails()
                 .Enrich.WithProperty("Environment", environment)  
                 .WriteTo.RollingFile("runnify-info-log-{Date}.log")
-                .WriteTo.Elasticsearch(ConfigureElasticSink(configuration, environment))
+                .WriteTo.Elasticsearch(ConfigureElasticSink(environment))
                 .CreateLogger();
 
             Log.Information("Starting Runnify service");
@@ -51,7 +45,7 @@ namespace Trails
             Log.CloseAndFlush();
         }
 
-        private static ElasticsearchSinkOptions ConfigureElasticSink(IConfigurationRoot configuration, string environment)
+        private static ElasticsearchSinkOptions ConfigureElasticSink(string environment)
         {
             var elasticHost = "localhost";
             var elasticPort = "9200";
