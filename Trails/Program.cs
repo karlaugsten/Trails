@@ -32,8 +32,10 @@ namespace Trails
                 .Build();
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Information)
+                .Enrich.FromLogContext()
                 .Enrich.WithElasticApmCorrelationInfo()
                 .Enrich.WithExceptionDetails()
+                .Enrich.WithProperty("Environment", environment)  
                 .WriteTo.RollingFile("runnify-info-log-{Date}.log")
                 .WriteTo.Elasticsearch(ConfigureElasticSink(configuration, environment))
                 .CreateLogger();

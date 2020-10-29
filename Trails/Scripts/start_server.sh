@@ -1,4 +1,5 @@
 #!/bin/bash
+cd /home/ubuntu/runnify.ca
 
 echo "Setting permissions"
 
