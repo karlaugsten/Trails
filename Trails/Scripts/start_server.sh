@@ -11,6 +11,8 @@ sudo chown -R ubuntu:ubuntu ./*
 sudo chmod -R +x ./*
 
 echo "Restoring dependencies..."
+cd /home/ubuntu/runnify.ca/Trails
+
 sudo /usr/bin/dotnet restore
 
 echo "Updating database TrailContext..."
