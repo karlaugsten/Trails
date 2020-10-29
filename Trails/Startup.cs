@@ -18,6 +18,7 @@ using Trails.FileProcessing;
 using Trails.Transforms;
 using Trails.Models;
 using Elastic.Apm.NetCoreAll;
+using Serilog;
 
 namespace Trails
 {
