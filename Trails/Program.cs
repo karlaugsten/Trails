@@ -52,7 +52,7 @@ namespace Trails
             return new ElasticsearchSinkOptions(new Uri($"http://{elasticHost}:{elasticPort}"))
             {
                 AutoRegisterTemplate = true,
-                IndexFormat = "Trails-{0:yyyy.MM.dd}",
+                IndexFormat = "trails-{0:yyyy.MM.dd}",
                 MinimumLogEventLevel = LogEventLevel.Information,
                 EmitEventFailure = EmitEventFailureHandling.WriteToSelfLog
             };
