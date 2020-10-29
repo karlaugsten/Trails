@@ -17,6 +17,7 @@ using Microsoft.Extensions.Logging;
 using Trails.FileProcessing;
 using Trails.Transforms;
 using Trails.Models;
+using Elastic.Apm.NetCoreAll;
 
 namespace Trails
 {
@@ -191,6 +192,7 @@ namespace Trails
                 app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
+                app.UseAllElasticApm(Configuration);
             }
 
             app.UseStaticFiles();
