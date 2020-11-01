@@ -23,6 +23,13 @@ let Loader = styled.div`
   margin-right: 1em;
 `
 
+let Error = styled.div`
+  align-text: center;
+  font-size: 0.5em;
+  color: ${props => props.theme.errorText};
+  text-wrap: wrap;
+`
+
 export default class FileUploader extends React.Component {
   constructor(props) {
     super(props);
@@ -40,7 +47,8 @@ export default class FileUploader extends React.Component {
   onChange = () => {
     var file = this.fileInput.current.files[0];
     this.setState({
-      processing: true
+      processing: true,
+      error: null
     });
     this.props.upload(file)
       .then(response => {
@@ -48,8 +56,7 @@ export default class FileUploader extends React.Component {
         {
           return response.json();         
         }
-        // TODO: Set an error message
-        throw new Error('Something went wrong, please try again');
+        return Promise.reject('Something went wrong, please try again');
       })
       .then(fileTask => {
         console.log(fileTask);
@@ -59,7 +66,8 @@ export default class FileUploader extends React.Component {
         this.startPolling();
       }).catch(error => {
         this.setState({
-          processing: false
+          processing: false,
+          error: error.message || "Something went wrong, please try again."
         });
       });
   }
@@ -73,10 +81,10 @@ export default class FileUploader extends React.Component {
       method: 'GET'
     })
     .catch(error => {
-      // TODO: handle error
       console.log(error);
       this.setState({
-        processing: false
+        processing: false,
+        error: "Something went wrong, please try again."
       });
     })
     .then(result => result.json())
@@ -85,21 +93,23 @@ export default class FileUploader extends React.Component {
         clearTimeout(this.state.timer);
         this.setState({
           processing: false,
-          task: fileTask
+          task: fileTask,
+          error: null
         });
         this.fetchResult(fileTask.finishedUrl);
       } else if(fileTask.status == "ERRORED") {
-        // TODO: handle error
         clearTimeout(this.state.timer);
         this.setState({
           processing: false,
-          task: fileTask
+          task: fileTask,
+          error: fileTask.errorMessage
         });
       }
-    }).catch(errror => {
-      // TODO: handle error
+    }).catch(error => {
+      console.error(error);
       this.setState({
-        processing: false
+        processing: false,
+        error: "Something went wrong, please try again."
       });
     })
   }
@@ -113,7 +123,7 @@ export default class FileUploader extends React.Component {
 
   render() {
     const { children, ...others } = this.props;
-    const { processing } = this.state;
+    const { processing, error } = this.state;
     var button = (
       <AddButton onClick={this.onClick} {...others} />);
     if (processing) {
@@ -122,6 +132,7 @@ export default class FileUploader extends React.Component {
     return (
       <>
         <input onChange={this.onChange} ref={this.fileInput} id="fileinput" type="file" style={{ display: "none" }}/>
+        {error ? (<Error>{error}</Error>) : null}
         {button}
       </>
     );

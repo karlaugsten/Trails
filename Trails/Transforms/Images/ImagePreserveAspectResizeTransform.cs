@@ -14,6 +14,8 @@ namespace Trails.Transforms {
   /// </summary>
   public class ImagePreserveAspectResizeTransform : ITransform<Image<Rgba32>, Image<Rgba32>, ImageJobContext>
   {
+    private static int MIN_PIXELS = 1000000;
+
     /// <summary>
     /// Desired meagpixels for image to be.
     /// </summary>
@@ -38,8 +40,8 @@ namespace Trails.Transforms {
 
     private void Resize(Image<Rgba32> image) {
       int MP = image.Width * image.Height;
-
-      if(MP > _pixels) {
+      if (MP < MIN_PIXELS) throw new ArgumentException("The image does not meet the minimum resolution requirements");
+      if (MP > _pixels) {
         // Sqrt since we are scaling down height AND width;
         double scaleFactor = Math.Sqrt((double)_pixels/(double)MP);
         image.Mutate(x => x

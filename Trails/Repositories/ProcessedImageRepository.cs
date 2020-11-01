@@ -77,6 +77,9 @@ namespace Trails.Repositories
       if (file.status == FileProcessing.Models.FileStatus.DONE) {
         task.FinishedUrl = $"/api/images/data/{image.Id}";
       }
+      if (file.status == FileProcessing.Models.FileStatus.ERRORED) {
+        task.ErrorMessage = file.errorMessage;
+      }
       return task;
     }
 

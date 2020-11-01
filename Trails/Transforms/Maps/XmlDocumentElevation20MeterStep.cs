@@ -25,6 +25,7 @@ namespace Trails.Transforms {
       
       double distance = 0.0;
       Location lastLocation = null;
+      if (eleNodes.Count < 10) throw new ArgumentException("GPX file does not contain elevation data");
       foreach(XmlNode eleNode in eleNodes) {
         double elevation = double.Parse(eleNode.InnerText);
         var locationNode = eleNode.ParentNode;

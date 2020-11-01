@@ -30,16 +30,28 @@ namespace Trails.FileProcessing
         throw new ArgumentException("Invalid transform specified in job: " + transformJob.transform);
       }
       try {
-        await transform.transformAsync(transformJob.input, transformJob.context);
+        try {
+          await transform.transformAsync(transformJob.input, transformJob.context);
+        } catch (Exception e) {
+          if (e.InnerException != null) throw e.InnerException;
+          throw e;
+        }
         transformJob.status = FileStatus.DONE;
         transformJob.endTime = DateTime.Now;
-        _repository.SaveTransforms(transformJob, transform.getTransformNames());
+      } catch (ArgumentException e) {
+        _logger.LogError(e, "ArgumentException Executing jobId={} {}", transformJob.id, e.Message);
+        // Set status to errored and update an error message.
+        transformJob.status = FileStatus.ERRORED;
+        transformJob.endTime = DateTime.Now;
+        transformJob.errorMessage = e.Message;
       } catch (Exception e) {
         _logger.LogError(e, "Error Executing jobId={} {}", transformJob.id, e.Message);
         // Set status to errored and update an error message.
         transformJob.status = FileStatus.ERRORED;
         transformJob.endTime = DateTime.Now;
+        transformJob.errorMessage = "Something went wrong processing your file.";
       } finally {
+        _repository.SaveTransforms(transformJob, transform.getTransformNames());
         transformJob = _repository.SaveTransform(transformJob);
       }
     }

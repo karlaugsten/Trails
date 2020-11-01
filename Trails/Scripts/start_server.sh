@@ -14,9 +14,10 @@ sudo rm -rf ./**/bin
 sudo rm -rf ./**/obj
 
 echo "Restoring dependencies..."
-cd /home/ubuntu/runnify.ca/Trails
 
 sudo /usr/bin/dotnet restore
+
+cd /home/ubuntu/runnify.ca/Trails
 
 echo "Updating database TrailContext..."
 /usr/bin/dotnet ef database update --context TrailContext -v

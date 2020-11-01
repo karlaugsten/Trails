@@ -41,6 +41,10 @@ public class GpxRepository : IGpxRepository
       task.FinishedUrl = $"/api/maps/{map.Id}";
     }
 
+    if (file.status == Trails.FileProcessing.Models.FileStatus.ERRORED) {
+      task.ErrorMessage = file.errorMessage;
+    }
+
     return task;
   }
 
@@ -73,10 +77,13 @@ public class GpxRepository : IGpxRepository
       mapId = entity.Entity.Id
     });
 
+    entity.Entity.FileId = transform.id;
+    _context.SaveChanges();
+
     return new FileProcessingTask() {
-      CallbackUrl = $"/maps/files/{transform.id}",
+      CallbackUrl = $"/api/maps/files/{transform.id}",
       Status = transform.status.ToString(),
-      FinishedUrl = $"/maps/{entity.Entity.Id}"
+      FinishedUrl = $"/api/maps/{entity.Entity.Id}"
     };
   }
 }

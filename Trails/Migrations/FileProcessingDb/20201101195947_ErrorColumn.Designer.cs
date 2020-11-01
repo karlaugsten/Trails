@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Trails.Models;
 
 namespace trails.Migrations.FileProcessingDb
 {
     [DbContext(typeof(FileProcessingDbContext))]
-    partial class FileProcessingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201101195947_ErrorColumn")]
+    partial class ErrorColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

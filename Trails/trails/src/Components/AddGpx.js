@@ -33,7 +33,7 @@ export default class AddGpx extends React.Component {
       <React.Fragment>
         <Row style={{width: "50%"}}><Column>Add Map:</Column><Column><FileUploader upload={this.handleSubmit} finished={this.onAdd}/></Column></Row>
         <Row>
-          {this.props.map.elevationPolyline ? <Polyline polyline={this.props.map.elevationPolyline}>
+          {this.props.map && this.props.map.elevationPolyline ? <Polyline polyline={this.props.map.elevationPolyline}>
               {elevation => 
                   <Suspense fallback={<div>Loading...</div>}>
                       <Graph values={elevation}/>

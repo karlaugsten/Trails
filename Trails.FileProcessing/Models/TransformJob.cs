@@ -15,5 +15,7 @@ namespace Trails.FileProcessing.Models
     public string input { get; set; }
 
     public int fileId { get; set; }
+
+    public string errorMessage { get; set; }
   }
 }

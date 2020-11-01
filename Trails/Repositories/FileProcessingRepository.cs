@@ -91,6 +91,7 @@ namespace Trails.Repositories
         status = FileStatus.DONE;
       } else if(transformJobs.Any(t => t.status == FileStatus.ERRORED)) {
         status = FileStatus.ERRORED;
+        file.errorMessage = transformJobs.First(t => t.status == FileStatus.ERRORED).errorMessage;
       } else if(transformJobs.Any(t => t.status == FileStatus.QUEUED)) {
         status = FileStatus.QUEUED;
       }

@@ -18,5 +18,7 @@ namespace Trails.FileProcessing.Models
 
     // The location of the file in s3.
     public string s3Location { get; set; }
+
+    public string errorMessage { get; set; }
   }
 }

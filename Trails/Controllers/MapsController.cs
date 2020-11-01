@@ -60,7 +60,7 @@ namespace Trails.Controllers
             }
         }
 
-        [HttpGet("/files/{fileId}")]
+        [HttpGet("files/{fileId}")]
         public IActionResult GetFileStatus(int fileId)
         {
             try {
@@ -80,7 +80,7 @@ namespace Trails.Controllers
             }
         }
 
-        [HttpGet("/raw/{name}")]
+        [HttpGet("raw/{name}")]
         public IActionResult GetRawMap(string name)
         {
             // TODO: Allow signed in users to download raw maps?
