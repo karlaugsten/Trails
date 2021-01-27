@@ -14,6 +14,7 @@ public class TrailRequest : BaseTrail {
       Elevation = edit.Elevation,
       Location = edit.Location,
       Description = edit.Description,
+      Distance = edit.Distance,
       Map = edit.Map,
       MapId = edit.MapId,
       MaxDuration = edit.MaxDuration,
