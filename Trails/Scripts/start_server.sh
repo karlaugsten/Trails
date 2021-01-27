@@ -26,7 +26,7 @@ echo "Updating database FileProcessingDbContext..."
 /usr/bin/dotnet ef database update --context FileProcessingDbContext -v
 
 echo "Building source code..."
-sudo /usr/bin/dotnet publish --configuration Release
+sudo /usr/bin/dotnet publish --configuration Release ./Trails.csproj
 
 echo "Copying source files"
 sudo cp -Rrf /home/ubuntu/runnify.ca/Trails/* /var/www/runnify.ca
